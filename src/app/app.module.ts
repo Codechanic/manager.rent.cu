@@ -40,6 +40,7 @@ import { AppRoutingModule } from './app.routing';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ChartsModule } from 'ng2-charts';
+import { FramedLayoutComponent } from './containers/framed-layout/framed-layout.component';
 
 @NgModule({
   imports: [
@@ -62,7 +63,8 @@ import { ChartsModule } from 'ng2-charts';
     P404Component,
     P500Component,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    FramedLayoutComponent
   ],
   providers: [{
     provide: LocationStrategy,
