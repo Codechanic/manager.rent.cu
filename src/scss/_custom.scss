@@ -5,13 +5,17 @@ a {
 }
 
 .app-header {
-  background-image: linear-gradient(to top, #ECF4E0 1%, #FFF 50%);
+  background-image: linear-gradient(to top, #ECF4E0 1%, #FFF 70%);
 }
 
 .breadcrumb {
-  background-image: linear-gradient(to top, #CAE2AA 10%, #ECF4E0 92%);
+  background-image: linear-gradient(to top, #CAE2AA 10%, #ECF4E0 100%);
 }
 
 .sidebar {
   background-image: linear-gradient(to top, #CAE2AA 10%, #ECF4E0 92%);
+}
+
+.sidebar-minimizer {
+  background-color: #a2b588 !important;
 }

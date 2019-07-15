@@ -31,16 +31,16 @@ export interface NavData {
 
 export const navItems: NavData[] = [
   {
-    name: 'Casas',
+    name: 'Houses',
     icon: 'icon-home',
     children: [
       {
-        name: 'Listado',
+        name: 'List',
         url: '/houses',
         icon: 'icon-list'
       },
       {
-        name: 'Nueva Casa',
+        name: 'New House',
         url: '/houses/new',
         icon: 'icon-note'
       }
