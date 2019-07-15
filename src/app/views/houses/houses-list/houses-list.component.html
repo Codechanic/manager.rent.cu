@@ -1,1 +1,24 @@
-<p>houses-list works!</p>
+<div class="houses-list">
+  <div class="animated fadeIn">
+    <div class="card">
+      <div class="card-header">
+        Bootstrap Collapse
+        <div class="card-header-actions">
+          <a
+            (click)="isFiltersCardCollapsed = !isFiltersCardCollapsed">
+            <i class="cui-chevron-bottom icons"></i>
+          </a>
+<!--          <button type="button" class="btn btn-primary btn-sm"-->
+<!--                  (click)="isFiltersCardCollapsed = !isFiltersCardCollapsed">Toggle collapse-->
+<!--          </button>-->
+        </div>
+      </div>
+      <div class="card-body"
+           [collapse]="isFiltersCardCollapsed">
+        <p>
+          Filters here
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
