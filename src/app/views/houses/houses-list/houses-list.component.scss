@@ -1,3 +1,7 @@
 .houses-list {
   height: 100%;
+
+  .card-header-actions > a {
+    cursor: pointer;
+  }
 }

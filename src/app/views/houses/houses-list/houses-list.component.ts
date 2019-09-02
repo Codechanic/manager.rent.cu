@@ -6,9 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./houses-list.component.scss']
 })
 export class HousesListComponent implements OnInit {
-  isFiltersCardCollapsed: boolean;
+  isFiltersCardCollapsed = true;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }
