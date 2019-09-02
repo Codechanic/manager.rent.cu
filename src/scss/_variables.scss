@@ -9,3 +9,8 @@ $sidebar-nav-link-active-color: $breadcrumb-active-color;
 $sidebar-nav-dropdown-color: #255180;
 $sidebar-nav-link-active-icon-color: $sidebar-nav-dropdown-color;
 $sidebar-nav-link-hover-bg: #7EAD3B;
+
+$theme-colors: (
+  "primary": $sidebar-nav-link-hover-bg,
+);
+

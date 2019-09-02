@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgSelectConfig } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-houses-add-edit',
@@ -7,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HousesAddEditComponent implements OnInit {
 
-  constructor() { }
+  constructor(private ngSelectConfig: NgSelectConfig) {
+    this.ngSelectConfig.notFoundText = 'Oops! Nothing here...';
+  }
 
   ngOnInit() {
   }

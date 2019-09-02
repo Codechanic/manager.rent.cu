@@ -33,10 +33,11 @@ export const navItems: NavData[] = [
   {
     name: 'Houses',
     icon: 'icon-home',
+    url: '/houses',
     children: [
       {
         name: 'List',
-        url: '/houses',
+        url: '/houses/list',
         icon: 'icon-list'
       },
       {
