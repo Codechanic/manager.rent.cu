@@ -10,6 +10,7 @@
     "experimentalDecorators": true,
     "module": "esnext",
     "target": "es5",
+    "types": ["jest"],
     "typeRoots": [
       "node_modules/@types"
     ],

@@ -4,4 +4,21 @@
   .card-header-actions > a {
     cursor: pointer;
   }
+
+  .avatar-container {
+    display: flex;
+    justify-content: center;
+    height: 110px;
+
+    .img-avatar {
+      height: 100%;
+    }
+  }
+
+  .manager-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem;
+  }
 }

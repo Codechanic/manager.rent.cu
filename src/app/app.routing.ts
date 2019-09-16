@@ -8,59 +8,56 @@ import { P404Component } from './views/error/404.component';
 import { P500Component } from './views/error/500.component';
 import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
+import { AuthGuard } from './services/auth.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full',
+    redirectTo: 'houses',
+    pathMatch: 'full'
   },
   {
     path: '404',
     component: P404Component,
     data: {
-      title: 'Page 404'
-    }
+      title: 'Page 404',
+    },
   },
   {
     path: '500',
     component: P500Component,
     data: {
-      title: 'Page 500'
-    }
+      title: 'Page 500',
+    },
   },
   {
     path: 'login',
-    component: LoginComponent,
-    data: {
-      title: 'Login Page'
-    }
+    loadChildren: () => import('./views/login/login.module').then(m => m.LoginModule),
   },
   {
     path: 'register',
-    component: RegisterComponent,
-    data: {
-      title: 'Register Page'
-    }
+    loadChildren: () => import('./views/register/register.module').then(m => m.RegisterModule),
   },
   {
     path: '',
     component: FramedLayoutComponent,
     data: {
-      title: 'Home'
+      title: 'Home',
     },
     children: [
       {
         path: 'houses',
-        loadChildren: () => import('./views/houses/houses.module').then(m => m.HousesModule)
+        loadChildren: () => import('./views/manager/manager.module').then(m => m.ManagerModule),
+        canLoad: [AuthGuard],
       },
-    ]
+    ],
   },
-  { path: '**', component: P404Component }
+  { path: '**', component: P404Component },
 ];
 
 @NgModule({
-  imports: [ RouterModule.forRoot(routes) ],
-  exports: [ RouterModule ]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}

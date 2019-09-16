@@ -34,17 +34,5 @@ export const navItems: NavData[] = [
     name: 'Houses',
     icon: 'icon-home',
     url: '/houses',
-    children: [
-      {
-        name: 'List',
-        url: '/houses/list',
-        icon: 'icon-list'
-      },
-      {
-        name: 'New House',
-        url: '/houses/new',
-        icon: 'icon-note'
-      }
-    ]
   },
 ];

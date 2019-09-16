@@ -4,10 +4,11 @@ import { Router, NavigationEnd } from '@angular/router';
 @Component({
   // tslint:disable-next-line
   selector: 'body',
-  template: '<router-outlet></router-outlet>'
+  template: '<router-outlet></router-outlet>',
 })
 export class AppComponent implements OnInit {
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+  }
 
   ngOnInit() {
     this.router.events.subscribe((evt) => {
