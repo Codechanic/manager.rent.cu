@@ -1,28 +1,7 @@
 <div class="houses-list">
-  <div class="animated fadeIn">
-    <div class="card">
-      <div class="card-header">
-        Filters
-        <div class="card-header-actions">
-          <a
-            (click)="isFiltersCardCollapsed = !isFiltersCardCollapsed">
-            <i *ngIf="isFiltersCardCollapsed" class="cui-chevron-bottom icons"></i>
-            <i *ngIf="!isFiltersCardCollapsed" class="cui-chevron-top icons"></i>
-          </a>
-        </div>
-      </div>
-      <div class="card-body"
-           [collapse]="isFiltersCardCollapsed">
-        <p>
-          Filters here
-        </p>
-      </div>
-    </div>
-  </div>
-
   <div class="card">
     <div class="card-header">
-      List
+      Houses
       <div class="card-header-actions">
         <a [routerLink]="['/houses/new']">
           <button class="btn btn-primary">
@@ -35,65 +14,31 @@
       <table class="table">
         <thead>
         <tr>
-          <th>Username</th>
-          <th>Date registered</th>
-          <th>Role</th>
-          <th>Status</th>
+          <th>Name</th>
+          <th>Address</th>
+          <th>Phones</th>
+          <th>Rooms</th>
+          <th>Description</th>
+          <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <td>Samppa Nori</td>
-          <td>2012/01/01</td>
-          <td>Member</td>
+        <tr *ngFor="let house of houses | paginate: { itemsPerPage: 5, currentPage: page }">
+          <td>{{house.name}}</td>
+          <td>{{house.address}}</td>
+          <td>{{house.phones}}</td>
+          <td>{{house.rooms}}</td>
+          <td>{{house.description}}</td>
           <td>
-            <span class="badge badge-success">Active</span>
-          </td>
-        </tr>
-        <tr>
-          <td>Estavan Lykos</td>
-          <td>2012/02/01</td>
-          <td>Staff</td>
-          <td>
-            <span class="badge badge-danger">Banned</span>
-          </td>
-        </tr>
-        <tr>
-          <td>Chetan Mohamed</td>
-          <td>2012/02/01</td>
-          <td>Admin</td>
-          <td>
-            <span class="badge badge-secondary">Inactive</span>
-          </td>
-        </tr>
-        <tr>
-          <td>Derick Maximinus</td>
-          <td>2012/03/01</td>
-          <td>Member</td>
-          <td>
-            <span class="badge badge-warning">Pending</span>
-          </td>
-        </tr>
-        <tr>
-          <td>Friderik D�vid</td>
-          <td>2012/01/21</td>
-          <td>Staff</td>
-          <td>
-            <span class="badge badge-success">Active</span>
+            <a class="btn btn-warning" [routerLink]="['/houses/edit', house.id]">Edit</a>
+            <a class="btn btn-danger" (click)="onDelete(house.id)">Delete</a>
           </td>
         </tr>
         </tbody>
       </table>
-      <ul class="pagination">
-        <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-        <li class="page-item active">
-          <a class="page-link" href="#">1</a>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item"><a class="page-link" href="#">4</a></li>
-        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-      </ul>
+      <pagination-controls (pageChange)="page = $event"></pagination-controls>
     </div>
   </div>
 </div>
+
+<app-delete #deleteComponent></app-delete>
