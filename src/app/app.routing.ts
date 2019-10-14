@@ -9,6 +9,7 @@ import { P500Component } from './views/error/500.component';
 import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
 import { AuthGuard } from './services/auth.guard';
+import { ComingSoonComponent } from "./views/coming-soon/coming-soon.component";
 
 export const routes: Routes = [
   {
@@ -32,7 +33,24 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import('./views/login/login.module').then(m => m.LoginModule),
+    children:[
+      {
+        path: '',
+        redirectTo: 'false',
+        pathMatch: 'full'
+      },
+      {
+        path: ':expired',
+        component: LoginComponent,
+      },
+    ],
+  },
+  {
+    path: 'coming-soon',
+    component: ComingSoonComponent,
+    data: {
+      title: 'Coming Soon'
+    }
   },
   {
     path: 'register',
