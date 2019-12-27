@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
-import { Manager } from '../model/manager.model';
+import { Owner } from '../model/owner.model';
 
 /**
  * Manager handling service
@@ -12,7 +12,7 @@ import { Manager } from '../model/manager.model';
 @Injectable({
   providedIn: 'root',
 })
-export class ManagerService {
+export class OwnerService {
 
   /**
    * Service constructor
@@ -22,10 +22,10 @@ export class ManagerService {
   }
 
   /**
-   * Find manager by id
+   * Find owner by id
    * @param id Manager id
    */
-  findById(id): Observable<Manager> {
-    return this.httpClient.get<Manager>(environment.uris.api + '/manager/' + id);
+  findById(id): Observable<Owner> {
+    return this.httpClient.get<Owner>(environment.uris.api + '/user/' + id);
   }
 }

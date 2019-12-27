@@ -1,4 +1,4 @@
-import { Manager } from './manager.model';
+import { Owner } from './owner.model';
 
 export class House {
   id: string;
@@ -7,5 +7,5 @@ export class House {
   phones: string;
   rooms: number;
   description: string;
-  manager: Manager;
+  manager: Owner;
 }

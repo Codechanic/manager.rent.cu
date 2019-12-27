@@ -39,7 +39,7 @@ export class HousesListComponent implements OnInit {
    */
   ngOnInit() {
 
-    /* initilize component's data */
+    /* initialize component's data */
     this.initializeData();
   }
 
@@ -73,9 +73,9 @@ export class HousesListComponent implements OnInit {
 
     /*
     * call service action to retrieve from the serve the house
-    * list filtered by the currently authenticated manager
+    * list filtered by the currently authenticated owner
     */
-    this.houseService.findByManagerId(this.authService.currentUser().managerId).subscribe((houses) => {
+    this.houseService.findByOwnerId(this.authService.currentUser().id).subscribe((houses) => {
       this.houses = houses;
     }, (error) => {
       console.log(error);

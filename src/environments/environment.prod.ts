@@ -1,3 +1,9 @@
 export const environment = {
-  production: true
-}
+  production: true,
+
+  uris: {
+    api: "http://localhost:3000"
+  },
+
+  secret: "someVerySecretKeyHere"
+};

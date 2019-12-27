@@ -9,7 +9,6 @@ import { P500Component } from './views/error/500.component';
 import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
 import { AuthGuard } from './services/auth.guard';
-import { ComingSoonComponent } from "./views/coming-soon/coming-soon.component";
 
 export const routes: Routes = [
   {
@@ -46,13 +45,6 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'coming-soon',
-    component: ComingSoonComponent,
-    data: {
-      title: 'Coming Soon'
-    }
-  },
-  {
     path: 'register',
     loadChildren: () => import('./views/register/register.module').then(m => m.RegisterModule),
   },
@@ -65,7 +57,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'houses',
-        loadChildren: () => import('./views/manager/manager.module').then(m => m.ManagerModule),
+        loadChildren: () => import('./views/owner/owner.module').then(m => m.OwnerModule),
         canLoad: [AuthGuard],
       },
     ],
