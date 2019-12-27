@@ -8,7 +8,7 @@
               <div class="card-body">
                 <alert *ngIf="loginError.show" [type]="'danger'" [dismissible]="true"
                        (onClose)="onClose()">{{ loginError.message }}</alert>
-                <div class="bg-warning" *ngIf="sessionExpired">The session has expired {{sessionExpired}}.
+                <div class="bg-warning" *ngIf="sessionExpired === true">The session has expired {{sessionExpired}}.
                 </div>
                 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                   <h1>Login</h1>
