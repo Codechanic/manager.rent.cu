@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
+import { BsDropdownConfig } from "ngx-bootstrap";
+
 import { AuthService } from '../../../services/auth.service';
 import { HouseService } from '../../../services/house.service';
 import { House } from '../../../model/house.model';
@@ -8,6 +10,7 @@ import { House } from '../../../model/house.model';
   selector: 'app-houses-list',
   templateUrl: './houses-list.component.html',
   styleUrls: ['./houses-list.component.scss'],
+  providers: [{ provide: BsDropdownConfig, useValue: { isAnimated: true, autoClose: true } }]
 })
 export class HousesListComponent implements OnInit {
 

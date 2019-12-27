@@ -11,15 +11,15 @@
       </div>
     </div>
     <div class="card-body">
-      <table class="table">
+      <table class="table table-striped">
         <thead>
         <tr>
           <th>Name</th>
           <th>Address</th>
           <th>Phones</th>
-          <th>Rooms</th>
+          <th style="text-align: end">Rooms</th>
           <th>Description</th>
-          <th>Actions</th>
+          <th></th>
         </tr>
         </thead>
         <tbody>
@@ -27,11 +27,22 @@
           <td>{{house.name}}</td>
           <td>{{house.address}}</td>
           <td>{{house.phones}}</td>
-          <td>{{house.rooms}}</td>
+          <td style="text-align: end">{{house.rooms}}</td>
           <td>{{house.description}}</td>
           <td>
-            <a class="btn btn-warning" [routerLink]="['/houses/edit', house.id]">Edit</a>
-            <a class="btn btn-danger" (click)="onDelete(house.id)">Delete</a>
+            <div class="btn-group" dropdown>
+              <button id="button-animated" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+                      aria-controls="dropdown-animated">
+                Actions <span class="caret"></span>
+              </button>
+              <ul id="dropdown-animated" *dropdownMenu class="dropdown-menu dropdown-menu-right"
+                  role="menu" aria-labelledby="button-animated">
+                <li role="menuitem"><a class="dropdown-item" [routerLink]="['/houses/edit', house.id]">Edit</a></li>
+                <li role="menuitem"><a class="dropdown-item" (click)="onDelete(house.id)">Delete</a></li>
+                <li class="divider dropdown-divider"></li>
+                <li role="menuitem"><a class="dropdown-item" href="#">View comments</a></li>
+              </ul>
+            </div>
           </td>
         </tr>
         </tbody>
