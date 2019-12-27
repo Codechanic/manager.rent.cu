@@ -7,7 +7,12 @@
             <div class="card-body p-4">
               <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
                 <h1>Register</h1>
-                <p class="text-muted">Create your manager account</p>
+                <p class="text-muted">Create your owner account</p>
+                <div
+                  class="bg-danger"
+                  *ngIf="registrationError">
+                  {{registrationErrorMessage}}
+                </div>
                 <div
                   class="bg-danger"
                   *ngIf="registerForm.get('username').hasError('required') && registerForm.get('username').touched">
@@ -29,33 +34,6 @@
                     <span class="input-group-text"><i class="icon-user"></i></span>
                   </div>
                   <input type="text" class="form-control" placeholder="Name" autocomplete="name" required formControlName="name">
-                </div>
-                <div
-                  class="bg-danger"
-                  *ngIf="registerForm.get('lastName').hasError('required') && registerForm.get('lastName').touched">
-                  Last Name required
-                </div>
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="icon-user"></i></span>
-                  </div>
-                  <input type="text" class="form-control" placeholder="Last Name" autocomplete="last name" required formControlName="lastName">
-                </div>
-                <div
-                  class="bg-danger"
-                  *ngIf="registerForm.get('email').hasError('required') && registerForm.get('email').touched">
-                  Email required
-                </div>
-                <div
-                  class="bg-danger"
-                  *ngIf="registerForm.get('email').hasError('email') && registerForm.get('email').touched">
-                  Email not valid
-                </div>
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">@</span>
-                  </div>
-                  <input type="text" class="form-control" placeholder="Email" autocomplete="email" required formControlName="email">
                 </div>
                 <div
                   class="bg-danger"

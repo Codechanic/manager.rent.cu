@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
       password: new FormControl('', Validators.required),
     },
   );
-  private loginError = { show: false, message: '' };
+  loginError = { show: false, message: '' };
 
   /**
    * Component's constructor
@@ -70,17 +70,22 @@ export class LoginComponent implements OnInit {
       */
       const credentials = this.loginForm.value;
       this.authService.login(credentials.username, credentials.password)
-        .subscribe((response: { access_token }) => {
+        .subscribe((response: any) => {
 
           /* if the authentication succeeded, store the resulting jwt in cookie encrypted  */
-          this.cookieService.set('context', CryptoJS.AES.encrypt(response.access_token, environment.secret).toString());
+          this.cookieService.set('context', CryptoJS.AES.encrypt(response, environment.secret).toString());
 
           /* navigate to the houses route */
           this.router.navigate(['/houses']);
         }, error => {
+          console.log(error);
           this.loginError.show = true;
           this.loginError.message = 'Login failed';
         });
     }
+  }
+
+  onClose() {
+    this.loginError.show = false;
   }
 }

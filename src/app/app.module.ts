@@ -16,7 +16,6 @@ import { FramedLayoutComponent } from "./containers/framed-layout/framed-layout.
 import { LoginComponent } from "./views/login/login.component";
 import { P404Component } from "./views/error/404.component";
 import { P500Component } from "./views/error/500.component";
-import { ComingSoonComponent } from './views/coming-soon/coming-soon.component';
 
 import {
   AppAsideModule,
@@ -36,8 +35,6 @@ import { ChartsModule } from "ng2-charts";
 import { CookieService } from "ngx-cookie-service";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AlertModule } from "ngx-bootstrap";
-import {CountdownModule} from "ng2-date-countdown";
-
 @NgModule({
   imports: [
     BrowserModule,
@@ -54,16 +51,14 @@ import {CountdownModule} from "ng2-date-countdown";
     TabsModule.forRoot(),
     ReactiveFormsModule,
     AlertModule.forRoot(),
-    ChartsModule,
-    CountdownModule
+    ChartsModule
   ],
   declarations: [
     AppComponent,
     LoginComponent,
     P404Component,
     P500Component,
-    FramedLayoutComponent,
-    ComingSoonComponent
+    FramedLayoutComponent
   ],
   providers: [
     {

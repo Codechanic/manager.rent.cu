@@ -7,6 +7,8 @@ export const environment = {
   production: false,
 
   uris: {
+    login: 'http://127.0.0.5/es/token',
+    register: 'http://127.0.0.5/es/owner',
     api: 'http://localhost:3000',
   },
 

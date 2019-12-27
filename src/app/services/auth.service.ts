@@ -1,18 +1,18 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 
-import { CookieService } from 'ngx-cookie-service';
-import { Observable, Subscriber } from 'rxjs';
-import * as CryptoJS from 'crypto-js';
-import * as jwt_decode from 'jwt-decode';
+import { CookieService } from "ngx-cookie-service";
+import { Observable, Subscriber } from "rxjs";
+import * as CryptoJS from "crypto-js";
+import * as jwt_decode from "jwt-decode";
 
-import { environment } from '../../environments/environment';
+import { environment } from "../../environments/environment";
 
 /**
  * Authentication service
  */
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root"
 })
 export class AuthService {
 
@@ -31,7 +31,7 @@ export class AuthService {
    * @description This is done by checking for the existence of the jwt cookie
    */
   isAuthenticated(): boolean {
-    const jwt = this.cookieService.get('context');
+    const jwt = this.cookieService.get("context");
     return !!jwt;
   }
 
@@ -42,7 +42,10 @@ export class AuthService {
    * @param password User's password
    */
   login(username: string, password: string): Observable<any> {
-    return this.httpClient.post(environment.uris.api + '/api/login', { username, password });
+    const formData = new FormData();
+    formData.append("_username", username);
+    formData.append("_password", password);
+    return this.httpClient.post(environment.uris.login, formData);
   }
 
   /**
@@ -50,12 +53,12 @@ export class AuthService {
    * @description This performs a simple http request to the server
    */
   logout(): Observable<boolean> {
-    this.cookieService.delete('context');
+    this.cookieService.delete("context");
     return new Observable<any>(
       (subscriber: Subscriber<any>) => {
         subscriber.next(true);
         subscriber.complete();
-      },
+      }
     );
   }
 
@@ -65,7 +68,11 @@ export class AuthService {
    * @param user User to be registered
    */
   register(user): Observable<any> {
-    return this.httpClient.post(environment.uris.api + '/api/register', user);
+    const formData = new FormData();
+    formData.append("_name", user.name);
+    formData.append("_username", user.username);
+    formData.append("_password", user.password);
+    return this.httpClient.post(environment.uris.register, formData);
   }
 
   /**
@@ -74,7 +81,7 @@ export class AuthService {
   isTokenExpired(): boolean {
 
     /* gets and decrypts the jwt from the cookie */
-    const jwt = CryptoJS.AES.decrypt(this.cookieService.get('context'), environment.secret).toString(CryptoJS.enc.Utf8);
+    const jwt = CryptoJS.AES.decrypt(this.cookieService.get("context"), environment.secret).toString(CryptoJS.enc.Utf8);
 
     /* early return if there is no jwt */
     if (!jwt) {
@@ -104,7 +111,9 @@ export class AuthService {
   currentUser() {
 
     /* gets and decrypts the jwt from the cookie */
-    const jwt = CryptoJS.AES.decrypt(this.cookieService.get('context'), environment.secret).toString(CryptoJS.enc.Utf8);
+    const jwt = CryptoJS.AES.decrypt(
+      this.cookieService.get("context"), environment.secret
+    ).toString(CryptoJS.enc.Utf8);
 
     /* early return if there is no jwt */
     if (!jwt) {
@@ -113,7 +122,17 @@ export class AuthService {
 
     /* decode the jwt */
     const jwt_decoded = this.jwtDecoder(jwt);
+    console.log(jwt_decoded);
 
-    return { id: jwt_decoded.sub, username: jwt_decoded.username, managerId: jwt_decoded.managerId };
+    return { id: jwt_decoded.sub, username: jwt_decoded.username, roles: jwt_decoded.roles };
+  }
+
+  /**
+   * Returns the password encrypted 10 times using SHA512 algorithm
+   * @param password Password to encrypt
+   */
+  encryptPassword(password: string): string {
+    const encryptedPassword = CryptoJS.SHA512(password);
+    return encryptedPassword.toString(CryptoJS.enc.Base64);
   }
 }

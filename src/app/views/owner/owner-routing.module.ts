@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ManagerComponent } from './manager.component';
+
+import { OwnerComponent } from './owner.component';
 import { AuthGuard } from '../../services/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: ManagerComponent,
+    component: OwnerComponent,
     children: [
       {
         path: '',
@@ -22,5 +23,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ManagerRoutingModule {
+export class OwnerRoutingModule {
 }

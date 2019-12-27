@@ -1,6 +1,6 @@
 import { House } from './house.model';
 
-export class Manager {
+export class Owner {
   id: string;
   name: string;
   lastName: string;

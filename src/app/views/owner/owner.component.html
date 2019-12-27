@@ -1,5 +1,5 @@
 <div class="manager">
-  <div class="row" *ngIf="manager">
+  <div class="row" *ngIf="owner">
     <div class="col-md-2">
       <div class="card">
         <div class="card-header">
@@ -9,8 +9,8 @@
           </div>
         </div>
         <div class="card-body manager-info">
-          <div><b>{{manager.name}} &nbsp;{{manager.lastName}}</b></div>
-          <div>{{manager.email}}</div>
+          <div><b>{{owner.name}} &nbsp;{{owner.lastName}}</b></div>
+          <div>{{owner.email}}</div>
         </div>
       </div>
     </div>

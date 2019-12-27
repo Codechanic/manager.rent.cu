@@ -1,7 +1,7 @@
-import { Manager } from './manager.model';
+import { Owner } from './owner.model';
 
 export class User {
   id: string;
   username: string;
-  manager: Manager;
+  manager: Owner;
 }
