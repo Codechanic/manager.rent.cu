@@ -1,0 +1,12 @@
+<div class="card" *ngIf="house && owner">
+  <div class="card-header">
+    <div style="text-align: center">House</div>
+    <div class="avatar-container">
+      <img src="assets/img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com"/>
+    </div>
+  </div>
+  <div class="card-body house-info">
+    <div><b>{{house.name}} </b></div>
+    <div>{{owner.email}}</div>
+  </div>
+</div>

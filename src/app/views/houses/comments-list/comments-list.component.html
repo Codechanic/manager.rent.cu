@@ -1,39 +1,34 @@
 <div class="row">
   <div class="col-md-2">
-    <div class="owner-card">
-      <app-owner-card></app-owner-card>
+    <div class="house-card">
+      <app-house-card></app-house-card>
     </div>
   </div>
   <div class="col-md-10">
-    <div class="houses-list">
+    <div class="comments-list">
       <div class="card">
         <div class="card-header">
-          Houses
-          <div class="card-header-actions">
-            <a [routerLink]="['/houses/new']">
-              <button class="btn btn-primary">
-                New
-              </button>
-            </a>
-          </div>
+          Comments
         </div>
         <div class="card-body">
           <table class="table table-striped">
             <thead>
             <tr>
               <th>Name</th>
-              <th>Address</th>
-              <th>Phones</th>
-              <th style="text-align: end">Rooms</th>
+              <th>Nick</th>
+              <th>Email</th>
+              <th>Text</th>
+              <th style="text-align: end">Rating</th>
               <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let house of houses | paginate: { itemsPerPage: 10, currentPage: page }; let i = index">
-              <td>{{house.name}}</td>
-              <td>{{house.address}}</td>
-              <td>{{house.phones}}</td>
-              <td style="text-align: end">{{house.rooms}}</td>
+            <tr *ngFor="let comment of comments | paginate: { itemsPerPage: 10, currentPage: page }; let i = index">
+              <td>{{comment.name}}</td>
+              <td>{{comment.nick}}</td>
+              <td>{{comment.email}}</td>
+              <td>{{comment.text}}</td>
+              <td style="text-align: end">{{comment.rating}}</td>
               <td>
                 <div class="btn-group" dropdown [container]="i >= 8 ? '' : 'body'" [dropup]=" i >= 8">
                   <button id="button-animated" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
@@ -42,11 +37,7 @@
                   </button>
                   <ul id="dropdown-animated" *dropdownMenu class="dropdown-menu"
                       role="menu" aria-labelledby="button-animated">
-                    <li role="menuitem"><a class="dropdown-item" [routerLink]="['/houses/edit', house.id]">Edit</a></li>
-                    <li role="menuitem"><a class="dropdown-item" (click)="onDelete(house.id)">Delete</a></li>
-                    <li class="divider dropdown-divider"></li>
-                    <li role="menuitem"><a class="dropdown-item" [routerLink]="['/houses/list/comments/', house.id]">View
-                      comments</a></li>
+                    <li role="menuitem"><a class="dropdown-item" >Approve</a></li>
                   </ul>
                 </div>
               </td>

@@ -76,7 +76,7 @@ export class HousesListComponent implements OnInit {
 
     /*
     * call service action to retrieve from the serve the house
-    * list filtered by the currently authenticated owner
+    * list filtered by the currently authenticated owner-card
     */
     this.houseService.findByOwnerId(this.authService.currentUser().id).subscribe((houses) => {
       this.houses = houses;

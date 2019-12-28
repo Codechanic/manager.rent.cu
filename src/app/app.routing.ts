@@ -57,7 +57,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'houses',
-        loadChildren: () => import('./views/owner/owner.module').then(m => m.OwnerModule),
+        loadChildren: () => import('./views/houses/houses.module').then(m => m.HousesModule),
         canLoad: [AuthGuard],
       },
     ],

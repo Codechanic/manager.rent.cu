@@ -21,13 +21,14 @@
     align-items: center;
     padding: 0.5rem;
   }
+}
 
-  .dropdown-item:active {
-    background-color: #CAE2AA;
-  }
 
-  ::ng-deep .ngx-pagination {
-    padding: 0 !important;
-    text-align: center;
-  }
+.dropdown-item:active {
+  background-color: #CAE2AA;
+}
+
+::ng-deep .ngx-pagination {
+  padding: 0 !important;
+  text-align: center;
 }
