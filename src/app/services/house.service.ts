@@ -38,8 +38,8 @@ export class HouseService {
   }
 
   /**
-   * Find house by it's owner id
-   * @param ownerId House owner id
+   * Find house by it's owner-card id
+   * @param ownerId House owner-card id
    */
   findByOwnerId(ownerId: string): Observable<House[]> {
     return this.httpClient.get<House[]>(environment.uris.api + '/house/owner/' + ownerId);

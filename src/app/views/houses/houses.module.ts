@@ -9,9 +9,12 @@ import { HousesRoutingModule } from "./houses-routing.module";
 import { HousesListComponent } from "./houses-list/houses-list.component";
 import { HousesAddEditComponent } from "./houses-add-edit/houses-add-edit.component";
 import { ModalsModule } from "../modals/modals.module";
+import { CommentsListComponent } from "./comments-list/comments-list.component";
+import { OwnerCardComponent } from "./owner-card/owner-card.component";
+import { HouseCardComponent } from './house-card/house-card.component';
 
 @NgModule({
-  declarations: [HousesListComponent, HousesAddEditComponent],
+  declarations: [HousesListComponent, HousesAddEditComponent, CommentsListComponent, OwnerCardComponent, HouseCardComponent],
   imports: [
     CommonModule,
     HousesRoutingModule,

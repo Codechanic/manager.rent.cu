@@ -60,7 +60,7 @@ export class HousesAddEditComponent implements OnInit {
 
   ngOnInit() {
 
-    /* get the owner object from the server using the owner's id associated to the authenticated user */
+    /* get the owner-card object from the server using the owner-card's id associated to the authenticated user */
     this.ownerService.findById(this.authService.currentUser().id).subscribe((owner) => {
       this.owner = owner;
       this.houseForm.controls["owner"].setValue(owner.name);
@@ -103,7 +103,7 @@ export class HousesAddEditComponent implements OnInit {
     /* the house form data is valid */
     if (this.houseForm.valid) {
 
-      /* tweak it to send the owner's id alongside house data */
+      /* tweak it to send the owner-card's id alongside house data */
       this.houseForm.controls["ownerId"].setValue(this.authService.currentUser().id);
 
       /* if there was not a house id set */
@@ -119,12 +119,12 @@ export class HousesAddEditComponent implements OnInit {
           this.alert.type = "success";
           this.alert.msg = "House created successfully";
           this.alert.show = true;
-          this.houseForm.controls["owner"].setValue(this.owner.name);
+          this.houseForm.controls["owner-card"].setValue(this.owner.name);
           this.houseForm.addControl("id", new FormControl(""));
         }, error => {
 
           /* if the operation was unsuccessful, alert the user about it */
-          this.houseForm.controls["owner"].setValue(this.owner.name);
+          this.houseForm.controls["owner-card"].setValue(this.owner.name);
           this.houseForm.addControl("id", new FormControl(""));
           this.alert.type = "danger";
           this.alert.msg = error;
@@ -142,7 +142,7 @@ export class HousesAddEditComponent implements OnInit {
         }, error => {
 
           /* if the operation was unsuccessful, alert the user about it */
-          this.houseForm.controls["owner"].setValue(this.owner.name);
+          this.houseForm.controls["owner-card"].setValue(this.owner.name);
           this.alert.type = "danger";
           this.alert.msg = error;
           this.alert.show = true;

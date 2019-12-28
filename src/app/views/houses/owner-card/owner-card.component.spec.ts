@@ -4,16 +4,16 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { CookieService } from 'ngx-cookie-service';
 
-import { OwnerComponent } from './owner.component';
-import { AuthService } from '../../services/auth.service';
+import { OwnerCardComponent } from './owner-card.component';
+import { AuthService } from '../../../services/auth.service';
 
 describe('ManagerComponent', () => {
-  let component: OwnerComponent;
-  let fixture: ComponentFixture<OwnerComponent>;
+  let component: OwnerCardComponent;
+  let fixture: ComponentFixture<OwnerCardComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [OwnerComponent],
+      declarations: [OwnerCardComponent],
       imports: [RouterTestingModule, HttpClientTestingModule],
       providers: [
         CookieService,
@@ -27,7 +27,7 @@ describe('ManagerComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OwnerComponent);
+    fixture = TestBed.createComponent(OwnerCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { OwnerService } from '../../services/owner.service';
-import { AuthService } from '../../services/auth.service';
-import { Owner } from '../../model/owner.model';
+import { OwnerService } from '../../../services/owner.service';
+import { AuthService } from '../../../services/auth.service';
+import { Owner } from '../../../model/owner.model';
 
 @Component({
-  selector: 'app-owner',
-  templateUrl: './owner.component.html',
-  styleUrls: ['./owner.component.scss'],
+  selector: 'app-owner-card',
+  templateUrl: './owner-card.component.html',
+  styleUrls: ['./owner-card.component.scss'],
 })
-export class OwnerComponent implements OnInit {
+export class OwnerCardComponent implements OnInit {
 
   /**
    * Object that holds Owner data
@@ -28,8 +28,9 @@ export class OwnerComponent implements OnInit {
    */
   ngOnInit() {
 
-    /* call service action to retrieve a owner by its id */
+    /* call service action to retrieve a owner-card by its id */
     this.ownerService.findById(this.authService.currentUser().id).subscribe((owner: Owner) => {
+      console.log(owner);
       this.owner = owner;
     }, (error) => {
       console.log(error);

@@ -22,7 +22,7 @@ export class OwnerService {
   }
 
   /**
-   * Find owner by id
+   * Find owner-card by id
    * @param id Manager id
    */
   findById(id): Observable<Owner> {

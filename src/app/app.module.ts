@@ -35,6 +35,7 @@ import { ChartsModule } from "ng2-charts";
 import { CookieService } from "ngx-cookie-service";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AlertModule } from "ngx-bootstrap";
+
 @NgModule({
   imports: [
     BrowserModule,
