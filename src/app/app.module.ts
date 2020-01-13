@@ -36,6 +36,12 @@ import { CookieService } from "ngx-cookie-service";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AlertModule } from "ngx-bootstrap";
 
+import { registerLocaleData } from '@angular/common';
+import localeEsCu from '@angular/common/locales/es-CU'
+
+registerLocaleData(localeEsCu, 'es');
+// Here you can import more locales if needed
+
 @NgModule({
   imports: [
     BrowserModule,

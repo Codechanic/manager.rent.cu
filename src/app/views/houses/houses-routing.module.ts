@@ -4,7 +4,6 @@ import { Routes, RouterModule } from "@angular/router";
 import { HousesListComponent } from "./houses-list/houses-list.component";
 import { HousesAddEditComponent } from "./houses-add-edit/houses-add-edit.component";
 import { AuthGuard } from "../../services/auth.guard";
-import { CommentsListComponent } from "./comments-list/comments-list.component";
 
 const routes: Routes = [
   {
@@ -30,8 +29,7 @@ const routes: Routes = [
       {
         path: "comments/:id",
         data: { title: "Comments" },
-        component: CommentsListComponent,
-        canActivateChild: [AuthGuard]
+        loadChildren: () => import("../comments/comments.module").then(m => m.CommentsModule)
       }
     ]
   },

@@ -1,17 +1,20 @@
+<alert *ngIf="alert.show" [type]="alert.type" [dismissible]="true"
+       (onClose)="alert.show = false">{{ alert.msg }}</alert>
+
 <div class="row">
   <div class="col-md-2">
-    <div class="owner-card">
-      <app-owner-card></app-owner-card>
+    <div class="house-card">
+      <app-house-card [houseId]="houseId"></app-house-card>
     </div>
   </div>
   <div class="col-md-10">
-    <div class="houses-list">
+    <div class="comments-list">
       <div class="card" [style.height]="cardHeight">
         <div class="card-header">
-          Houses
+          Comments
           <div class="card-header-actions">
             <div class="btn-group" dropdown>
-              <button class="btn btn-primary" type="button" (click)="onNew()">New</button>
+              <button class="btn btn-primary" type="button" (click)="onEdit()">Edit</button>
               <button id="button-split" class="btn btn-primary dropdown-toggle dropdown-toggle-split" type="button"
                       dropdownToggle aria-controls="dropdown-split">
                 <span class="caret"></span>
@@ -22,12 +25,8 @@
                 <li role="menuitem">
                   <a href="javascript:void(0);" class="dropdown-item"
                      [ngClass]="!(selectedRows.length === 1) ? 'disabled' : ''"
-                     (click)="onEdit()">Edit</a>
+                     (click)="onApprove()">Approve</a>
                 </li>
-                <li role="menuitem">
-                  <a href="javascript:void(0);" class="dropdown-item"
-                     [ngClass]="!(selectedRows.length === 1) ? 'disabled' : ''"
-                     (click)="onViewComments()">View comments</a></li>
                 <li class="divider dropdown-divider"></li>
                 <li role="menuitem">
                   <a href="javascript:void(0);" class="dropdown-item"
@@ -49,7 +48,7 @@
             rowHeight='40'
             rowSelection="multiple"
             rowClass="row-class"
-            [rowData]="housesObservable | async"
+            [rowData]="commentsObservable | async"
             [columnDefs]="columnDefs"
             (rowSelected)="onRowSelected()">
           </ag-grid-angular>

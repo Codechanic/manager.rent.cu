@@ -10,6 +10,7 @@ export const environment = {
     login: 'http://127.0.0.5/es/token',
     register: 'http://127.0.0.5/es/owner',
     api: 'http://localhost:3000',
+    image: 'http://127.0.0.5/uploads/main/homestay'
   },
 
   secret: 'someVerySecretKeyHere',

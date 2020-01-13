@@ -1,5 +1,8 @@
 .houses-list {
-  height: 100%;
+  
+  .card {
+    margin-bottom: 0;
+  }
 
   .card-header-actions > a {
     cursor: pointer;
@@ -28,7 +31,20 @@
   background-color: #CAE2AA;
 }
 
-::ng-deep .ngx-pagination {
-  padding: 0 !important;
-  text-align: center;
+::ng-deep {
+
+  .header-class {
+    font-size: 14px;
+    align-items: center;
+  }
+
+  .cell-class {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+  }
+
+  .room-cell-class {
+    flex-direction: row-reverse;
+  }
 }
