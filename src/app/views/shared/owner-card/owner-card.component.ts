@@ -30,7 +30,6 @@ export class OwnerCardComponent implements OnInit {
 
     /* call service action to retrieve a owner-card by its id */
     this.ownerService.findById(this.authService.currentUser().id).subscribe((owner: Owner) => {
-      console.log(owner);
       this.owner = owner;
     }, (error) => {
       console.log(error);

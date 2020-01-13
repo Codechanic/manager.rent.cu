@@ -1,0 +1,79 @@
+<alert *ngIf="alert.show" [type]="alert.type" [dismissible]="true"
+       (onClose)="alert.show = false">{{ alert.msg }}</alert>
+
+<div class="row">
+  <div class="col-md-2">
+    <div class="house-card">
+      <app-house-card [houseId]="houseId"></app-house-card>
+    </div>
+  </div>
+  <div class="col-md-10">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            Comment
+          </div>
+          <form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+            <input type="text" class="form-control" formControlName="id" hidden>
+            <div class="card-body">
+              <tabset>
+                <tab heading="General">
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Name</label>
+                    <div class="col-md-9">
+                      <div
+                        class="bg-danger"
+                        *ngIf="commentForm.get('name').hasError('required') && commentForm.get('name').touched">
+                        Name required
+                      </div>
+                      <input type="text" class="form-control" formControlName="name">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Nick</label>
+                    <div class="col-md-9">
+                      <div
+                        class="bg-danger"
+                        *ngIf="commentForm.get('nick').hasError('required') && commentForm.get('nick').touched">
+                        Nick required
+                      </div>
+                      <input type="text" class="form-control" formControlName="nick">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Email</label>
+                    <div class="col-md-9">
+                      <div
+                        class="bg-danger"
+                        *ngIf="commentForm.get('email').hasError('required') && commentForm.get('email').touched">
+                        Nick required
+                      </div>
+                      <input type="text" class="form-control" formControlName="email">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Text</label>
+                    <div class="col-md-9">
+                      <div
+                        class="bg-danger"
+                        *ngIf="commentForm.get('text').hasError('required') && commentForm.get('text').touched">
+                        Nick required
+                      </div>
+                      <textarea style="min-height: 200px" class="form-control" formControlName="text"></textarea>
+                    </div>
+                  </div>
+                </tab>
+              </tabset>
+            </div>
+            <div class="card-footer">
+              <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
+              <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

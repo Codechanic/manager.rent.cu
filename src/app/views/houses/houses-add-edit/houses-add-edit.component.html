@@ -10,61 +10,167 @@
   <div class="col-md-10">
     <div class="row">
       <div class="col-md-12">
-        <div class="card">
-          <div class="card-header">
-            House
-          </div>
-          <form [formGroup]="houseForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="houseForm" (ngSubmit)="onSubmit()">
+          <div class="card" [style.min-height]="cardHeight">
+            <div class="card-header">
+              House
+            </div>
             <div class="card-body">
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label">Name</label>
-                <div class="col-md-9">
-                  <input type="text" class="form-control" formControlName="id" hidden>
-                  <div
-                    class="bg-danger"
-                    *ngIf="houseForm.get('name').hasError('required') && houseForm.get('name').touched">
-                    Username required
+              <tabset>
+                <tab heading="General">
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Name</label>
+                    <div class="col-md-9">
+                      <input type="text" class="form-control" formControlName="id" hidden>
+                      <div
+                        class="bg-danger"
+                        *ngIf="houseForm.get('name').hasError('required') && houseForm.get('name').touched">
+                        Name required
+                      </div>
+                      <input type="text" class="form-control" formControlName="name">
+                    </div>
                   </div>
-                  <input type="text" class="form-control" formControlName="name">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label">Address</label>
-                <div class="col-md-9">
-                  <input type="text" class="form-control" formControlName="address">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label">Phones</label>
-                <div class="col-md-9">
-                  <input type="text" class="form-control" formControlName="phones">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label">Rooms</label>
-                <div class="col-md-9">
-                  <input type="number" class="form-control" formControlName="rooms">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label">Owner</label>
-                <div class="col-md-9">
-                  <input type="text" class="form-control" formControlName="owner" disabled>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label">Description</label>
-                <div class="col-md-9">
-                  <textarea class="form-control" formControlName="description"></textarea>
-                </div>
-              </div>
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Phones</label>
+                    <div class="col-md-9">
+                      <input type="text" class="form-control" formControlName="phones">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Rooms</label>
+                    <div class="col-md-9">
+                      <input type="number" class="form-control" formControlName="rooms">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Owner</label>
+                    <div class="col-md-9">
+                      <input type="text" class="form-control" formControlName="owner">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Owner email</label>
+                    <div class="col-md-9">
+                      <input type="text" class="form-control" formControlName="email">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Description</label>
+                    <div class="col-md-9">
+                      <textarea style="min-height: 400px" class="form-control" formControlName="description"></textarea>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Keywords</label>
+                    <div class="col-md-9">
+                      <input type="text" class="form-control" formControlName="metaKeywords">
+                    </div>
+                  </div>
+                </tab>
+                <tab heading="Accommodation">
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Accommodation Type</label>
+                    <div class="col-md-9">
+                      <ng-select [items]="accommodationTypes$ | async"
+                                 placeholder="Select accomodation type"
+                                 bindValue="id"
+                                 bindLabel="name"
+                                 formControlName="accommodation">
+
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Free services</label>
+                    <div class="col-md-9">
+                      <ng-select [items]="freeServices$ | async"
+                                 placeholder="Select free services"
+                                 bindValue="id"
+                                 bindLabel="name"
+                                 [multiple]="true"
+                                 [closeOnSelect]="false"
+                                 [searchable]="false"
+                                 formControlName="homestayFreeservices">
+
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Not offered services</label>
+                    <div class="col-md-9">
+                      <ng-select [items]="notOffered$ | async"
+                                 placeholder="Select not offered services"
+                                 bindValue="id"
+                                 bindLabel="name"
+                                 [multiple]="true"
+                                 [closeOnSelect]="false"
+                                 [searchable]="false"
+                                 formControlName="homestayNotOffered">
+
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Extra-cost services</label>
+                    <div class="col-md-9">
+                      <ng-select [items]="extraCost$ | async"
+                                 placeholder="Select extra-cost services"
+                                 bindValue="id"
+                                 bindLabel="name"
+                                 [multiple]="true"
+                                 [closeOnSelect]="false"
+                                 [searchable]="false"
+                                 formControlName="homestayExtracosts">
+
+                      </ng-select>
+                    </div>
+                  </div>
+                </tab>
+                <tab heading="Location">
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Address</label>
+                    <div class="col-md-9">
+                      <div
+                        class="bg-danger"
+                        *ngIf="houseForm.get('address').hasError('required') && houseForm.get('address').touched">
+                        Address required
+                      </div>
+                      <input type="text" class="form-control" formControlName="address">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Municipality</label>
+                    <div class="col-md-9">
+                      <ng-select [items]="municipalities$ | async"
+                                 placeholder="Select municipality type"
+                                 bindValue="id"
+                                 bindLabel="name"
+                                 formControlName="municipality">
+
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Latitude</label>
+                    <div class="col-md-9">
+                      <input type="number" step="0.00001" class="form-control" formControlName="latitude">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Longitude</label>
+                    <div class="col-md-9">
+                      <input type="number" class="form-control" formControlName="longitude">
+                    </div>
+                  </div>
+                </tab>
+              </tabset>
             </div>
             <div class="card-footer">
               <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
               <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
             </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>

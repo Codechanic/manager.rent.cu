@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 
 import { Owner } from "../../../model/owner.model";
 import { HouseService } from "../../../services/house.service";
@@ -6,13 +6,19 @@ import { OwnerService } from "../../../services/owner.service";
 import { House } from "../../../model/house.model";
 import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "../../../services/auth.service";
+import { environment } from "../../../../environments/environment";
 
 @Component({
   selector: "app-house-card",
   templateUrl: "./house-card.component.html",
   styleUrls: ["./house-card.component.scss"]
 })
-export class HouseCardComponent implements OnInit {
+export class HouseCardComponent implements OnInit, OnChanges {
+
+  /**
+   * Id of the house passed down as property
+   */
+  @Input() houseId: string;
 
   /**
    * Object that holds House data
@@ -23,6 +29,11 @@ export class HouseCardComponent implements OnInit {
    * Object that holds Owner data
    */
   owner: Owner;
+
+  /**
+   * Uris
+   */
+  environmentUris = environment.uris;
 
   /**
    * Component's constructor
@@ -42,27 +53,28 @@ export class HouseCardComponent implements OnInit {
    * Component's initialization lifecycle hook
    */
   ngOnInit() {
-    /* get the house's id from the activated route */
-    const houseId = this.activatedRoute.snapshot.params["id"];
 
-    /*
-     * if there is a house id, it means that the component has been instantiated to edit a house,
-     * otherwise, it's being used to create a new house
-     */
-    if (houseId) {
-
-      /* get the house object from the server and populate the form with its data */
-      this.houseService.findById(houseId).subscribe((house) => {
-        this.house = house;
-      });
-    }
-
-    /* call service action to retrieve a owner-card by its id */
+    /* call service action to retrieve an owner by its id */
     this.ownerService.findById(this.authService.currentUser().id).subscribe((owner: Owner) => {
       this.owner = owner;
     }, (error) => {
       console.log(error);
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+
+    /*
+     * if there is a house id, it means that the component has been instantiated to edit a house,
+     * otherwise, it's being used to create a new house
+     */
+    if (this.houseId) {
+
+      /* get the house object from the server and populate the form with its data */
+      this.houseService.findById(this.houseId).subscribe((house) => {
+        this.house = house;
+      });
+    }
   }
 
 }

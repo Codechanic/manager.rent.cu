@@ -1,40 +1,95 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from "@angular/core";
+import { Router } from "@angular/router";
 
 import { BsDropdownConfig } from "ngx-bootstrap";
+import { Observable } from "rxjs";
+import { AgGridAngular } from "ag-grid-angular";
 
-import { AuthService } from '../../../services/auth.service';
-import { HouseService } from '../../../services/house.service';
-import { House } from '../../../model/house.model';
+import { AuthService } from "../../../services/auth.service";
+import { HouseService } from "../../../services/house.service";
+import { House } from "../../../model/house.model";
+import { AppCommonConstants } from "../../../constants/common";
 
 @Component({
-  selector: 'app-houses-list',
-  templateUrl: './houses-list.component.html',
-  styleUrls: ['./houses-list.component.scss'],
+  selector: "app-houses-list",
+  templateUrl: "./houses-list.component.html",
+  styleUrls: ["./houses-list.component.scss"],
   providers: [{ provide: BsDropdownConfig, useValue: { isAnimated: true, autoClose: true } }]
 })
 export class HousesListComponent implements OnInit {
 
   /**
+   * Ag Grid's column definitions
+   */
+  columnDefs = [
+    {
+      headerName: "Name",
+      field: "name",
+      checkboxSelection: true,
+      headerClass: "header-class",
+      cellClass: ["cell-class"]
+    },
+    {
+      headerName: "Address",
+      field: "address",
+      headerClass: "header-class",
+      flex: 1,
+      resizable: true,
+      cellClass: ["cell-class"]
+    },
+    {
+      headerName: "Phones",
+      field: "phones",
+      headerClass: "header-class",
+      resizable: true,
+      cellClass: ["cell-class"]
+    },
+    {
+      headerName: "Rooms",
+      field: "rooms",
+      headerClass: "header-class",
+      width: 70,
+      cellClass: ["cell-class", "room-cell-class"]
+    }
+  ];
+
+  @ViewChild("agGridAngular", { static: false }) agGridAngular: AgGridAngular;
+
+  /**
    * Instance reference to the delete modal component
    */
-  @ViewChild('deleteComponent', { static: false }) deleteComponent;
+  @ViewChild("deleteComponent", { static: false }) deleteComponent;
 
   /**
    * List of houses
    */
-  houses: House[];
+  housesObservable: Observable<House[]>;
 
   /**
-   * Current page in display
+   * Selected Ag Grid rows
    */
-  page = 1;
+  selectedRows: any[] = [];
+
+  /**
+   * Calculated height of the card containing the list
+   */
+  cardHeight: any;
+
+  /**
+   * Listener to DOM event window:resize
+   * @param event DOM event
+   */
+  @HostListener("window:resize", ["$event"]) onWindowResize(event) {
+    this.setCardHeight();
+  }
 
   /**
    * Component constructor
    * @param houseService House handling service
    * @param authService Authentication service
+   * @param router: Angular router
    */
-  constructor(private houseService: HouseService, private authService: AuthService) {
+  constructor(private houseService: HouseService, private authService: AuthService, private router: Router) {
   }
 
   /**
@@ -44,13 +99,28 @@ export class HousesListComponent implements OnInit {
 
     /* initialize component's data */
     this.initializeData();
+
+    this.setCardHeight();
+
   }
 
   /**
-   * Function called on deleting a house
-   * @param id House id
+   * Set the height of the list containing card dynamically
    */
-  onDelete(id: string) {
+  setCardHeight() {
+
+      this.cardHeight = (
+        document.getElementsByClassName("nav")[2].clientHeight -
+        document.getElementsByClassName("breadcrumb")[0].clientHeight -
+        AppCommonConstants.LIST_CONTAINING_CARD_PADDING
+      ) + "px";
+
+  }
+
+  /**
+   * Callback to execute on delete button click
+   */
+  onDelete() {
 
     /* prompt the user for confirmation on the deletion operation */
     this.deleteComponent.dangerModal.show();
@@ -59,12 +129,15 @@ export class HousesListComponent implements OnInit {
       /* if the user confirmed the operation */
       if (result === true) {
 
-        /* call service action to delete the house */
-        this.houseService.delete(id).subscribe((response) => {
+        this.selectedRows.forEach((row) => {
 
-          /* if the deletion operation was successful, reinitialize component's data */
-          this.initializeData();
-        }, error => console.log(error));
+          /* call service action to delete the house */
+          this.houseService.delete(row.id).subscribe((response) => {
+
+            /* if the deletion operation was successful, reinitialize component's data */
+            this.initializeData();
+          }, error => console.log(error));
+        });
       }
     });
   }
@@ -78,10 +151,34 @@ export class HousesListComponent implements OnInit {
     * call service action to retrieve from the serve the house
     * list filtered by the currently authenticated owner-card
     */
-    this.houseService.findByOwnerId(this.authService.currentUser().id).subscribe((houses) => {
-      this.houses = houses;
-    }, (error) => {
-      console.log(error);
-    });
+    this.housesObservable = this.houseService.findByOwnerId(this.authService.currentUser().id);
+  }
+
+  /**
+   * Call back to execute on Ag Grid row selection
+   */
+  onRowSelected() {
+    this.selectedRows = this.agGridAngular.api.getSelectedRows();
+  }
+
+  /**
+   * Callback to execute on edit button click
+   */
+  onEdit() {
+    this.router.navigate(["houses/edit/" + this.selectedRows[0].id]);
+  }
+
+  /**
+   * Callback to execute on new button click
+   */
+  onNew() {
+    this.router.navigate(["houses/new/"]);
+  }
+
+  /**
+   * Callback to execute on view comments button click
+   */
+  onViewComments() {
+    this.router.navigate(["houses/list/comments/" + this.selectedRows[0].id]);
   }
 }
