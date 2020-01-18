@@ -6,8 +6,8 @@ import * as CryptoJS from 'crypto-js';
 import { CookieService } from 'ngx-cookie-service';
 import * as jwt_decode from 'jwt-decode';
 
-import { AuthService } from '../../services/auth.service';
-import { environment } from '../../../environments/environment';
+import { AuthService } from '../../../services/auth.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-dashboard',

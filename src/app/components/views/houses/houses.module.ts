@@ -9,8 +9,8 @@ import { NgSelectModule } from "@ng-select/ng-select";
 import { HousesRoutingModule } from "./houses-routing.module";
 import { HousesListComponent } from "./houses-list/houses-list.component";
 import { HousesAddEditComponent } from "./houses-add-edit/houses-add-edit.component";
-import { ModalsModule } from "../modals/modals.module";
-import { SharedModule } from "../shared/shared.module";
+import { ModalsModule } from "../../modals/modals.module";
+import { SharedModule } from "../../shared/shared.module";
 
 @NgModule({
   declarations: [

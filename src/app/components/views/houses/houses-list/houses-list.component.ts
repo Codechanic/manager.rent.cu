@@ -5,10 +5,10 @@ import { BsDropdownConfig } from "ngx-bootstrap";
 import { Observable } from "rxjs";
 import { AgGridAngular } from "ag-grid-angular";
 
-import { AuthService } from "../../../services/auth.service";
-import { HouseService } from "../../../services/house.service";
-import { House } from "../../../model/house.model";
-import { AppCommonConstants } from "../../../constants/common";
+import { AuthService } from "../../../../services/auth.service";
+import { HouseService } from "../../../../services/house.service";
+import { House } from "../../../../model/house.model";
+import { AppCommonConstants } from "../../../../constants/common";
 
 @Component({
   selector: "app-houses-list",
@@ -111,7 +111,7 @@ export class HousesListComponent implements OnInit {
 
       this.cardHeight = (
         document.getElementsByClassName("nav")[2].clientHeight -
-        document.getElementsByClassName("breadcrumb")[0].clientHeight -
+        50 -
         AppCommonConstants.LIST_CONTAINING_CARD_PADDING
       ) + "px";
 

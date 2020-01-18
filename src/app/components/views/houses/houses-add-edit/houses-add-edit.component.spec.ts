@@ -7,7 +7,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { AlertModule } from 'ngx-bootstrap';
 
 import { HousesAddEditComponent } from './houses-add-edit.component';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../../services/auth.service';
 
 describe('HousesAddEditComponent', () => {
   let component: HousesAddEditComponent;

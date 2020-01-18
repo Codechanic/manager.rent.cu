@@ -6,7 +6,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { CookieService } from 'ngx-cookie-service';
 
 import { HousesListComponent } from './houses-list.component';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../../services/auth.service';
 
 describe('HousesListComponent', () => {
   let component: HousesListComponent;

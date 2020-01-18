@@ -10,11 +10,11 @@
   <div class="col-md-10">
     <div class="row">
       <div class="col-md-12">
-        <div class="card">
-          <div class="card-header">
-            Comment
-          </div>
-          <form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+          <div class="card" [style.min-height]="cardHeight">
+            <div class="card-header">
+              Comment
+            </div>
             <input type="text" class="form-control" formControlName="id" hidden>
             <div class="card-body">
               <tabset>
@@ -71,8 +71,8 @@
               <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
               <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
             </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>

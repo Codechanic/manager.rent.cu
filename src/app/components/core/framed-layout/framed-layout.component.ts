@@ -1,14 +1,14 @@
-import { Component, Inject, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-import { DOCUMENT } from '@angular/common';
+import { Component, Inject, OnDestroy } from "@angular/core";
+import { Router } from "@angular/router";
+import { DOCUMENT } from "@angular/common";
 
-import { navItems } from '../../_nav';
-import { AuthService } from '../../services/auth.service';
+import { navItems } from "../../../_nav";
+import { AuthService } from "../../../services/auth.service";
 
 @Component({
-  selector: 'app-framed-layout',
-  templateUrl: './framed-layout.component.html',
-  styleUrls: ['./framed-layout.component.scss'],
+  selector: "app-framed-layout",
+  templateUrl: "./framed-layout.component.html",
+  styleUrls: ["./framed-layout.component.scss"]
 })
 export class FramedLayoutComponent implements OnDestroy {
   public navItems = navItems;
@@ -19,12 +19,12 @@ export class FramedLayoutComponent implements OnDestroy {
   constructor(private authService: AuthService, private router: Router, @Inject(DOCUMENT) _document?: any) {
 
     this.changes = new MutationObserver((mutations) => {
-      this.sidebarMinimized = _document.body.classList.contains('sidebar-minimized');
+      this.sidebarMinimized = _document.body.classList.contains("sidebar-minimized");
     });
     this.element = _document.body;
-    this.changes.observe(<Element> this.element, {
+    this.changes.observe(<Element>this.element, {
       attributes: true,
-      attributeFilter: ['class'],
+      attributeFilter: ["class"]
     });
   }
 
@@ -35,7 +35,7 @@ export class FramedLayoutComponent implements OnDestroy {
   onLogout() {
     this.authService.logout().subscribe((loggedOut) => {
       if (loggedOut) {
-        this.router.navigate(['login']);
+        this.router.navigate(["login"]);
       }
     });
   }

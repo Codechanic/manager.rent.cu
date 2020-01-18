@@ -2,19 +2,20 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 
-import { HouseService } from "../../../services/house.service";
-import { House } from "../../../model/house.model";
-import { AuthService } from "../../../services/auth.service";
-import { OwnerService } from "../../../services/owner.service";
-import { Owner } from "../../../model/owner.model";
-import { Municipality } from "../../../model/municipality.model";
-import { FormDataService } from "../../../services/form-data.service";
-import { AccommodationType } from "../../../model/accommodation-type.model";
+import { HouseService } from "../../../../services/house.service";
+import { House } from "../../../../model/house.model";
+import { AuthService } from "../../../../services/auth.service";
+import { OwnerService } from "../../../../services/owner.service";
+import { Owner } from "../../../../model/owner.model";
+import { Municipality } from "../../../../model/municipality.model";
+import { FormDataService } from "../../../../services/form-data.service";
+import { AccommodationType } from "../../../../model/accommodation-type.model";
 import { Observable } from "rxjs";
-import { FreeService } from "../../../model/free-service.model";
-import { AppCommonConstants } from "../../../constants/common";
-import { NotOffered } from "../../../model/not-offered.model";
-import { ExtraCostService } from "../../../model/extra-cost-service.model";
+import { FreeService } from "../../../../model/free-service.model";
+import { AppCommonConstants } from "../../../../constants/common";
+import { NotOffered } from "../../../../model/not-offered.model";
+import { ExtraCostService } from "../../../../model/extra-cost-service.model";
+import { Place } from "../../../../model/place.model";
 
 @Component({
   selector: "app-houses-add-edit",
@@ -43,7 +44,8 @@ export class HousesAddEditComponent implements OnInit {
     accommodation: new FormControl(""),
     homestayFreeservices: new FormControl(""),
     homestayNotOffered: new FormControl(""),
-    homestayExtracosts: new FormControl("")
+    homestayExtracosts: new FormControl(""),
+    places: new FormControl("")
   });
 
   /**
@@ -85,6 +87,11 @@ export class HousesAddEditComponent implements OnInit {
    * Extra-cost services observable
    */
   extraCost$: Observable<ExtraCostService[]>;
+
+  /**
+   * Nearby places observable
+   */
+  places$: Observable<ExtraCostService[]>;
 
   /**
    * Dynamic form containing card height
@@ -157,6 +164,11 @@ export class HousesAddEditComponent implements OnInit {
      */
     this.extraCost$ = this.formDataService.extraCost();
 
+    /*
+     * create the nearby places observable
+     */
+    this.places$ = this.formDataService.places();
+
     /**
      * set form containing card automatically
      */
@@ -171,7 +183,7 @@ export class HousesAddEditComponent implements OnInit {
 
     this.cardHeight = (
       document.getElementsByClassName("nav")[2].clientHeight -
-      document.getElementsByClassName("breadcrumb")[0].clientHeight -
+      50 -
       AppCommonConstants.LIST_CONTAINING_CARD_PADDING
     ) + "px";
 
@@ -191,8 +203,8 @@ export class HousesAddEditComponent implements OnInit {
     this.houseForm.controls["latitude"].setValue(house.latitude);
     this.houseForm.controls["longitude"].setValue(house.longitude);
     this.houseForm.controls["metaKeywords"].setValue(house.metaKeywords);
-    this.houseForm.controls["municipality"].setValue(house.municipality.id);
-    this.houseForm.controls["accommodation"].setValue(house.accommodation.id);
+    this.houseForm.controls["municipality"].setValue(house.municipality ? house.municipality.id : "");
+    this.houseForm.controls["accommodation"].setValue(house.accommodation ? house.accommodation.id : "");
 
     /* set man-to-many relationship values */
     this.houseForm.controls["homestayFreeservices"].setValue(
@@ -208,6 +220,11 @@ export class HousesAddEditComponent implements OnInit {
     this.houseForm.controls["homestayExtracosts"].setValue(
       house.homestayExtracosts.map((homestayExtracost: ExtraCostService) => {
         return homestayExtracost.id;
+      })
+    );
+    this.houseForm.controls["places"].setValue(
+      house.places.map((place: Place) => {
+        return place.id;
       })
     );
   }
@@ -241,6 +258,12 @@ export class HousesAddEditComponent implements OnInit {
           return { id: homestayExtracostId };
         });
       this.houseForm.controls["homestayExtracosts"].setValue(homestayExtracosts);
+
+      const places = this.houseForm.controls["places"].value.map(
+        (placeId) => {
+          return { id: placeId };
+        });
+      this.houseForm.controls["places"].setValue(places);
 
       /* if there was not a house id set */
       if (!this.houseId) {
@@ -298,6 +321,11 @@ export class HousesAddEditComponent implements OnInit {
           this.houseForm.controls["homestayExtracosts"].setValue((result[0] as House).homestayExtracosts
             .map((extraCostService) => {
               return extraCostService.id;
+            }));
+
+          this.houseForm.controls["places"].setValue((result[0] as House).places
+            .map((place) => {
+              return place.id;
             }));
 
         }, error => {

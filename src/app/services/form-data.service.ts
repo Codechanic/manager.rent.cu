@@ -9,6 +9,8 @@ import { Municipality } from "../model/municipality.model";
 import { AccommodationType } from "../model/accommodation-type.model";
 import { FreeService } from "../model/free-service.model";
 import { ExtraCostService } from "../model/extra-cost-service.model";
+import { NotOffered } from "../model/not-offered.model";
+import { Place } from "../model/place.model";
 
 /**
  * Form data handling service
@@ -54,14 +56,21 @@ export class FormDataService {
   /**
    * Get list of not offered services
    */
-  notOffered() {
+  notOffered(): Observable<NotOffered[]> {
     return this.httpClient.get<FreeService[]>(environment.uris.api + '/form/data/notoffered');
   }
 
   /**
-   * Get list of not offered services
+   * Get list of extra cost services
    */
-  extraCost() {
+  extraCost(): Observable<ExtraCostService[]> {
     return this.httpClient.get<ExtraCostService[]>(environment.uris.api + '/form/data/extracost');
+  }
+
+  /**
+   * Get list of nearby places
+   */
+  places(): Observable<Place[]> {
+    return this.httpClient.get<Place[]>(environment.uris.api + '/form/data/place');
   }
 }
