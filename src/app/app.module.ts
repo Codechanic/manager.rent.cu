@@ -16,7 +16,6 @@ import { FramedLayoutComponent } from "./components/core/framed-layout/framed-la
 import { LoginComponent } from "./components/views/login/login.component";
 import { P404Component } from "./components/shared/error/404.component";
 import { P500Component } from "./components/shared/error/500.component";
-import { CustomBreadcrumbComponent } from './components/core/custom-breadcrumb/custom-breadcrumb.component'
 
 import {
   AppAsideModule,
@@ -68,7 +67,6 @@ registerLocaleData(localeEsCu, 'es');
     LoginComponent,
     P404Component,
     P500Component,
-    CustomBreadcrumbComponent,
     FramedLayoutComponent
   ],
   providers: [
