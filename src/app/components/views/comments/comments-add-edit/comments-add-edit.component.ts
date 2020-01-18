@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 
-import { Comment } from "../../../model/comment.model";
-import { CommentService } from "../../../services/comment.service";
+import { Comment } from "../../../../model/comment.model";
+import { CommentService } from "../../../../services/comment.service";
+import { AppCommonConstants } from "../../../../constants/common";
 
 @Component({
   selector: 'app-comments-add-edit',
@@ -38,6 +39,11 @@ export class CommentsAddEditComponent implements OnInit {
    */
   houseId: any;
 
+  /**
+   * Dynamic form containing card height
+   */
+  private cardHeight: string;
+
   constructor(private commentService: CommentService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
@@ -58,6 +64,24 @@ export class CommentsAddEditComponent implements OnInit {
         this.populateForm(comment);
       });
     }
+
+    /**
+     * set form containing card automatically
+     */
+    this.setCardHeight();
+  }
+
+  /**
+   * Set the height of the list containing card dynamically
+   */
+  setCardHeight() {
+
+    this.cardHeight = (
+      document.getElementsByClassName("nav")[2].clientHeight -
+      document.getElementsByClassName("breadcrumb")[0].clientHeight -
+      AppCommonConstants.LIST_CONTAINING_CARD_PADDING
+    ) + "px";
+
   }
 
   /**
@@ -78,7 +102,7 @@ export class CommentsAddEditComponent implements OnInit {
       this.commentService.update(this.commentForm.value).subscribe((result) => {
         /* if the operation was successful, alert the user about it */
         this.alert.type = "success";
-        this.alert.msg = "House created successfully";
+        this.alert.msg = "Comment edited successfully";
         this.alert.show = true;
       }, error => {
         this.alert.type = "danger";

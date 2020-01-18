@@ -1,11 +1,11 @@
 import { Component, HostListener, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
-import { CommentService } from "../../../services/comment.service";
-import { Comment } from "../../../model/comment.model";
+import { CommentService } from "../../../../services/comment.service";
+import { Comment } from "../../../../model/comment.model";
 import { AgGridAngular } from "ag-grid-angular";
 import { Observable } from "rxjs";
-import { AppCommonConstants } from "../../../constants/common";
+import { AppCommonConstants } from "../../../../constants/common";
 
 @Component({
   selector: "app-comments-list",

@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 // Import Containers
-import { FramedLayoutComponent } from './containers/framed-layout/framed-layout.component';
+import { FramedLayoutComponent } from './components/core/framed-layout/framed-layout.component';
 
-import { P404Component } from './views/error/404.component';
-import { P500Component } from './views/error/500.component';
-import { LoginComponent } from './views/login/login.component';
-import { RegisterComponent } from './views/register/register.component';
+import { P404Component } from './components/shared/error/404.component';
+import { P500Component } from './components/shared/error/500.component';
+import { LoginComponent } from './components/views/login/login.component';
+import { RegisterComponent } from './components/views/register/register.component';
 import { AuthGuard } from './services/auth.guard';
 
 export const routes: Routes = [
@@ -20,14 +20,14 @@ export const routes: Routes = [
     path: '404',
     component: P404Component,
     data: {
-      title: 'Page 404',
+      breadcrumb: 'Page 404',
     },
   },
   {
     path: '500',
     component: P500Component,
     data: {
-      title: 'Page 500',
+      breadcrumb: 'Page 500',
     },
   },
   {
@@ -46,18 +46,18 @@ export const routes: Routes = [
   },
   {
     path: 'register',
-    loadChildren: () => import('./views/register/register.module').then(m => m.RegisterModule),
+    loadChildren: () => import('./components/views/register/register.module').then(m => m.RegisterModule),
   },
   {
     path: '',
     component: FramedLayoutComponent,
-    data: {
-      title: 'Home',
-    },
     children: [
       {
         path: 'houses',
-        loadChildren: () => import('./views/houses/houses.module').then(m => m.HousesModule),
+        data: {
+          breadcrumb: 'Houses',
+        },
+        loadChildren: () => import('./components/views/houses/houses.module').then(m => m.HousesModule),
         canLoad: [AuthGuard],
       },
     ],

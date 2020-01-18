@@ -5,8 +5,8 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
 import { CookieService } from "ngx-cookie-service";
 import * as CryptoJS from "crypto-js";
 
-import { AuthService } from "../../services/auth.service";
-import { environment } from "../../../environments/environment";
+import { AuthService } from "../../../services/auth.service";
+import { environment } from "../../../../environments/environment";
 
 @Component({
   selector: "app-dashboard",

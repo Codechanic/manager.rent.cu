@@ -162,7 +162,23 @@
                       <input type="number" class="form-control" formControlName="longitude">
                     </div>
                   </div>
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Nearby places</label>
+                    <div class="col-md-9">
+                      <ng-select [items]="places$ | async"
+                                 placeholder="Select nearby places"
+                                 bindValue="id"
+                                 bindLabel="name"
+                                 [multiple]="true"
+                                 [closeOnSelect]="false"
+                                 [searchable]="false"
+                                 formControlName="places">
+
+                      </ng-select>
+                    </div>
+                  </div>
                 </tab>
+                <tab heading="Prices"></tab>
               </tabset>
             </div>
             <div class="card-footer">

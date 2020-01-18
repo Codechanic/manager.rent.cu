@@ -10,12 +10,13 @@ import { JwtInterceptor } from "./interceptors/jwt.interceptor";
 import { AppComponent } from "./app.component";
 
 // Import containers
-import { FramedLayoutComponent } from "./containers/framed-layout/framed-layout.component";
+import { FramedLayoutComponent } from "./components/core/framed-layout/framed-layout.component";
 
-// Import local components
-import { LoginComponent } from "./views/login/login.component";
-import { P404Component } from "./views/error/404.component";
-import { P500Component } from "./views/error/500.component";
+// Import local and core components
+import { LoginComponent } from "./components/views/login/login.component";
+import { P404Component } from "./components/shared/error/404.component";
+import { P500Component } from "./components/shared/error/500.component";
+import { CustomBreadcrumbComponent } from './components/core/custom-breadcrumb/custom-breadcrumb.component'
 
 import {
   AppAsideModule,
@@ -37,7 +38,8 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { AlertModule } from "ngx-bootstrap";
 
 import { registerLocaleData } from '@angular/common';
-import localeEsCu from '@angular/common/locales/es-CU'
+import localeEsCu from '@angular/common/locales/es-CU';
+import { BreadcrumbModule } from "angular-crumbs";
 
 registerLocaleData(localeEsCu, 'es');
 // Here you can import more locales if needed
@@ -46,6 +48,7 @@ registerLocaleData(localeEsCu, 'es');
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    BreadcrumbModule,
     AppRoutingModule,
     AppAsideModule,
     AppBreadcrumbModule.forRoot(),
@@ -65,6 +68,7 @@ registerLocaleData(localeEsCu, 'es');
     LoginComponent,
     P404Component,
     P500Component,
+    CustomBreadcrumbComponent,
     FramedLayoutComponent
   ],
   providers: [

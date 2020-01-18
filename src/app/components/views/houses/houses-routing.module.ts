@@ -3,7 +3,7 @@ import { Routes, RouterModule } from "@angular/router";
 
 import { HousesListComponent } from "./houses-list/houses-list.component";
 import { HousesAddEditComponent } from "./houses-add-edit/houses-add-edit.component";
-import { AuthGuard } from "../../services/auth.guard";
+import { AuthGuard } from "../../../services/auth.guard";
 
 const routes: Routes = [
   {
@@ -16,7 +16,7 @@ const routes: Routes = [
   {
     path: "list",
     data: {
-      title: "Houses' List"
+      breadcrumb: "Houses' List"
     },
     canLoad: [AuthGuard],
     canActivate: [AuthGuard],
@@ -28,7 +28,7 @@ const routes: Routes = [
       },
       {
         path: "comments/:id",
-        data: { title: "Comments" },
+        data: { breadcrumb: "Comments" },
         loadChildren: () => import("../comments/comments.module").then(m => m.CommentsModule)
       }
     ]
@@ -37,7 +37,7 @@ const routes: Routes = [
     path: "new",
     component: HousesAddEditComponent,
     data: {
-      title: "New House"
+      breadcrumb: "New House"
     },
     canLoad: [AuthGuard],
     canActivate: [AuthGuard]
@@ -46,7 +46,7 @@ const routes: Routes = [
     path: "edit/:id",
     component: HousesAddEditComponent,
     data: {
-      title: "Edit House"
+      breadcrumb: "Edit House"
     },
     canLoad: [AuthGuard],
     canActivate: [AuthGuard]

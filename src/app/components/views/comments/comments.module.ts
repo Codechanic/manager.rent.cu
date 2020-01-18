@@ -8,8 +8,8 @@ import { AgGridModule } from "ag-grid-angular";
 import { CommentsRoutingModule } from "./comments-routing.module";
 import { CommentsListComponent } from "./comments-list/comments-list.component";
 import { CommentsAddEditComponent } from "./comments-add-edit/comments-add-edit.component";
-import { SharedModule } from "../shared/shared.module";
-import { ModalsModule } from "../modals/modals.module";
+import { SharedModule } from "../../shared/shared.module";
+import { ModalsModule } from "../../modals/modals.module";
 
 @NgModule({
   declarations: [
