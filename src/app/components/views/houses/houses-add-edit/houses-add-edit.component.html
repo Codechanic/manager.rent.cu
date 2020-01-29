@@ -139,13 +139,27 @@
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label class="col-md-3 col-form-label">Municipality</label>
+                    <label class="col-md-3 col-form-label">Province</label>
                     <div class="col-md-9">
-                      <ng-select [items]="municipalities$ | async"
-                                 placeholder="Select municipality type"
+                      <ng-select [items]="provinces$ | async"
+                                 placeholder="Select province"
                                  bindValue="id"
                                  bindLabel="name"
-                                 formControlName="municipality">
+                                 #provincesSelect>
+
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Municipality</label>
+                    <div class="col-md-9">
+                      <ng-select [items]="municipalities"
+                                 placeholder="Select municipality"
+                                 bindValue="id"
+                                 bindLabel="name"
+                                 formControlName="municipality"
+                                 [loading]="loadingMunicipalities"
+                                 #municipalitiesSelect>
 
                       </ng-select>
                     </div>
