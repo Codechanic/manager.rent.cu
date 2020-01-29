@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   /**
    * Property that says if the component was accessed because the session expired
    */
-  sessionExpired: false;
+  sessionExpired = false;
 
   /**
    * Form group to collect and validate user data for authentication

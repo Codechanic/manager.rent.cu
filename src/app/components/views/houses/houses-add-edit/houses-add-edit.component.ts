@@ -1,6 +1,9 @@
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Component, EventEmitter, OnInit, ViewChild } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+
+import { Observable } from "rxjs";
+import { NgSelectComponent } from "@ng-select/ng-select";
 
 import { HouseService } from "../../../../services/house.service";
 import { House } from "../../../../model/house.model";
@@ -10,12 +13,12 @@ import { Owner } from "../../../../model/owner.model";
 import { Municipality } from "../../../../model/municipality.model";
 import { FormDataService } from "../../../../services/form-data.service";
 import { AccommodationType } from "../../../../model/accommodation-type.model";
-import { Observable } from "rxjs";
 import { FreeService } from "../../../../model/free-service.model";
 import { AppCommonConstants } from "../../../../constants/common";
 import { NotOffered } from "../../../../model/not-offered.model";
 import { ExtraCostService } from "../../../../model/extra-cost-service.model";
 import { Place } from "../../../../model/place.model";
+import { Province } from "../../../../model/province.model";
 
 @Component({
   selector: "app-houses-add-edit",
@@ -54,6 +57,11 @@ export class HousesAddEditComponent implements OnInit {
   houseId: undefined;
 
   /**
+   * House object
+   */
+  house: House;
+
+  /**
    * House Owner
    */
   owner: Owner;
@@ -62,11 +70,6 @@ export class HousesAddEditComponent implements OnInit {
    * Object to handle alerts
    */
   alert = { type: "", msg: "", show: false };
-
-  /**
-   * List of municipalities' observable
-   */
-  municipalities$: Observable<Municipality[]>;
 
   /**
    * Accommodation types observable
@@ -94,9 +97,39 @@ export class HousesAddEditComponent implements OnInit {
   places$: Observable<ExtraCostService[]>;
 
   /**
+   * Provinces observable
+   */
+  provinces$: Observable<Province[]>;
+
+  /**
+   * List of provinces
+   */
+  provinces: Province[];
+
+  /**
+   * List of municipalities
+   */
+  municipalities: Municipality[];
+
+  /**
+   * Municipalities NgSelectComponent
+   */
+  @ViewChild("municipalitiesSelect", { static: false }) municipalitiesSelect: NgSelectComponent;
+
+  /**
+   * Municipalities NgSelectComponent
+   */
+  @ViewChild("provincesSelect", { static: false }) provincesSelect: NgSelectComponent;
+
+  /**
    * Dynamic form containing card height
    */
-  private cardHeight: string;
+  cardHeight: string;
+
+  /**
+   * Property that defines whether or not the municipalities are already loaded
+   */
+  loadingMunicipalities = false;
 
   /**
    * Component constructor
@@ -114,9 +147,13 @@ export class HousesAddEditComponent implements OnInit {
     private formDataService: FormDataService) {
   }
 
+  /**
+   * Angular component lifecycle hook
+   * @description Allows to execute custom code after the input properties are initialized
+   */
   ngOnInit() {
 
-    /* get the owner-card object from the server using the owner-card's id associated to the authenticated user */
+    /* get the owner object from the server using the owner's id associated to the authenticated user */
     this.ownerService.findById(this.authService.currentUser().id).subscribe((owner) => {
       this.owner = owner;
       this.houseForm.controls["owner"].setValue(owner.name);
@@ -134,15 +171,48 @@ export class HousesAddEditComponent implements OnInit {
 
       /* get the house object from the server and populate the form with its data */
       this.houseService.findById(this.houseId).subscribe((house) => {
-        console.log(house);
-        this.populateForm(house);
+        this.house = house;
+        this.populateForm();
+        if (!(this.provincesSelect.itemsList.items.length > 0)) {
+          this.provinces$.subscribe(() => {
+            this.initializeProvince();
+          });
+        } else {
+          this.initializeProvince();
+        }
       });
     }
 
-    /*
-     * create the  municipalities observable
+    /**
+     * initialize form ng-select components
      */
-    this.municipalities$ = this.formDataService.municipalities();
+    this.initializeNgSelectObservables();
+
+    /**
+     * set form containing card automatically
+     */
+    this.setCardHeight();
+
+  }
+
+  /**
+   * Initialize province-municipality relationship
+   */
+  initializeProvince() {
+    const provinceToSelect = this.provincesSelect.itemsList.findByLabel(
+      this.house.municipality.province.name
+    );
+    this.provincesSelect.registerOnChange(this.provinceSelected.bind(this));
+
+    if (provinceToSelect) {
+      this.provincesSelect.select(provinceToSelect);
+    }
+  }
+
+  /**
+   * Initialize all NgSelect-associated observables
+   */
+  initializeNgSelectObservables() {
 
     /*
      * create the accommodation types observable
@@ -169,11 +239,10 @@ export class HousesAddEditComponent implements OnInit {
      */
     this.places$ = this.formDataService.places();
 
-    /**
-     * set form containing card automatically
+    /*
+     * create the provinces observable
      */
-    this.setCardHeight();
-
+    this.provinces$ = this.formDataService.provinces();
   }
 
   /**
@@ -191,39 +260,38 @@ export class HousesAddEditComponent implements OnInit {
 
   /**
    * Populates the house form using a House object
-   * @param house House object to populate the form from
    */
-  populateForm(house: House) {
-    this.houseForm.controls["id"].setValue(house.id);
-    this.houseForm.controls["name"].setValue(house.name);
-    this.houseForm.controls["address"].setValue(house.address);
-    this.houseForm.controls["phones"].setValue(house.phones);
-    this.houseForm.controls["rooms"].setValue(house.rooms);
-    this.houseForm.controls["description"].setValue(house.description);
-    this.houseForm.controls["latitude"].setValue(house.latitude);
-    this.houseForm.controls["longitude"].setValue(house.longitude);
-    this.houseForm.controls["metaKeywords"].setValue(house.metaKeywords);
-    this.houseForm.controls["municipality"].setValue(house.municipality ? house.municipality.id : "");
-    this.houseForm.controls["accommodation"].setValue(house.accommodation ? house.accommodation.id : "");
+  populateForm() {
+    this.houseForm.controls["id"].setValue(this.house.id);
+    this.houseForm.controls["name"].setValue(this.house.name);
+    this.houseForm.controls["address"].setValue(this.house.address);
+    this.houseForm.controls["phones"].setValue(this.house.phones);
+    this.houseForm.controls["rooms"].setValue(this.house.rooms);
+    this.houseForm.controls["description"].setValue(this.house.description);
+    this.houseForm.controls["latitude"].setValue(this.house.latitude);
+    this.houseForm.controls["longitude"].setValue(this.house.longitude);
+    this.houseForm.controls["metaKeywords"].setValue(this.house.metaKeywords);
+    this.houseForm.controls["municipality"].setValue(this.house.municipality ? this.house.municipality.id : "");
+    this.houseForm.controls["accommodation"].setValue(this.house.accommodation ? this.house.accommodation.id : "");
 
     /* set man-to-many relationship values */
     this.houseForm.controls["homestayFreeservices"].setValue(
-      house.homestayFreeservices.map((homestayFreeservice: FreeService) => {
+      this.house.homestayFreeservices.map((homestayFreeservice: FreeService) => {
         return homestayFreeservice.id;
       })
     );
     this.houseForm.controls["homestayNotOffered"].setValue(
-      house.homestayNotOffered.map((homestayNotOfferedService: NotOffered) => {
+      this.house.homestayNotOffered.map((homestayNotOfferedService: NotOffered) => {
         return homestayNotOfferedService.id;
       })
     );
     this.houseForm.controls["homestayExtracosts"].setValue(
-      house.homestayExtracosts.map((homestayExtracost: ExtraCostService) => {
+      this.house.homestayExtracosts.map((homestayExtracost: ExtraCostService) => {
         return homestayExtracost.id;
       })
     );
     this.houseForm.controls["places"].setValue(
-      house.places.map((place: Place) => {
+      this.house.places.map((place: Place) => {
         return place.id;
       })
     );
@@ -276,7 +344,7 @@ export class HousesAddEditComponent implements OnInit {
         this.houseForm.controls["email"].enable();
 
         /* call the service action to create a new house object */
-        this.houseService.create(this.houseForm.value).subscribe((result) => {
+        this.houseService.create(this.houseForm.value).subscribe(() => {
 
           /* if the operation was successful, alert the user about it */
           this.alert.type = "success";
@@ -337,6 +405,32 @@ export class HousesAddEditComponent implements OnInit {
           this.alert.show = true;
         });
       }
+    }
+  }
+
+  /**
+   * Listener for the change event of the province ng-select
+   * @param provinceId Id of the selected province
+   */
+  provinceSelected(provinceId) {
+    // if a province is selected, update the model of the municipalities select
+    if (provinceId) {
+      this.municipalitiesSelect.clearModel();
+      this.loadingMunicipalities = true;
+      this.formDataService.municipalitiesByProvinceId(provinceId).subscribe((municipalities: Municipality[]) => {
+        this.municipalities = municipalities;
+        this.loadingMunicipalities = false;
+        if (this.house) {
+          setTimeout(() => {
+            const municipalityToSelect = this.municipalitiesSelect.itemsList.findByLabel(
+              this.house.municipality.name
+            );
+            if (municipalityToSelect) {
+              this.municipalitiesSelect.select(municipalityToSelect);
+            }
+          });
+        }
+      });
     }
   }
 }
