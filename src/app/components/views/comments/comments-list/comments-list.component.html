@@ -14,7 +14,9 @@
           Comments
           <div class="card-header-actions">
             <div class="btn-group" dropdown>
-              <button class="btn btn-primary" type="button" (click)="onEdit()">Edit</button>
+              <button class="btn btn-primary" type="button" (click)="onEdit()" [disabled]="selectedRows.length !== 1">
+                Edit
+              </button>
               <button id="button-split" class="btn btn-primary dropdown-toggle dropdown-toggle-split" type="button"
                       dropdownToggle aria-controls="dropdown-split">
                 <span class="caret"></span>
@@ -25,7 +27,8 @@
                 <li role="menuitem">
                   <a href="javascript:void(0);" class="dropdown-item"
                      [ngClass]="!(selectedRows.length === 1) ? 'disabled' : ''"
-                     (click)="onApprove()">Approve</a>
+                     (click)="onApprove()"
+                  >Approve</a>
                 </li>
                 <li class="divider dropdown-divider"></li>
                 <li role="menuitem">
