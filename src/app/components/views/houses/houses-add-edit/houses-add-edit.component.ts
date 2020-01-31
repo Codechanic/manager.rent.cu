@@ -172,6 +172,7 @@ export class HousesAddEditComponent implements OnInit {
       /* get the house object from the server and populate the form with its data */
       this.houseService.findById(this.houseId).subscribe((house) => {
         this.house = house;
+        console.log(house);
         this.populateForm();
         if (!(this.provincesSelect.itemsList.items.length > 0)) {
           this.provinces$.subscribe(() => {

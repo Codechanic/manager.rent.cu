@@ -25,8 +25,8 @@ export class HouseService {
   /**
    * Find all houses
    */
-  find(): Observable<House[]> {
-    return this.httpClient.get<House[]>(environment.uris.api + '/house/');
+  findAll(): Observable<House[]> {
+    return this.httpClient.get<House[]>(environment.uris.api + '/house?take=10&skip=0');
   }
 
   /**

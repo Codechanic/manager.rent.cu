@@ -122,8 +122,9 @@ export class AuthService {
 
     /* decode the jwt */
     const jwt_decoded = this.jwtDecoder(jwt);
+    console.log(jwt_decoded);
 
-    return { id: jwt_decoded.sub, username: jwt_decoded.username, roles: jwt_decoded.roles };
+    return { id: jwt_decoded.sub, username: jwt_decoded.username, role: jwt_decoded.role };
   }
 
   /**

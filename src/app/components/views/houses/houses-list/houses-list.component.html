@@ -51,7 +51,8 @@
             rowClass="row-class"
             [rowData]="housesObservable | async"
             [columnDefs]="columnDefs"
-            (rowSelected)="onRowSelected()">
+            (rowSelected)="onRowSelected()"
+            (gridReady)="onGridReady($event)">
           </ag-grid-angular>
         </div>
       </div>
