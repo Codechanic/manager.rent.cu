@@ -9,6 +9,7 @@ import { AuthService } from "../../../../services/auth.service";
 import { HouseService } from "../../../../services/house.service";
 import { House } from "../../../../model/house.model";
 import { AppCommonConstants } from "../../../../constants/common";
+import { IDatasource, IGetRowsParams } from "ag-grid-community";
 
 @Component({
   selector: "app-houses-list",
@@ -76,6 +77,31 @@ export class HousesListComponent implements OnInit {
   cardHeight: any;
 
   /**
+   * Ag-Grid datasource
+   */
+  dataSource: IDatasource = {
+    getRows: (params: IGetRowsParams) => {
+
+      // Use startRow and endRow for sending pagination to Backend
+      // params.startRow : Start Page
+      // params.endRow : End Page
+
+      const apiService = this.authService.currentUser().role === AppCommonConstants.ROLES.ROLE_ADMIN
+        ? this.houseService.findAll(params.startRow - params.endRow, params.)
+        : this.houseService.findById(this.authService.currentUser().id);
+
+      //replace this.apiService with your Backend Call that returns an Observable
+      apiService.().subscribe(response => {
+
+        params.successCallback(
+          response.data, response.totalRecords
+        );
+
+      });
+    }
+  };
+
+  /**
    * Listener to DOM event window:resize
    * @param event DOM event
    */
@@ -104,16 +130,20 @@ export class HousesListComponent implements OnInit {
 
   }
 
+  onGridReady(params: any) {
+    params.api.setDatasource(this.dataSource);
+  }
+
   /**
    * Set the height of the list containing card dynamically
    */
   setCardHeight() {
 
-      this.cardHeight = (
-        document.getElementsByClassName("nav")[2].clientHeight -
-        50 -
-        AppCommonConstants.LIST_CONTAINING_CARD_PADDING
-      ) + "px";
+    this.cardHeight = (
+      document.getElementsByClassName("nav")[2].clientHeight -
+      50 -
+      AppCommonConstants.LIST_CONTAINING_CARD_PADDING
+    ) + "px";
 
   }
 
@@ -151,7 +181,11 @@ export class HousesListComponent implements OnInit {
     * call service action to retrieve from the serve the house
     * list filtered by the currently authenticated owner-card
     */
-    this.housesObservable = this.houseService.findByOwnerId(this.authService.currentUser().id);
+    if (this.authService.currentUser().role !== AppCommonConstants.ROLES.ROLE_ADMIN) {
+      this.housesObservable = this.houseService.findByOwnerId(this.authService.currentUser().id);
+    } else {
+      this.housesObservable = this.houseService.findAll();
+    }
   }
 
   /**
