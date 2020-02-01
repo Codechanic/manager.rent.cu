@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 
 import { CommentService } from "../../../../services/comment.service";
 import { Comment } from "../../../../model/comment.model";
-import { AgGridAngular } from "ag-grid-angular";
 import { Observable } from "rxjs";
 import { AppCommonConstants } from "../../../../constants/common";
 
@@ -18,62 +17,6 @@ export class CommentsListComponent implements OnInit {
    * Id of the house
    */
   houseId: string;
-
-  /**
-   * Ag Grid's column definitions
-   */
-  columnDefs = [
-    {
-      headerName: "Name",
-      field: "name",
-      checkboxSelection: true,
-      headerClass: "header-class",
-      cellClass: ["cell-class"]
-    },
-    {
-      headerName: "Nick",
-      field: "nick",
-      headerClass: "header-class",
-      resizable: true,
-      width: 70,
-      cellClass: ["cell-class"]
-    },
-    {
-      headerName: "Email",
-      field: "email",
-      headerClass: "header-class",
-      resizable: true,
-      cellClass: ["cell-class"]
-    },
-    {
-      headerName: "Text",
-      field: "text",
-      headerClass: "header-class",
-      resizable: true,
-      flex: 1,
-      cellClass: ["cell-class"]
-    },
-    {
-      headerName: "Approved",
-      field: "enabled",
-      headerClass: "header-class",
-      width: 100,
-      cellClass: ["cell-class", "approved-cell-class"]
-    },
-    {
-      headerName: "Rating",
-      field: "rating",
-      headerClass: ["header-class", "rating-header-class"],
-      width: 70,
-      type: "numericColumn",
-      cellClass: ["cell-class", "rating-cell-class"]
-    }
-  ];
-
-  /**
-   * Ag Grid reference
-   */
-  @ViewChild("agGridAngular", { static: false }) agGridAngular: AgGridAngular;
 
   /**
    * Object holding the comments
@@ -152,13 +95,6 @@ export class CommentsListComponent implements OnInit {
   }
 
   /**
-   * Call back to execute on Ag Grid row selection
-   */
-  onRowSelected() {
-    this.selectedRows = this.agGridAngular.api.getSelectedRows();
-  }
-
-  /**
    * Call back to execute on edit button click
    */
   onEdit() {
@@ -169,18 +105,18 @@ export class CommentsListComponent implements OnInit {
    * Call back to execute on approve button click
    */
   onApprove() {
-    console.log(this.agGridAngular.api.getSelectedRows(), this.agGridAngular.api.getModel());
-    const approvedComment = this.selectedRows[0] as Comment;
-    approvedComment.enabled = true;
-    this.commentService.update(approvedComment).subscribe(() => {
-      this.alert.msg = "Comment approved successfully";
-      this.alert.type = "success";
-      this.alert.show = true;
-      this.agGridAngular.api.getSelectedNodes().forEach((node) => {
-        node.data.enabled = true;
-        node.updateData(node.data);
-      });
-    });
+    // console.log(this.agGridAngular.api.getSelectedRows(), this.agGridAngular.api.getModel());
+    // const approvedComment = this.selectedRows[0] as Comment;
+    // approvedComment.enabled = true;
+    // this.commentService.update(approvedComment).subscribe(() => {
+    //   this.alert.msg = "Comment approved successfully";
+    //   this.alert.type = "success";
+    //   this.alert.show = true;
+    //   this.agGridAngular.api.getSelectedNodes().forEach((node) => {
+    //     node.data.enabled = true;
+    //     node.updateData(node.data);
+    //   });
+    // });
   }
 
   /**

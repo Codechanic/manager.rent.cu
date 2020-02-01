@@ -1,5 +1,5 @@
 .houses-list {
-  
+
   .card {
     margin-bottom: 0;
   }
@@ -33,18 +33,19 @@
 
 ::ng-deep {
 
-  .header-class {
-    font-size: 14px;
-    align-items: center;
+  .ngx-datatable.bootstrap .datatable-footer {
+    background: #f8f9fa;
+    color:black;
+    margin-top: -1px;
   }
 
-  .cell-class {
-    font-size: 14px;
-    display: flex;
-    align-items: center;
+  .ngx-datatable.bootstrap .datatable-footer .datatable-pager a {
+    color: black;
   }
 
-  .room-cell-class {
-    flex-direction: row-reverse;
+  .ngx-datatable.bootstrap .datatable-footer .datatable-pager ul li:not(.disabled).active a,
+  .ngx-datatable.bootstrap .datatable-footer .datatable-pager ul li:not(.disabled):hover a {
+    color: #ededed;
+    background-color: #7EAD3B;
   }
 }
