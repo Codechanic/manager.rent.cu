@@ -21,17 +21,17 @@
                   aria-labelledby="button-animated">
                 <li role="menuitem">
                   <a href="javascript:void(0);" class="dropdown-item"
-                     [ngClass]="!(selectedRows.length === 1) ? 'disabled' : ''"
+                     [ngClass]="!(selected.length === 1) ? 'disabled' : ''"
                      (click)="onEdit()">Edit</a>
                 </li>
                 <li role="menuitem">
                   <a href="javascript:void(0);" class="dropdown-item"
-                     [ngClass]="!(selectedRows.length === 1) ? 'disabled' : ''"
+                     [ngClass]="!(selected.length === 1) ? 'disabled' : ''"
                      (click)="onViewComments()">View comments</a></li>
                 <li class="divider dropdown-divider"></li>
                 <li role="menuitem">
                   <a href="javascript:void(0);" class="dropdown-item"
-                     [ngClass]="!(selectedRows.length > 0) ? 'disabled' : ''"
+                     [ngClass]="!(selected.length > 0) ? 'disabled' : ''"
                      (click)="onDelete()">Delete</a>
                 </li>
               </ul>
@@ -39,21 +39,22 @@
           </div>
         </div>
         <div class="card-body">
-          <ag-grid-angular
-            #agGridAngular
-            style="width: 100%; height: 100%"
-            class="ag-theme-balham"
-            pagination="true"
-            paginationAutoPageSize="true"
-            suppressCellSelection="true"
-            rowHeight='40'
-            rowSelection="multiple"
-            rowClass="row-class"
-            [rowData]="housesObservable | async"
-            [columnDefs]="columnDefs"
-            (rowSelected)="onRowSelected()"
-            (gridReady)="onGridReady($event)">
-          </ag-grid-angular>
+          <ngx-datatable
+            class="bootstrap"
+            rowHeight="auto"
+            [rows]="rows"
+            [columns]="columns"
+            [columnMode]="ColumnMode.force"
+            [footerHeight]="50"
+            [loadingIndicator]="true"
+            [selectionType]="SelectionType.multi"
+            [externalPaging]="true"
+            [count]="page.totalElements"
+            [offset]="page.pageNumber"
+            [limit]="page.size"
+            (select)="onSelect($event)"
+            (page)="setPage($event)">
+          </ngx-datatable>
         </div>
       </div>
     </div>

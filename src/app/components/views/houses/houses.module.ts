@@ -1,10 +1,10 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { ReactiveFormsModule } from "@angular/forms";
 
 import { AlertModule, BsDropdownModule, TabsModule } from "ngx-bootstrap";
-import { ReactiveFormsModule } from "@angular/forms";
-import { AgGridModule } from "ag-grid-angular";
 import { NgSelectModule } from "@ng-select/ng-select";
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { HousesRoutingModule } from "./houses-routing.module";
 import { HousesListComponent } from "./houses-list/houses-list.component";
@@ -24,9 +24,9 @@ import { SharedModule } from "../../shared/shared.module";
     TabsModule,
     NgSelectModule,
     SharedModule,
+    NgxDatatableModule,
     BsDropdownModule.forRoot(),
     AlertModule.forRoot(),
-    AgGridModule.withComponents([])
   ]
 })
 export class HousesModule {

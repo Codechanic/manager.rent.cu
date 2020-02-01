@@ -3,13 +3,13 @@ import { Router } from "@angular/router";
 
 import { BsDropdownConfig } from "ngx-bootstrap";
 import { Observable } from "rxjs";
-import { AgGridAngular } from "ag-grid-angular";
+import { ColumnMode, SelectionType } from "@swimlane/ngx-datatable";
 
-import { AuthService } from "../../../../services/auth.service";
 import { HouseService } from "../../../../services/house.service";
-import { House } from "../../../../model/house.model";
+import { AuthService } from "../../../../services/auth.service";
 import { AppCommonConstants } from "../../../../constants/common";
-import { IDatasource, IGetRowsParams } from "ag-grid-community";
+import { House } from "../../../../model/house.model";
+import { Page } from "../../../../model/page";
 
 @Component({
   selector: "app-houses-list",
@@ -18,88 +18,49 @@ import { IDatasource, IGetRowsParams } from "ag-grid-community";
   providers: [{ provide: BsDropdownConfig, useValue: { isAnimated: true, autoClose: true } }]
 })
 export class HousesListComponent implements OnInit {
+  rows = new Array<House>();
+  page = new Page();
 
-  /**
-   * Ag Grid's column definitions
-   */
-  columnDefs = [
+  columns: any[] = [
     {
-      headerName: "Name",
-      field: "name",
-      checkboxSelection: true,
-      headerClass: "header-class",
-      cellClass: ["cell-class"]
+      name: "Name",
+      prop: "name",
+      resizeable: true
     },
     {
-      headerName: "Address",
-      field: "address",
-      headerClass: "header-class",
-      flex: 1,
-      resizable: true,
-      cellClass: ["cell-class"]
+      name: "Address",
+      prop: "address",
+      resizeable: true
     },
     {
-      headerName: "Phones",
-      field: "phones",
-      headerClass: "header-class",
-      resizable: true,
-      cellClass: ["cell-class"]
+      name: "Phones",
+      prop: "phones",
+      resizeable: true
     },
     {
-      headerName: "Rooms",
-      field: "rooms",
-      headerClass: "header-class",
-      width: 70,
-      cellClass: ["cell-class", "room-cell-class"]
+      name: "Rooms",
+      prop: "rooms",
+      resizeable: true
     }
   ];
 
-  @ViewChild("agGridAngular", { static: false }) agGridAngular: AgGridAngular;
+  ColumnMode = ColumnMode;
 
+  SelectionType = SelectionType;
   /**
    * Instance reference to the delete modal component
    */
   @ViewChild("deleteComponent", { static: false }) deleteComponent;
 
   /**
-   * List of houses
+   * Selected rows
    */
-  housesObservable: Observable<House[]>;
-
-  /**
-   * Selected Ag Grid rows
-   */
-  selectedRows: any[] = [];
+  selected = [];
 
   /**
    * Calculated height of the card containing the list
    */
   cardHeight: any;
-
-  /**
-   * Ag-Grid datasource
-   */
-  dataSource: IDatasource = {
-    getRows: (params: IGetRowsParams) => {
-
-      // Use startRow and endRow for sending pagination to Backend
-      // params.startRow : Start Page
-      // params.endRow : End Page
-
-      const apiService = this.authService.currentUser().role === AppCommonConstants.ROLES.ROLE_ADMIN
-        ? this.houseService.findAll(params.startRow - params.endRow, params.)
-        : this.houseService.findById(this.authService.currentUser().id);
-
-      //replace this.apiService with your Backend Call that returns an Observable
-      apiService.().subscribe(response => {
-
-        params.successCallback(
-          response.data, response.totalRecords
-        );
-
-      });
-    }
-  };
 
   /**
    * Listener to DOM event window:resize
@@ -116,22 +77,32 @@ export class HousesListComponent implements OnInit {
    * @param router: Angular router
    */
   constructor(private houseService: HouseService, private authService: AuthService, private router: Router) {
+    this.page.pageNumber = 0;
+    this.page.size = 5;
   }
 
   /**
    * Lifecycle hook to component's initialization
    */
   ngOnInit() {
-
-    /* initialize component's data */
-    this.initializeData();
+    this.setPage({ offset: 0 });
 
     this.setCardHeight();
 
   }
 
-  onGridReady(params: any) {
-    params.api.setDatasource(this.dataSource);
+  /**
+   * Populate the table with new data based on the page number
+   * @param pageInfo The page to select
+   */
+  setPage(pageInfo) {
+    this.page.pageNumber = pageInfo.offset;
+    this.getServerData(this.page).subscribe((data: House[]) => {
+      this.houseService.count().subscribe(totalElements => {
+        this.page.totalElements = totalElements;
+        this.rows = data;
+      });
+    });
   }
 
   /**
@@ -159,13 +130,13 @@ export class HousesListComponent implements OnInit {
       /* if the user confirmed the operation */
       if (result === true) {
 
-        this.selectedRows.forEach((row) => {
+        this.selected.forEach((row) => {
 
           /* call service action to delete the house */
           this.houseService.delete(row.id).subscribe((response) => {
 
             /* if the deletion operation was successful, reinitialize component's data */
-            this.initializeData();
+            // this.initializeData();
           }, error => console.log(error));
         });
       }
@@ -173,33 +144,10 @@ export class HousesListComponent implements OnInit {
   }
 
   /**
-   * Initialize component's data
-   */
-  initializeData() {
-
-    /*
-    * call service action to retrieve from the serve the house
-    * list filtered by the currently authenticated owner-card
-    */
-    if (this.authService.currentUser().role !== AppCommonConstants.ROLES.ROLE_ADMIN) {
-      this.housesObservable = this.houseService.findByOwnerId(this.authService.currentUser().id);
-    } else {
-      this.housesObservable = this.houseService.findAll();
-    }
-  }
-
-  /**
-   * Call back to execute on Ag Grid row selection
-   */
-  onRowSelected() {
-    this.selectedRows = this.agGridAngular.api.getSelectedRows();
-  }
-
-  /**
    * Callback to execute on edit button click
    */
   onEdit() {
-    this.router.navigate(["houses/edit/" + this.selectedRows[0].id]);
+    this.router.navigate(["houses/edit/" + this.selected[0].id]);
   }
 
   /**
@@ -213,6 +161,18 @@ export class HousesListComponent implements OnInit {
    * Callback to execute on view comments button click
    */
   onViewComments() {
-    this.router.navigate(["houses/list/comments/" + this.selectedRows[0].id]);
+    this.router.navigate(["houses/list/comments/" + this.selected[0].id]);
+  }
+
+  onSelect($event: any) {
+    this.selected.splice(0, this.selected.length);
+    this.selected.push(...$event.selected);
+  }
+
+  getServerData(page: Page) {
+    if (this.authService.currentUser().role === AppCommonConstants.ROLES.ROLE_ADMIN) {
+      return this.houseService.findAll(page);
+    }
+    return this.houseService.findByOwnerId(this.authService.currentUser().id, page);
   }
 }
