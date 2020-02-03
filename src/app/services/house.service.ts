@@ -43,8 +43,8 @@ export class HouseService {
   /**
    * Find house by it's owner id
    */
-  findByOwner(ownerId: string, page: Page): Observable<House[]> {
-    return this.httpClient.get<House[]>(
+  findByOwner(ownerId: string, page: Page): Observable<{data: House[], count: number}> {
+    return this.httpClient.get<{data: House[], count: number}>(
       environment.uris.api + '/house/owner/' + ownerId + `?take=${page.size}&skip=${page.pageNumber * page.size}`
     );
   }

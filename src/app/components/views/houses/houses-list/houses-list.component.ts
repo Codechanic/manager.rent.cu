@@ -123,11 +123,9 @@ export class HousesListComponent implements OnInit {
    */
   setPage(pageInfo) {
     this.page.pageNumber = pageInfo.offset;
-    this.getServerData(this.page).subscribe((data: House[]) => {
-      this.houseService.count().subscribe(totalElements => {
-        this.page.totalElements = totalElements;
-        this.rows = data;
-      });
+    this.getServerData(this.page).subscribe((response: {data: House[], count: number}) => {
+        this.page.totalElements = response.count;
+        this.rows = response.data;
     });
   }
 
