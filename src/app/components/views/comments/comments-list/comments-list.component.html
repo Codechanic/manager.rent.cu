@@ -14,7 +14,7 @@
           Comments
           <div class="card-header-actions">
             <div class="btn-group" dropdown>
-              <button class="btn btn-primary" type="button" (click)="onEdit()" [disabled]="selectedRows.length !== 1">
+              <button class="btn btn-primary" type="button" (click)="onEdit()" [disabled]="selected.length !== 1">
                 Edit
               </button>
               <button id="button-split" class="btn btn-primary dropdown-toggle dropdown-toggle-split" type="button"
@@ -26,14 +26,14 @@
                   aria-labelledby="button-animated">
                 <li role="menuitem">
                   <a href="javascript:void(0);" class="dropdown-item"
-                     [ngClass]="!(selectedRows.length === 1) ? 'disabled' : ''"
+                     [ngClass]="!(selected.length === 1) ? 'disabled' : ''"
                      (click)="onApprove()"
                   >Approve</a>
                 </li>
                 <li class="divider dropdown-divider"></li>
                 <li role="menuitem">
                   <a href="javascript:void(0);" class="dropdown-item"
-                     [ngClass]="!(selectedRows.length > 0) ? 'disabled' : ''"
+                     [ngClass]="!(selected.length > 0) ? 'disabled' : ''"
                      (click)="onDelete()">Delete</a>
                 </li>
               </ul>
@@ -41,6 +41,26 @@
           </div>
         </div>
         <div class="card-body">
+          <ngx-datatable
+            class="bootstrap"
+            [rows]="rows"
+            [columns]="columns"
+            [columnMode]="ColumnMode.force"
+            [footerHeight]="50"
+            [rowHeight]="50"
+            [loadingIndicator]="true"
+            [selectionType]="SelectionType.multi"
+            [externalPaging]="true"
+            [count]="page.totalElements"
+            [offset]="page.pageNumber"
+            [limit]="page.size"
+            (select)="onSelect($event)"
+            (page)="setPage($event)">
+            <ngx-datatable-column name="Name" headerClass="header"></ngx-datatable-column>
+            <ngx-datatable-column name="Phones" headerClass="header"></ngx-datatable-column>
+            <ngx-datatable-column name="Address" headerClass="header"></ngx-datatable-column>
+            <ngx-datatable-column name="Rooms" headerClass="header right-align" cellClass="right-align"></ngx-datatable-column>
+          </ngx-datatable>
         </div>
       </div>
     </div>

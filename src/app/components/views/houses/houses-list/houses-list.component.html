@@ -41,11 +41,11 @@
         <div class="card-body">
           <ngx-datatable
             class="bootstrap"
-            rowHeight="auto"
             [rows]="rows"
             [columns]="columns"
             [columnMode]="ColumnMode.force"
             [footerHeight]="50"
+            [rowHeight]="50"
             [loadingIndicator]="true"
             [selectionType]="SelectionType.multi"
             [externalPaging]="true"
@@ -54,6 +54,10 @@
             [limit]="page.size"
             (select)="onSelect($event)"
             (page)="setPage($event)">
+            <ngx-datatable-column name="Name" headerClass="header"></ngx-datatable-column>
+            <ngx-datatable-column name="Phones" headerClass="header"></ngx-datatable-column>
+            <ngx-datatable-column name="Address" headerClass="header"></ngx-datatable-column>
+            <ngx-datatable-column name="Rooms" headerClass="header right-align" cellClass="right-align"></ngx-datatable-column>
           </ngx-datatable>
         </div>
       </div>

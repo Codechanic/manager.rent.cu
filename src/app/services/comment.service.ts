@@ -1,17 +1,18 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 
-import { Observable, throwError } from "rxjs";
+import {Observable, throwError} from 'rxjs';
 
-import { Comment } from "../model/comment.model";
-import { environment } from "../../environments/environment";
-import { catchError } from "rxjs/operators";
+import {Comment} from '../model/comment.model';
+import {environment} from '../../environments/environment';
+import {catchError} from 'rxjs/operators';
+import {Page} from '../model/page';
 
 /**
  * Comments handling service
  */
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class CommentService {
 
@@ -24,10 +25,13 @@ export class CommentService {
 
   /**
    * Find comments by house
+   * @param page Currently displayed page
    * @param houseId Id of the associated house
    */
-  findByHouse(houseId: string): Observable<Comment[]> {
-    return this.httpClient.get<Comment[]>(environment.uris.api + "/comment/house/" + houseId);
+  findByHouse(page: Page, houseId: string): Observable<Comment[]> {
+    return this.httpClient.get<Comment[]>(
+      environment.uris.api + '/comment/house/' + houseId + `?take=${page.size}&skip=${page.pageNumber * page.size}`
+    );
   }
 
   /**
@@ -35,7 +39,14 @@ export class CommentService {
    * @param id Id of the comment
    */
   findById(id: string): Observable<Comment> {
-    return this.httpClient.get<Comment>(environment.uris.api + "/comment/" + id);
+    return this.httpClient.get<Comment>(environment.uris.api + '/comment/' + id);
+  }
+
+  /**
+   * Count all comments
+   */
+  count(): Observable<number> {
+    return this.httpClient.get<number>(environment.uris.api + '/comment/count');
   }
 
   /**
@@ -43,7 +54,7 @@ export class CommentService {
    * @param comment Comment to be created
    */
   create(comment: Comment) {
-    return this.httpClient.post<Comment>(environment.uris.api + "/comment/create", comment, {})
+    return this.httpClient.post<Comment>(environment.uris.api + '/comment/create', comment, {})
       .pipe(
         catchError(this.handleError)
       );
@@ -54,7 +65,7 @@ export class CommentService {
    * @param comment Comment to be updated
    */
   update(comment: Comment) {
-    return this.httpClient.put(environment.uris.api + "/comment/" + comment.id, comment, {})
+    return this.httpClient.put(environment.uris.api + '/comment/' + comment.id, comment, {})
       .pipe(
         catchError(this.handleError)
       );
@@ -67,7 +78,7 @@ export class CommentService {
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
-      console.error("An error occurred:", error.error.message);
+      console.error('An error occurred:', error.error.message);
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
@@ -77,6 +88,6 @@ export class CommentService {
     }
     // return an observable with a user-facing error message
     return throwError(
-      "Something bad happened; please try again later.");
+      'Something bad happened; please try again later.');
   }
 }

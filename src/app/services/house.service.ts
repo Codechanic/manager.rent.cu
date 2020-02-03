@@ -1,18 +1,18 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 
-import { Observable, throwError } from "rxjs";
-import { catchError } from "rxjs/operators";
+import {Observable, throwError} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 
-import { House } from "../model/house.model";
-import { environment } from "../../environments/environment";
-import { Page } from "../model/page";
+import {House} from '../model/house.model';
+import {environment} from '../../environments/environment';
+import {Page} from '../model/page';
 
 /**
  * House handling service
  */
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class HouseService {
 
@@ -27,7 +27,9 @@ export class HouseService {
    * Find all houses
    */
   findAll(page: Page): Observable<House[]> {
-    return this.httpClient.get<House[]>(environment.uris.api + `/house?take=${page.size}&skip=${page.pageNumber * page.size}`);
+    return this.httpClient.get<House[]>(
+      environment.uris.api + `/house?take=${page.size}&skip=${page.pageNumber * page.size}`
+    );
   }
 
   /**
@@ -35,14 +37,16 @@ export class HouseService {
    * @param id House id
    */
   findById(id: string): Observable<House> {
-    return this.httpClient.get<House>(environment.uris.api + "/house/" + id);
+    return this.httpClient.get<House>(environment.uris.api + '/house/' + id);
   }
 
   /**
    * Find house by it's owner id
    */
-  findByOwnerId(ownerId: string, page: Page): Observable<House[]> {
-    return this.httpClient.get<House[]>(environment.uris.api + "/house/owner/" + ownerId);
+  findByOwner(ownerId: string, page: Page): Observable<House[]> {
+    return this.httpClient.get<House[]>(
+      environment.uris.api + '/house/owner/' + ownerId + `?take=${page.size}&skip=${page.pageNumber * page.size}`
+    );
   }
 
   /**
@@ -50,7 +54,7 @@ export class HouseService {
    * @param house House to be created
    */
   create(house: House) {
-    return this.httpClient.post<House>(environment.uris.api + "/house/create", house, {})
+    return this.httpClient.post<House>(environment.uris.api + '/house/create', house, {})
       .pipe(
         catchError(this.handleError)
       );
@@ -61,7 +65,7 @@ export class HouseService {
    * @param house House to be updated
    */
   update(house: House) {
-    return this.httpClient.put(environment.uris.api + "/house/" + house.id + "/update", house, {})
+    return this.httpClient.put(environment.uris.api + '/house/' + house.id + '/update', house, {})
       .pipe(
         catchError(this.handleError)
       );
@@ -72,14 +76,14 @@ export class HouseService {
    * @param id Id of the house to be deleted
    */
   delete(id: string) {
-    return this.httpClient.delete(environment.uris.api + "/house/" + id + "/delete");
+    return this.httpClient.delete(environment.uris.api + '/house/' + id + '/delete');
   }
 
   /**
    * Count houses
    */
   count() {
-    return this.httpClient.get<number>(environment.uris.api + "/house/count");
+    return this.httpClient.get<number>(environment.uris.api + '/house/count');
   }
 
   /**
@@ -89,7 +93,7 @@ export class HouseService {
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
-      console.error("An error occurred:", error.error.message);
+      console.error('An error occurred:', error.error.message);
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
@@ -99,6 +103,6 @@ export class HouseService {
     }
     // return an observable with a user-facing error message
     return throwError(
-      "Something bad happened; please try again later.");
+      'Something bad happened; please try again later.');
   }
 }
