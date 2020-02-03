@@ -7,10 +7,10 @@ export const environment = {
   production: false,
 
   uris: {
-    login: 'http://127.0.0.5/es/token',
-    register: 'http://127.0.0.5/es/owner',
+    login: 'http://site.rent.cu/es/token',
+    register: 'http://site.rent.cu/es/owner',
     api: 'http://localhost:3000',
-    image: 'http://127.0.0.5/uploads/main/homestay'
+    image: 'http://site.rent.cu/uploads/main/homestay'
   },
 
   secret: 'someVerySecretKeyHere',

@@ -33,10 +33,27 @@
 
 ::ng-deep {
 
+  .ngx-datatable.bootstrap .right-align,
+  .ngx-datatable.bootstrap .datatable-body .datatable-body-row .datatable-body-cell.right-align, {
+    text-align: right;
+    padding-right: 20px;
+  }
+
   .ngx-datatable.bootstrap .datatable-footer {
     background: #f8f9fa;
-    color:black;
+    color: black;
     margin-top: -1px;
+  }
+
+  .ngx-datatable.bootstrap .resize-handle {
+    background: rgba(0, 0, 0, 0.03) !important;
+    width: 3px !important;
+    padding: 0 !important;
+    height: 40px;
+  }
+
+  .ngx-datatable.bootstrap .header {
+    font-weight: bold;
   }
 
   .ngx-datatable.bootstrap .datatable-footer .datatable-pager a {

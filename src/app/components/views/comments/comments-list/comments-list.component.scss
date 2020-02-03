@@ -7,25 +7,39 @@
 }
 
 ::ng-deep {
+  ::ng-deep {
 
-  .header-class {
-    font-size: 14px;
-    align-items: center;
-  }
-
-  .cell-class {
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-  }
-
-  .rating-header-class {
-    .ag-header-cell-label {
-      flex-direction: row-reverse;
+    .ngx-datatable.bootstrap .right-align,
+    .ngx-datatable.bootstrap .datatable-body .datatable-body-row .datatable-body-cell.right-align, {
+      text-align: right;
+      padding-right: 20px;
     }
-  }
 
-  .rating-cell-class {
-    flex-direction: row-reverse;
+    .ngx-datatable.bootstrap .datatable-footer {
+      background: #f8f9fa;
+      color: black;
+      margin-top: -1px;
+    }
+
+    .ngx-datatable.bootstrap .resize-handle {
+      background: rgba(0, 0, 0, 0.03) !important;
+      width: 3px !important;
+      padding: 0 !important;
+      height: 40px;
+    }
+
+    .ngx-datatable.bootstrap .header {
+      font-weight: bold;
+    }
+
+    .ngx-datatable.bootstrap .datatable-footer .datatable-pager a {
+      color: black;
+    }
+
+    .ngx-datatable.bootstrap .datatable-footer .datatable-pager ul li:not(.disabled).active a,
+    .ngx-datatable.bootstrap .datatable-footer .datatable-pager ul li:not(.disabled):hover a {
+      color: #ededed;
+      background-color: #7EAD3B;
+    }
   }
 }
