@@ -103,6 +103,16 @@ export class CommentsListComponent implements OnInit {
   cardHeight: any;
 
   /**
+   * Sorting values for the houses list
+   */
+  sort = { field: 'name', direction: 'ASC' };
+
+  /**
+   * Whether or not the table should show a loading indicator
+   */
+  loading = false;
+
+  /**
    * Listener to DOM event window:resize
    * @param event DOM event
    */
@@ -192,12 +202,10 @@ export class CommentsListComponent implements OnInit {
    */
   setPage(pageInfo) {
     this.page.pageNumber = pageInfo.offset;
-    this.commentService.findByHouse(this.page, this.houseId).subscribe((data: Comment[]) => {
-      console.log(data);
-      this.commentService.count().subscribe(totalElements => {
-        this.page.totalElements = totalElements;
-        this.rows = data;
-      });
+    this.commentService.findByHouse(this.page, this.houseId, this.sort)
+      .subscribe((response: { data: Comment[], count: number }) => {
+      this.page.totalElements = response.count;
+      this.rows = response.data;
     });
   }
 
@@ -208,5 +216,15 @@ export class CommentsListComponent implements OnInit {
   onSelect($event: any) {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...$event.selected);
+  }
+
+  /**
+   * Callback on list sort
+   */
+  onSort($event: any) {
+    this.sort.field = $event.sorts[0].prop;
+    this.sort.direction = $event.sorts[0].dir.toUpperCase();
+
+    this.setPage({offset: 0});
   }
 }

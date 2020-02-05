@@ -27,10 +27,11 @@ export class CommentService {
    * Find comments by house
    * @param page Currently displayed page
    * @param houseId Id of the associated house
+   * @param sort
    */
-  findByHouse(page: Page, houseId: string): Observable<Comment[]> {
-    return this.httpClient.get<Comment[]>(
-      environment.uris.api + '/comment/house/' + houseId + `?take=${page.size}&skip=${page.pageNumber * page.size}`
+  findByHouse(page: Page, houseId: string, sort: { field: string, direction: string }): Observable<{ data: Comment[], count: number }> {
+    return this.httpClient.get<{ data: Comment[], count: number }>(
+      environment.uris.api + '/comment/house/' + houseId + `?take=${page.size}&skip=${page.pageNumber * page.size}&sortField=${sort.field}&sortDirection=${sort.direction}`
     );
   }
 
