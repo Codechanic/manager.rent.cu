@@ -26,9 +26,9 @@ export class HouseService {
   /**
    * Find all houses
    */
-  findAll(page: Page): Observable<House[]> {
-    return this.httpClient.get<House[]>(
-      environment.uris.api + `/house?take=${page.size}&skip=${page.pageNumber * page.size}`
+  findAll(page: Page, sort: { field: string, direction: string }): Observable<{ data: House[], count: number }> {
+    return this.httpClient.get<{ data: House[], count: number }>(
+      environment.uris.api + `/house?take=${page.size}&skip=${page.pageNumber * page.size}&sortField=${sort.field}&sortDirection=${sort.direction}`
     );
   }
 
@@ -43,9 +43,9 @@ export class HouseService {
   /**
    * Find house by it's owner id
    */
-  findByOwner(ownerId: string, page: Page): Observable<{data: House[], count: number}> {
-    return this.httpClient.get<{data: House[], count: number}>(
-      environment.uris.api + '/house/owner/' + ownerId + `?take=${page.size}&skip=${page.pageNumber * page.size}`
+  findByOwner(ownerId: string, page: Page, sort: { field: string, direction: string }): Observable<{ data: House[], count: number }> {
+    return this.httpClient.get<{ data: House[], count: number }>(
+      environment.uris.api + '/house/owner/' + ownerId + `?take=${page.size}&skip=${page.pageNumber * page.size}&sortField=${sort.field}&sortDirection=${sort.direction}`
     );
   }
 
