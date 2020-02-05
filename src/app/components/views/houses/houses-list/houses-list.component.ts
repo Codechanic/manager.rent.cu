@@ -85,6 +85,16 @@ export class HousesListComponent implements OnInit {
   cardHeight: any;
 
   /**
+   * Sorting values for the houses list
+   */
+  sort = { field: 'name', direction: 'ASC' };
+
+  /**
+   * Whether or not the table should show a loading indicator
+   */
+  loading = false;
+
+  /**
    * Listener to DOM event window:resize
    * @param event DOM event
    */
@@ -123,9 +133,11 @@ export class HousesListComponent implements OnInit {
    */
   setPage(pageInfo) {
     this.page.pageNumber = pageInfo.offset;
-    this.getServerData(this.page).subscribe((response: {data: House[], count: number}) => {
-        this.page.totalElements = response.count;
-        this.rows = response.data;
+    this.loading = true;
+    this.getServerData(this.page, this.sort).subscribe((response: { data: House[], count: number }) => {
+      this.page.totalElements = response.count;
+      this.rows = response.data;
+      this.loading = false;
     });
   }
 
@@ -203,10 +215,25 @@ export class HousesListComponent implements OnInit {
     this.selected.push(...$event.selected);
   }
 
-  getServerData(page: Page) {
+  /**
+   * Function to execute the remote api observable based on the current user's role
+   * @param page
+   * @param sort
+   */
+  getServerData(page: Page, sort: { field: string, direction: string }) {
     if (this.currentUser.role === AppCommonConstants.ROLES.ROLE_ADMIN) {
-      return this.houseService.findAll(page);
+      return this.houseService.findAll(page, sort);
     }
-    return this.houseService.findByOwner(this.currentUser.id, page);
+    return this.houseService.findByOwner(this.currentUser.id, page, sort);
+  }
+
+  /**
+   * Callback on list sort
+   */
+  onSort($event: any) {
+    this.sort.field = $event.sorts[0].prop;
+    this.sort.direction = $event.sorts[0].dir.toUpperCase();
+
+    this.setPage({offset: 0});
   }
 }

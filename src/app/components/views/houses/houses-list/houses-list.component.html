@@ -46,14 +46,16 @@
             [columnMode]="ColumnMode.force"
             [footerHeight]="50"
             [rowHeight]="50"
-            [loadingIndicator]="true"
+            [loadingIndicator]="loading"
             [selectionType]="SelectionType.multi"
             [externalPaging]="true"
+            [externalSorting]="true"
             [count]="page.totalElements"
             [offset]="page.pageNumber"
             [limit]="page.size"
             (select)="onSelect($event)"
-            (page)="setPage($event)">
+            (page)="setPage($event)"
+            (sort)="onSort($event)">
             <ngx-datatable-column name="Name" headerClass="header"></ngx-datatable-column>
             <ngx-datatable-column name="Phones" headerClass="header"></ngx-datatable-column>
             <ngx-datatable-column name="Address" headerClass="header"></ngx-datatable-column>
