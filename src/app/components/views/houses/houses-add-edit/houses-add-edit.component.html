@@ -192,7 +192,28 @@
                     </div>
                   </div>
                 </tab>
-                <tab heading="Prices"></tab>
+                <tab heading="Prices">
+                  <table class="table table-bordered outer-table" *ngIf="house !== undefined">
+                    <thead>
+                    <tr>
+                      <th>Seasons</th>
+                      <th>Prices</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let housePrice of house.homestayPrices">
+                      <td>
+                        <table class="table table-sm table-borderless inner-table">
+                          <tr *ngFor="let range of housePrice.season.seasonRanges">
+                            <td>{{range.start}} - {{range.end}}</td>
+                          </tr>
+                        </table>
+                      </td>
+                      <td>{{housePrice.price}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </tab>
               </tabset>
             </div>
             <div class="card-footer">

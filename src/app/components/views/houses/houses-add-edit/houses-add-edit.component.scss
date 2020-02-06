@@ -21,8 +21,18 @@
         border-right: 1px solid #a2b588;
       }
     }
+
     .ng-option.ng-option-selected {
       background-color: #CAE2AA;
     }
+  }
+}
+
+.outer-table {
+  text-align: center;
+  margin: 10px;
+
+  td {
+    vertical-align: middle !important;
   }
 }
