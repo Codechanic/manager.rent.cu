@@ -1,0 +1,20 @@
+<div bsModal #seasonModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-main" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">New season</h4>
+        <button type="button" class="close" (click)="seasonModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formControl]="seasonForm"></form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="seasonModal.hide()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="onCreate()">Create</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

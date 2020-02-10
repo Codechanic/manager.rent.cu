@@ -42,7 +42,7 @@ export class CommentsAddEditComponent implements OnInit {
   /**
    * Dynamic form containing card height
    */
-  private cardHeight: string;
+  cardHeight: string;
 
   constructor(private commentService: CommentService, private activatedRoute: ActivatedRoute) { }
 

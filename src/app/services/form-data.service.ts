@@ -11,6 +11,7 @@ import { FreeService } from "../model/free-service.model";
 import { ExtraCostService } from "../model/extra-cost-service.model";
 import { NotOffered } from "../model/not-offered.model";
 import { Place } from "../model/place.model";
+import { Season } from "../model/season.model";
 
 /**
  * Form data handling service
@@ -89,5 +90,12 @@ export class FormDataService {
    */
   municipalitiesByProvinceId(provinceId): Observable<Municipality[]> {
     return this.httpClient.get<Municipality[]>(environment.uris.api + "/form/data/municipality/province/" + provinceId);
+  }
+
+  /**
+   * Get the default seasons
+   */
+  defaultSeasons(): Observable<Season[]> {
+    return this.httpClient.get<Season[]>(environment.uris.api + "/form/data/seasons/default");
   }
 }

@@ -4,6 +4,17 @@
   flex-direction: column;
 }
 
+.dates {
+  color: darkred;
+}
+
+.price {
+  input {
+    text-align: right;
+    width: 100px;
+  }
+}
+
 .ng-select.ng-select-single {
   ::ng-deep {
     .ng-option.ng-option-selected {
@@ -30,7 +41,14 @@
 
 .outer-table {
   text-align: center;
-  margin: 10px;
+
+  th {
+    font-weight: normal;
+  }
+
+  .inner-table {
+    margin: 0;
+  }
 
   td {
     vertical-align: middle !important;
