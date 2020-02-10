@@ -108,7 +108,11 @@ export class HousesListComponent implements OnInit {
    * @param authService Authentication service
    * @param router: Angular router
    */
-  constructor(private houseService: HouseService, private authService: AuthService, private router: Router) {
+  constructor(
+    private houseService: HouseService,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.page.pageNumber = 0;
     this.page.size = 5;
     this.currentUser = this.authService.currentUser();

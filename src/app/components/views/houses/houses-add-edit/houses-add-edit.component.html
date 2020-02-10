@@ -22,9 +22,8 @@
                     <label class="col-md-3 col-form-label">Name</label>
                     <div class="col-md-9">
                       <input type="text" class="form-control" formControlName="id" hidden>
-                      <div
-                        class="bg-danger"
-                        *ngIf="houseForm.get('name').hasError('required') && houseForm.get('name').touched">
+                      <div class="bg-danger"
+                           *ngIf="houseForm.get('name').hasError('required') && houseForm.get('name').touched">
                         Name required
                       </div>
                       <input type="text" class="form-control" formControlName="name">
@@ -193,7 +192,7 @@
                   </div>
                 </tab>
                 <tab heading="Prices">
-                  <table class="table table-bordered outer-table" *ngIf="house !== undefined">
+                  <table class="table table-bordered outer-table">
                     <thead>
                     <tr>
                       <th>Seasons</th>
@@ -201,17 +200,29 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let housePrice of house.homestayPrices">
+                    <tr *ngFor="let housePriceForm of houseForm.controls['homestayPrices']['controls']">
                       <td>
                         <table class="table table-sm table-borderless inner-table">
-                          <tr *ngFor="let range of housePrice.season.seasonRanges">
-                            <td>{{range.start}} - {{range.end}}</td>
+                          <tr
+                            *ngFor="let rangeForm of housePriceForm.controls['season']['controls']['seasonRanges']['controls']">
+                            <td class="dates">{{getFormattedDate(rangeForm.value.start)}}
+                              - {{getFormattedDate(rangeForm.value.end)}}</td>
                           </tr>
                         </table>
                       </td>
-                      <td>{{housePrice.price}}</td>
+                      <td class="price">
+                        $ <input type="number" [formControl]="housePriceForm.controls['price']"/>
+                      </td>
                     </tr>
                     </tbody>
+                    <tfoot>
+                    <tr>
+                      <td colspan="2">
+                        <button style="width: 100%" class="btn btn-secondary" (click)="openNewSeasonModal()">New season
+                        </button>
+                      </td>
+                    </tr>
+                    </tfoot>
                   </table>
                 </tab>
               </tabset>
@@ -226,3 +237,5 @@
     </div>
   </div>
 </div>
+
+<app-season-modal #seasonModalComponent></app-season-modal>
