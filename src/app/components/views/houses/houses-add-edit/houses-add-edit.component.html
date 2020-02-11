@@ -204,21 +204,25 @@
                       <td>
                         <table class="table table-sm table-borderless inner-table">
                           <tr
-                            *ngFor="let rangeForm of housePriceForm.controls['season']['controls']['seasonRanges']['controls'] | formControlDateSort">
-                            <td class="dates">{{getFormattedDate(rangeForm.value.start)}}
-                              - {{getFormattedDate(rangeForm.value.end)}}</td>
+                            *ngFor="let rangeForm of
+                            housePriceForm.controls['season']['controls']['seasonRanges']['controls']
+                            | formControlDateSort">
+                            <td class="dates">
+                              {{getFormattedDate(rangeForm.value.start)}} - {{getFormattedDate(rangeForm.value.end)}}
+                            </td>
                           </tr>
                         </table>
                       </td>
                       <td class="price">
-                        $ <input type="number" [formControl]="housePriceForm.controls['price']"/>
+                        $ <input class="form-control" type="number" [formControl]="housePriceForm.controls['price']"/>
                       </td>
                     </tr>
                     </tbody>
                     <tfoot>
                     <tr>
                       <td colspan="2">
-                        <button style="width: 100%" class="btn btn-secondary" (click)="openNewSeasonModal()">New season
+                        <button style="width: 100%" class="btn btn-ghost-primary" (click)="openNewSeasonModal()">
+                          New season
                         </button>
                       </td>
                     </tr>

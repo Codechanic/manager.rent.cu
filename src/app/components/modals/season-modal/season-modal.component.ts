@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { ModalDirective } from 'ngx-bootstrap';
 
@@ -20,33 +20,44 @@ export class SeasonModalComponent implements OnInit {
    */
   @Output() actionConfirmed = new EventEmitter<boolean>();
 
+  /**
+   * Form group for manipulating seasons
+   */
   seasonForm: FormGroup;
 
   constructor(private fb: FormBuilder) {
     this.seasonForm = this.fb.group({
-      name: this.fb.control(''),
+      name: this.fb.control('', Validators.required),
       seasonRanges: this.fb.array([]),
     });
   }
 
   ngOnInit() {
-    this.addSeasonRange({ start: Date.now(), end: Date.now() });
+    this.addSeasonRange();
   }
 
   onCreate() {
 
     /* emit event that confirms the operation */
-    this.actionConfirmed.emit(true);
+    this.actionConfirmed.emit(this.seasonForm.value);
 
     /* hide the modal */
     this.seasonModal.hide();
   }
 
-  addSeasonRange(seasonRange) {
+  addSeasonRange() {
+    const start = new Date();
+    const end = new Date();
+    end.setDate(end.getDate() + 31);
+
     const seasonRangesControl = <FormArray> this.seasonForm.controls['seasonRanges'];
     seasonRangesControl.push(this.fb.group({
-      start: seasonRange.start,
-      end: seasonRange.end,
+      range: this.fb.control([start, end], Validators.required),
     }));
+  }
+
+  deleteSeasonRangeAtIndex(index: number) {
+    const seasonRangesControl = <FormArray> this.seasonForm.controls['seasonRanges'];
+    seasonRangesControl.removeAt(index);
   }
 }

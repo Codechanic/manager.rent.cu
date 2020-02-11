@@ -275,19 +275,6 @@ export class HousesAddEditComponent implements OnInit {
   }
 
   /**
-   * Set the height of the list containing card dynamically
-   */
-  setCardHeight() {
-
-    this.cardHeight = (
-      document.getElementsByClassName('nav')[2].clientHeight -
-      50 -
-      AppCommonConstants.LIST_CONTAINING_CARD_PADDING
-    ) + 'px';
-
-  }
-
-  /**
    * Populates the house form using a House object
    */
   populateForm() {
@@ -442,24 +429,41 @@ export class HousesAddEditComponent implements OnInit {
     return dd + '.' + mm + '.' + yyyy;
   }
 
-  private setHomestayPrices(homestayPrices: HouseSeasonPrice[]) {
+  /**
+   * Set the height of the list containing card dynamically
+   */
+  setCardHeight() {
+
+    this.cardHeight = (
+      document.getElementsByClassName('nav')[2].clientHeight -
+      50 -
+      AppCommonConstants.LIST_CONTAINING_CARD_PADDING
+    ) + 'px';
+
+  }
+
+  setHomestayPrices(homestayPrices: HouseSeasonPrice[]) {
     const arr = new FormArray([]);
     for (const homestayPrice of homestayPrices) {
       arr.push(this.fb.group({
         id: homestayPrice.id,
-        code: homestayPrice.code ? homestayPrice.code : 'HS#' + homestayPrice.season.id,
+        code: homestayPrice.code ? homestayPrice.code : 'HS' + this.houseId + '#S' + homestayPrice.season.id,
         price: homestayPrice.price ? homestayPrice.price : 0,
-        season: this.fb.group({
-          id: homestayPrice.season.id,
-          name: homestayPrice.season.name,
-          seasonRanges: this.setSeasonRanges(homestayPrice.season.seasonRanges),
-        }),
+        season: this.setSeason(homestayPrice.season),
       }));
     }
     return arr;
   }
 
-  private setSeasonRanges(seasonRanges: SeasonRange[]) {
+  setSeason(season: any) {
+    return this.fb.group({
+      id: season.id,
+      name: season.name,
+      seasonRanges: this.setSeasonRanges(season.seasonRanges),
+    });
+  }
+
+  setSeasonRanges(seasonRanges: SeasonRange[]) {
     const arr = new FormArray([]);
     for (const seasonRange of seasonRanges) {
       arr.push(this.fb.group({
@@ -472,8 +476,7 @@ export class HousesAddEditComponent implements OnInit {
     return arr;
   }
 
-  private setManyToManyRelationships(house: House) {
-    console.log(house);
+  setManyToManyRelationships(house: House) {
 
     this.houseForm.controls['homestayFreeservices'].setValue((house).homestayFreeservices
       .map((freeService) => {
@@ -496,7 +499,7 @@ export class HousesAddEditComponent implements OnInit {
       }));
   }
 
-  private showAlertMessage(type: string, message: string) {
+  showAlertMessage(type: string, message: string) {
     this.alert.type = type;
     this.alert.msg = message;
     this.alert.show = true;
@@ -505,8 +508,44 @@ export class HousesAddEditComponent implements OnInit {
 
   openNewSeasonModal() {
     this.seasonModalComponent.seasonModal.show();
-    this.seasonModalComponent.actionConfirmed.subscribe(() => {
-      console.log('created');
+    this.seasonModalComponent.actionConfirmed.subscribe((season) => {
+      if (season) {
+        for (const seasonRange of season.seasonRanges) {
+          const start = new Date(seasonRange.range[0]);
+          const end = new Date(seasonRange.range[1]);
+          seasonRange.start = start.toDateString();
+          seasonRange.end = end.toDateString();
+        }
+
+        this.addSeason(season);
+      }
     });
+  }
+
+  addSeason(season: Season) {
+    this.removeDefaultSeasons();
+
+    const homestayPricesFormControls = <FormArray> this.houseForm.controls['homestayPrices'];
+
+    this.houseForm.controls['homestayPrices'] = this.setHomestayPrices(homestayPricesFormControls.value.concat([{
+      id: null,
+      price: null,
+      code: 'HS' + undefined + '#S' + season.id,
+      season,
+    }]));
+
+    console.log(this.houseForm.controls['homestayPrices'].value);
+  }
+
+  removeDefaultSeasons() {
+
+    const homestayPricesFormControls = <FormArray> this.houseForm.controls['homestayPrices'];
+
+    for (let i = 0; i < homestayPricesFormControls.controls.length; i++) {
+      if ([7, 9].includes(homestayPricesFormControls.controls[i].value.season.id)) {
+        homestayPricesFormControls.removeAt(i);
+        i--;
+      }
+    }
   }
 }
