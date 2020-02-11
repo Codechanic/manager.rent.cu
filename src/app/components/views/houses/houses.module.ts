@@ -11,11 +11,14 @@ import { HousesListComponent } from './houses-list/houses-list.component';
 import { HousesAddEditComponent } from './houses-add-edit/houses-add-edit.component';
 import { ModalsModule } from '../../modals/modals.module';
 import { SharedModule } from '../../shared/shared.module';
+import { FormControlDateSortPipe } from '../../../pipes/form-control-date-sort.pipe';
 
 @NgModule({
   declarations: [
     HousesListComponent,
-    HousesAddEditComponent],
+    HousesAddEditComponent,
+    FormControlDateSortPipe
+  ],
   imports: [
     CommonModule,
     HousesRoutingModule,
