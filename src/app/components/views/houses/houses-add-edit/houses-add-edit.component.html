@@ -204,7 +204,7 @@
                       <td>
                         <table class="table table-sm table-borderless inner-table">
                           <tr
-                            *ngFor="let rangeForm of housePriceForm.controls['season']['controls']['seasonRanges']['controls']">
+                            *ngFor="let rangeForm of housePriceForm.controls['season']['controls']['seasonRanges']['controls'] | formControlDateSort">
                             <td class="dates">{{getFormattedDate(rangeForm.value.start)}}
                               - {{getFormattedDate(rangeForm.value.end)}}</td>
                           </tr>
