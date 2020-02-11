@@ -2,4 +2,45 @@
   .modal-header {
     background-image: linear-gradient(to top, #CAE2AA 10%, #ECF4E0 92%)
   }
+
+  .outer-table td {
+    vertical-align: middle;
+
+    .inner-table {
+      margin-bottom: 0;
+    }
+  }
+
+  .flex-wrap-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+
+    div {
+      flex: 100%;
+      margin-bottom: 10px;
+    }
+  }
+
+  .flex-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+
+    input {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      margin-left: 10px;
+    }
+  }
+}
+
+.modal-md {
+  max-width: 600px;
 }

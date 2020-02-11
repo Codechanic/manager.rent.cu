@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { ModalModule } from 'ngx-bootstrap';
+import { BsDatepickerModule, ModalModule } from 'ngx-bootstrap';
 
 import { DeleteComponent } from './delete/delete.component';
 import { SeasonModalComponent } from './season-modal/season-modal.component';
@@ -12,7 +12,8 @@ import { SeasonModalComponent } from './season-modal/season-modal.component';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    ModalModule.forRoot()
+    BsDatepickerModule.forRoot(),
+    ModalModule.forRoot(),
   ],
   exports: [DeleteComponent, SeasonModalComponent],
 })
