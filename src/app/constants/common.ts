@@ -17,4 +17,6 @@ export class AppCommonConstants {
     HOUSE_CREATED: 'House created success succesfully',
     HOUSE_UPDATED: 'House updated successfully',
   };
+
+  public static DEFAUlT_SEASON_IDS = ['7', '9'];
 }
