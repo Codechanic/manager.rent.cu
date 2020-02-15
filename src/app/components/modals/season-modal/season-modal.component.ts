@@ -1,34 +1,26 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from "@angular/core";
+import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 
-import { ModalDirective } from 'ngx-bootstrap';
+import { BsModalRef } from "ngx-bootstrap";
 
 @Component({
-  selector: 'app-season-modal',
-  templateUrl: './season-modal.component.html',
-  styleUrls: ['./season-modal.component.scss'],
+  selector: "app-season-modal",
+  templateUrl: "./season-modal.component.html",
+  styleUrls: ["./season-modal.component.scss"]
 })
 export class SeasonModalComponent implements OnInit {
-
-  /**
-   * Instance reference to ngx-bootstrap modal
-   */
-  @ViewChild('seasonModal', { static: false }) public seasonModal: ModalDirective;
-
-  /**
-   * Event to emit when the operation was confirmed
-   */
-  @Output() actionConfirmed = new EventEmitter<boolean>();
 
   /**
    * Form group for manipulating seasons
    */
   seasonForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  confirmed = false;
+
+  constructor(private fb: FormBuilder, private bsModalRef: BsModalRef) {
     this.seasonForm = this.fb.group({
-      name: this.fb.control('', Validators.required),
-      seasonRanges: this.fb.array([]),
+      name: this.fb.control("", Validators.required),
+      seasonRanges: this.fb.array([])
     });
   }
 
@@ -36,13 +28,18 @@ export class SeasonModalComponent implements OnInit {
     this.addSeasonRange();
   }
 
-  onCreate() {
+  onConfirm() {
+    if (this.seasonForm.valid) {
+      this.confirmed = true;
+      this.bsModalRef.hide();
+    } else {
+      this.seasonForm.markAllAsTouched();
+    }
+  }
 
-    /* emit event that confirms the operation */
-    this.actionConfirmed.emit(this.seasonForm.value);
-
-    /* hide the modal */
-    this.seasonModal.hide();
+  onCancel() {
+    this.confirmed = false;
+    this.bsModalRef.hide();
   }
 
   addSeasonRange() {
@@ -50,14 +47,14 @@ export class SeasonModalComponent implements OnInit {
     const end = new Date();
     end.setDate(end.getDate() + 31);
 
-    const seasonRangesControl = <FormArray> this.seasonForm.controls['seasonRanges'];
+    const seasonRangesControl = <FormArray>this.seasonForm.controls["seasonRanges"];
     seasonRangesControl.push(this.fb.group({
-      range: this.fb.control([start, end], Validators.required),
+      range: this.fb.control([start, end], Validators.required)
     }));
   }
 
   deleteSeasonRangeAtIndex(index: number) {
-    const seasonRangesControl = <FormArray> this.seasonForm.controls['seasonRanges'];
+    const seasonRangesControl = <FormArray>this.seasonForm.controls["seasonRanges"];
     seasonRangesControl.removeAt(index);
   }
 }

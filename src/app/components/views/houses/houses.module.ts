@@ -13,6 +13,7 @@ import { ModalsModule } from '../../modals/modals.module';
 import { SharedModule } from '../../shared/shared.module';
 import { FormControlDateSortPipe } from '../../../pipes/form-control-date-sort.pipe';
 import { SeasonScrubPipe } from "../../../pipes/season-scrub.pipe";
+import { SeasonModalComponent } from "../../modals/season-modal/season-modal.component";
 
 @NgModule({
   declarations: [
@@ -32,6 +33,9 @@ import { SeasonScrubPipe } from "../../../pipes/season-scrub.pipe";
     NgxDatatableModule,
     BsDropdownModule.forRoot(),
     AlertModule.forRoot(),
+  ],
+  entryComponents: [
+    SeasonModalComponent
   ]
 })
 export class HousesModule {
