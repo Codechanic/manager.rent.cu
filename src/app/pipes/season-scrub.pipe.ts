@@ -13,10 +13,16 @@ export class SeasonScrubPipe implements PipeTransform {
 
   private getScrubbedSeasons(housePriceFormControls: any[]) {
     const nonDefaultSeason = housePriceFormControls.find(
-      housePriceFormControl => !(DEFAULT_SEASONS_IDS.includes(housePriceFormControl.value.season.id.toString()))
+      housePriceFormControl => !(DEFAULT_SEASONS_IDS.includes(
+        housePriceFormControl.value.season.id !== null ? housePriceFormControl.value.season.id.toString() : null
+      ))
     );
     if (nonDefaultSeason) {
-      return housePriceFormControls.filter(housePriceFormControl => !(DEFAULT_SEASONS_IDS.includes(housePriceFormControl.value.season.id.toString())));
+      return housePriceFormControls.filter(
+        housePriceFormControl => !(DEFAULT_SEASONS_IDS.includes(
+          housePriceFormControl.value.season.id !== null ? housePriceFormControl.value.season.id.toString() : null
+        ))
+      );
     }
     return housePriceFormControls;
   }

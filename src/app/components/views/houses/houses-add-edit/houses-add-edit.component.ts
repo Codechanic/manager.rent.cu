@@ -1,31 +1,32 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 
-import { Observable } from 'rxjs';
-import { NgSelectComponent } from '@ng-select/ng-select';
+import { Observable } from "rxjs";
+import { NgSelectComponent } from "@ng-select/ng-select";
+import { BsModalRef, BsModalService } from "ngx-bootstrap";
 
-import { HouseService } from '../../../../services/house.service';
-import { House } from '../../../../model/house.model';
-import { AuthService } from '../../../../services/auth.service';
-import { OwnerService } from '../../../../services/owner.service';
-import { Owner } from '../../../../model/owner.model';
-import { Municipality } from '../../../../model/municipality.model';
-import { FormDataService } from '../../../../services/form-data.service';
-import { AccommodationType } from '../../../../model/accommodation-type.model';
-import { FreeService } from '../../../../model/free-service.model';
-import { AppCommonConstants } from '../../../../constants/common';
-import { ExtraCostService } from '../../../../model/extra-cost-service.model';
-import { Province } from '../../../../model/province.model';
-import { HouseSeasonPrice } from '../../../../model/house-season-price.model';
-import { Season } from '../../../../model/season.model';
-import { SeasonRange } from '../../../../model/season-range.model';
-import { SeasonModalComponent } from '../../../modals/season-modal/season-modal.component';
+import { HouseService } from "../../../../services/house.service";
+import { House } from "../../../../model/house.model";
+import { AuthService } from "../../../../services/auth.service";
+import { OwnerService } from "../../../../services/owner.service";
+import { Owner } from "../../../../model/owner.model";
+import { Municipality } from "../../../../model/municipality.model";
+import { FormDataService } from "../../../../services/form-data.service";
+import { AccommodationType } from "../../../../model/accommodation-type.model";
+import { FreeService } from "../../../../model/free-service.model";
+import { AppCommonConstants } from "../../../../constants/common";
+import { ExtraCostService } from "../../../../model/extra-cost-service.model";
+import { Province } from "../../../../model/province.model";
+import { HouseSeasonPrice } from "../../../../model/house-season-price.model";
+import { Season } from "../../../../model/season.model";
+import { SeasonRange } from "../../../../model/season-range.model";
+import { SeasonModalComponent } from "../../../modals/season-modal/season-modal.component";
 
 @Component({
-  selector: 'app-houses-add-edit',
-  templateUrl: './houses-add-edit.component.html',
-  styleUrls: ['./houses-add-edit.component.scss'],
+  selector: "app-houses-add-edit",
+  templateUrl: "./houses-add-edit.component.html",
+  styleUrls: ["./houses-add-edit.component.scss"]
 })
 export class HousesAddEditComponent implements OnInit {
 
@@ -52,7 +53,7 @@ export class HousesAddEditComponent implements OnInit {
   /**
    * Object to handle alerts
    */
-  alert = { type: '', msg: '', show: false };
+  alert = { type: "", msg: "", show: false };
 
   /**
    * Accommodation types observable
@@ -102,17 +103,16 @@ export class HousesAddEditComponent implements OnInit {
   /**
    * Municipalities NgSelectComponent
    */
-  @ViewChild('municipalitiesSelect', { static: false }) municipalitiesSelect: NgSelectComponent;
+  @ViewChild("municipalitiesSelect", { static: false }) municipalitiesSelect: NgSelectComponent;
 
   /**
    * Municipalities NgSelectComponent
    */
-  @ViewChild('provincesSelect', { static: false }) provincesSelect: NgSelectComponent;
+  @ViewChild("provincesSelect", { static: false }) provincesSelect: NgSelectComponent;
 
-  /**
-   * New season modal reference
-   */
-  @ViewChild('seasonModalComponent', { static: false }) seasonModalComponent: SeasonModalComponent;
+  seasonModalRef: BsModalRef;
+
+  seasonModalControl = 0;
 
   /**
    * Component constructor
@@ -123,6 +123,7 @@ export class HousesAddEditComponent implements OnInit {
    * @param formDataService Form data service
    * @param fb Form builder Angular service
    * @param router Angular router service
+   * @param modalService
    */
   constructor(
     private houseService: HouseService,
@@ -131,27 +132,28 @@ export class HousesAddEditComponent implements OnInit {
     private authService: AuthService,
     private formDataService: FormDataService,
     private fb: FormBuilder,
-    private router: Router) {
+    private router: Router,
+    private modalService: BsModalService) {
     this.houseForm = this.fb.group({
-      id: this.fb.control(''),
-      name: this.fb.control('', Validators.required),
-      address: this.fb.control('', Validators.required),
-      phones: this.fb.control(''),
-      rooms: this.fb.control(''),
-      email: this.fb.control({ value: '', disabled: true }),
-      owner: this.fb.control({ value: '', disabled: true }),
-      ownerId: this.fb.control(''),
-      description: this.fb.control(''),
-      municipality: this.fb.control(''),
-      latitude: this.fb.control(''),
-      longitude: this.fb.control(''),
-      metaKeywords: this.fb.control(''),
-      accommodation: this.fb.control(''),
-      places: this.fb.control(''),
-      homestayFreeservices: this.fb.control(''),
-      homestayNotOffered: this.fb.control(''),
-      homestayExtracosts: this.fb.control(''),
-      homestayPrices: this.fb.array([]),
+      id: this.fb.control(""),
+      name: this.fb.control("", Validators.required),
+      address: this.fb.control("", Validators.required),
+      phones: this.fb.control(""),
+      rooms: this.fb.control(""),
+      email: this.fb.control({ value: "", disabled: true }),
+      owner: this.fb.control({ value: "", disabled: true }),
+      ownerId: this.fb.control(""),
+      description: this.fb.control(""),
+      municipality: this.fb.control(""),
+      latitude: this.fb.control(""),
+      longitude: this.fb.control(""),
+      metaKeywords: this.fb.control(""),
+      accommodation: this.fb.control(""),
+      places: this.fb.control(""),
+      homestayFreeservices: this.fb.control(""),
+      homestayNotOffered: this.fb.control(""),
+      homestayExtracosts: this.fb.control(""),
+      homestayPrices: this.fb.array([])
     });
   }
 
@@ -164,19 +166,19 @@ export class HousesAddEditComponent implements OnInit {
     if (this.activatedRoute.snapshot.queryParams.created) {
       this.showAlertMessage(
         AppCommonConstants.ALERT_MESSAGE_TYPES.SUCCESS,
-        AppCommonConstants.ALERT_MESSAGES.HOUSE_CREATED,
+        AppCommonConstants.ALERT_MESSAGES.HOUSE_CREATED
       );
     }
 
     /* get the owner object from the server using the owner's id associated to the authenticated user */
     this.ownerService.findById(this.authService.currentUser().id).subscribe((owner) => {
       this.owner = owner;
-      this.houseForm.controls['owner'].setValue(owner.name);
-      this.houseForm.controls['email'].setValue(owner.email);
+      this.houseForm.controls["owner"].setValue(owner.name);
+      this.houseForm.controls["email"].setValue(owner.email);
     });
 
     /* get the house's id from the activated route */
-    this.houseId = this.activatedRoute.snapshot.params['id'];
+    this.houseId = this.activatedRoute.snapshot.params["id"];
 
     /*
      * if there is a house id, it means that the component has been instantiated to edit a house,
@@ -205,7 +207,7 @@ export class HousesAddEditComponent implements OnInit {
           homestayPrice.season = defaultSeason;
           homestayPrices.push(homestayPrice);
         }
-        this.houseForm.controls['homestayPrices'] = this.setHomestayPrices(homestayPrices);
+        this.houseForm.controls["homestayPrices"] = this.setHomestayPrices(homestayPrices);
 
         this.initializeProvince();
       });
@@ -221,6 +223,8 @@ export class HousesAddEditComponent implements OnInit {
      */
     this.setCardHeight();
 
+    this.initializeModalSubscription();
+
   }
 
   /**
@@ -228,7 +232,7 @@ export class HousesAddEditComponent implements OnInit {
    */
   initializeProvince() {
     const provinceToSelect = this.house ? this.provincesSelect.itemsList.findByLabel(
-      this.house.municipality.province.name,
+      this.house.municipality.province.name
     ) : undefined;
 
     this.provincesSelect.registerOnChange(this.provinceSelected.bind(this));
@@ -278,23 +282,23 @@ export class HousesAddEditComponent implements OnInit {
    * Populates the house form using a House object
    */
   populateForm() {
-    this.houseForm.controls['id'].setValue(this.house.id);
-    this.houseForm.controls['name'].setValue(this.house.name);
-    this.houseForm.controls['address'].setValue(this.house.address);
-    this.houseForm.controls['phones'].setValue(this.house.phones);
-    this.houseForm.controls['rooms'].setValue(this.house.rooms);
-    this.houseForm.controls['description'].setValue(this.house.description);
-    this.houseForm.controls['latitude'].setValue(this.house.latitude);
-    this.houseForm.controls['longitude'].setValue(this.house.longitude);
-    this.houseForm.controls['metaKeywords'].setValue(this.house.metaKeywords);
-    this.houseForm.controls['municipality'].setValue(this.house.municipality ? this.house.municipality.id : '');
-    this.houseForm.controls['accommodation'].setValue(this.house.accommodation ? this.house.accommodation.id : '');
+    this.houseForm.controls["id"].setValue(this.house.id);
+    this.houseForm.controls["name"].setValue(this.house.name);
+    this.houseForm.controls["address"].setValue(this.house.address);
+    this.houseForm.controls["phones"].setValue(this.house.phones);
+    this.houseForm.controls["rooms"].setValue(this.house.rooms);
+    this.houseForm.controls["description"].setValue(this.house.description);
+    this.houseForm.controls["latitude"].setValue(this.house.latitude);
+    this.houseForm.controls["longitude"].setValue(this.house.longitude);
+    this.houseForm.controls["metaKeywords"].setValue(this.house.metaKeywords);
+    this.houseForm.controls["municipality"].setValue(this.house.municipality ? this.house.municipality.id : "");
+    this.houseForm.controls["accommodation"].setValue(this.house.accommodation ? this.house.accommodation.id : "");
 
     /* set many-to-many relationship values */
     this.setManyToManyRelationships(this.house);
 
     /* set the form controls for the homestayPrices relationship */
-    this.houseForm.controls['homestayPrices'] = this.setHomestayPrices(this.house.homestayPrices);
+    this.houseForm.controls["homestayPrices"] = this.setHomestayPrices(this.house.homestayPrices);
   }
 
   /**
@@ -306,58 +310,58 @@ export class HousesAddEditComponent implements OnInit {
     if (this.houseForm.valid) {
 
       /* tweak it to send the owner's id alongside house data */
-      this.houseForm.controls['ownerId'].setValue(this.authService.currentUser().id);
+      this.houseForm.controls["ownerId"].setValue(this.authService.currentUser().id);
 
       /* send the many-to-many relationship values as arrays of objects */
-      const homestayFreeservices = this.houseForm.controls['homestayFreeservices'].value.map(
+      const homestayFreeservices = this.houseForm.controls["homestayFreeservices"].value.map(
         (homestayFreeserviceId) => {
           return { id: homestayFreeserviceId };
         });
-      this.houseForm.controls['homestayFreeservices'].setValue(homestayFreeservices);
+      this.houseForm.controls["homestayFreeservices"].setValue(homestayFreeservices);
 
-      const homestayNotOffered = this.houseForm.controls['homestayNotOffered'].value.map(
+      const homestayNotOffered = this.houseForm.controls["homestayNotOffered"].value.map(
         (homestayNotOfferedId) => {
           return { id: homestayNotOfferedId };
         });
-      this.houseForm.controls['homestayNotOffered'].setValue(homestayNotOffered);
+      this.houseForm.controls["homestayNotOffered"].setValue(homestayNotOffered);
 
-      const homestayExtracosts = this.houseForm.controls['homestayExtracosts'].value.map(
+      const homestayExtracosts = this.houseForm.controls["homestayExtracosts"].value.map(
         (homestayExtracostId) => {
           return { id: homestayExtracostId };
         });
-      this.houseForm.controls['homestayExtracosts'].setValue(homestayExtracosts);
+      this.houseForm.controls["homestayExtracosts"].setValue(homestayExtracosts);
 
-      const places = this.houseForm.controls['places'].value.map(
+      const places = this.houseForm.controls["places"].value.map(
         (placeId) => {
           return { id: placeId };
         });
-      this.houseForm.controls['places'].setValue(places);
+      this.houseForm.controls["places"].setValue(places);
 
       /* if there was not a house id set */
       if (!this.houseId) {
 
         /* tweak the form data so the id field doesn't travel to the server */
-        this.houseForm.removeControl('id');
+        this.houseForm.removeControl("id");
 
         /* enable disabled field so the values are passed alongside the other form values*/
-        this.houseForm.controls['owner'].enable();
-        this.houseForm.controls['email'].enable();
+        this.houseForm.controls["owner"].enable();
+        this.houseForm.controls["email"].enable();
 
         /* call the service action to create a new house object */
         this.houseService.create(this.houseForm.value).subscribe((result: House) => {
 
-          this.router.navigate(['houses/edit/' + result.id], { queryParams: { created: true } });
+          this.router.navigate(["houses/edit/" + result.id], { queryParams: { created: true } });
         }, error => {
 
           /* if the operation was unsuccessful, alert the user about it */
-          this.houseForm.controls['owner'].setValue(this.owner.name);
-          this.houseForm.addControl('id', new FormControl(''));
-          this.houseForm.controls['owner'].disable();
-          this.houseForm.controls['email'].disable();
+          this.houseForm.controls["owner"].setValue(this.owner.name);
+          this.houseForm.addControl("id", new FormControl(""));
+          this.houseForm.controls["owner"].disable();
+          this.houseForm.controls["email"].disable();
 
           this.showAlertMessage(
             AppCommonConstants.ALERT_MESSAGE_TYPES.DANGER,
-            error,
+            error
           );
         });
       } else {
@@ -368,7 +372,7 @@ export class HousesAddEditComponent implements OnInit {
           /* if the operation was successful, alert the user about it */
           this.showAlertMessage(
             AppCommonConstants.ALERT_MESSAGE_TYPES.SUCCESS,
-            AppCommonConstants.ALERT_MESSAGES.HOUSE_UPDATED,
+            AppCommonConstants.ALERT_MESSAGES.HOUSE_UPDATED
           );
 
           /* reset the many-to-many relationships */
@@ -377,10 +381,10 @@ export class HousesAddEditComponent implements OnInit {
         }, error => {
 
           /* if the operation was unsuccessful, alert the user about it */
-          this.houseForm.controls['owner'].setValue(this.owner.name);
+          this.houseForm.controls["owner"].setValue(this.owner.name);
           this.showAlertMessage(
             AppCommonConstants.ALERT_MESSAGE_TYPES.DANGER,
-            error,
+            error
           );
         });
       }
@@ -402,7 +406,7 @@ export class HousesAddEditComponent implements OnInit {
         if (this.house) {
           setTimeout(() => {
             const municipalityToSelect = this.municipalitiesSelect.itemsList.findByLabel(
-              this.house.municipality.name,
+              this.house.municipality.name
             );
             if (municipalityToSelect) {
               this.municipalitiesSelect.select(municipalityToSelect);
@@ -420,13 +424,13 @@ export class HousesAddEditComponent implements OnInit {
     const yyyy = date.getFullYear();
 
     if (+dd < 10) {
-      dd = '0' + dd;
+      dd = "0" + dd;
     }
     if (+mm < 10) {
-      mm = '0' + mm;
+      mm = "0" + mm;
     }
 
-    return dd + '.' + mm + '.' + yyyy;
+    return dd + "." + mm + "." + yyyy;
   }
 
   /**
@@ -435,10 +439,10 @@ export class HousesAddEditComponent implements OnInit {
   setCardHeight() {
 
     this.cardHeight = (
-      document.getElementsByClassName('nav')[2].clientHeight -
+      document.getElementsByClassName("nav")[2].clientHeight -
       50 -
       AppCommonConstants.LIST_CONTAINING_CARD_PADDING
-    ) + 'px';
+    ) + "px";
 
   }
 
@@ -447,9 +451,9 @@ export class HousesAddEditComponent implements OnInit {
     for (const homestayPrice of homestayPrices) {
       arr.push(this.fb.group({
         id: homestayPrice.id,
-        code: homestayPrice.code ? homestayPrice.code : 'HS' + this.houseId + '#S' + homestayPrice.season.id,
+        code: homestayPrice.code ? homestayPrice.code : "HS" + this.houseId + "#S" + homestayPrice.season.id,
         price: homestayPrice.price ? homestayPrice.price : 0,
-        season: this.setSeason(homestayPrice.season),
+        season: this.setSeason(homestayPrice.season)
       }));
     }
     return arr;
@@ -459,7 +463,7 @@ export class HousesAddEditComponent implements OnInit {
     return this.fb.group({
       id: season.id,
       name: season.name,
-      seasonRanges: this.setSeasonRanges(season.seasonRanges),
+      seasonRanges: this.setSeasonRanges(season.seasonRanges)
     });
   }
 
@@ -469,7 +473,7 @@ export class HousesAddEditComponent implements OnInit {
       arr.push(this.fb.group({
         id: seasonRange.id,
         start: seasonRange.start,
-        end: seasonRange.end,
+        end: seasonRange.end
       }));
     }
 
@@ -478,22 +482,22 @@ export class HousesAddEditComponent implements OnInit {
 
   setManyToManyRelationships(house: House) {
 
-    this.houseForm.controls['homestayFreeservices'].setValue((house).homestayFreeservices
+    this.houseForm.controls["homestayFreeservices"].setValue((house).homestayFreeservices
       .map((freeService) => {
         return freeService.id;
       }));
 
-    this.houseForm.controls['homestayNotOffered'].setValue((house).homestayNotOffered
+    this.houseForm.controls["homestayNotOffered"].setValue((house).homestayNotOffered
       .map((notOfferedService) => {
         return notOfferedService.id;
       }));
 
-    this.houseForm.controls['homestayExtracosts'].setValue((house).homestayExtracosts
+    this.houseForm.controls["homestayExtracosts"].setValue((house).homestayExtracosts
       .map((extraCostService) => {
         return extraCostService.id;
       }));
 
-    this.houseForm.controls['places'].setValue((house).places
+    this.houseForm.controls["places"].setValue((house).places
       .map((place) => {
         return place.id;
       }));
@@ -507,39 +511,27 @@ export class HousesAddEditComponent implements OnInit {
   }
 
   openNewSeasonModal() {
-    this.seasonModalComponent.seasonModal.show();
-    this.seasonModalComponent.actionConfirmed.subscribe((season) => {
-      if (season) {
-        for (const seasonRange of season.seasonRanges) {
-          const start = new Date(seasonRange.range[0]);
-          const end = new Date(seasonRange.range[1]);
-          seasonRange.start = start.toDateString();
-          seasonRange.end = end.toDateString();
-        }
-
-        this.addSeason(season);
-      }
-    });
+    this.seasonModalRef = this.modalService.show(SeasonModalComponent);
   }
 
   addSeason(season: Season) {
     this.removeDefaultSeasons();
 
-    const homestayPricesFormControls = <FormArray> this.houseForm.controls['homestayPrices'];
+    const homestayPricesFormControls = <FormArray>this.houseForm.controls["homestayPrices"];
 
-    this.houseForm.controls['homestayPrices'] = this.setHomestayPrices(homestayPricesFormControls.value.concat([{
+    this.houseForm.controls["homestayPrices"] = this.setHomestayPrices(homestayPricesFormControls.value.concat([{
       id: null,
       price: null,
-      code: 'HS' + undefined + '#S' + season.id,
-      season,
+      code: "HS" + undefined + "#S" + season.id,
+      season
     }]));
 
-    console.log(this.houseForm.controls['homestayPrices'].value);
+    console.log(this.houseForm.controls["homestayPrices"].value);
   }
 
   removeDefaultSeasons() {
 
-    const homestayPricesFormControls = <FormArray> this.houseForm.controls['homestayPrices'];
+    const homestayPricesFormControls = <FormArray>this.houseForm.controls["homestayPrices"];
 
     for (let i = 0; i < homestayPricesFormControls.controls.length; i++) {
       if ([7, 9].includes(homestayPricesFormControls.controls[i].value.season.id)) {
@@ -547,5 +539,24 @@ export class HousesAddEditComponent implements OnInit {
         i--;
       }
     }
+  }
+
+  initializeModalSubscription() {
+
+    this.modalService.onHidden.subscribe(() => {
+      if (this.seasonModalRef.content.confirmed) {
+        const season = this.seasonModalRef.content.seasonForm.value;
+        if (season) {
+          for (const seasonRange of season.seasonRanges) {
+            const start = new Date(seasonRange.range[0]);
+            const end = new Date(seasonRange.range[1]);
+            seasonRange.start = start.toDateString();
+            seasonRange.end = end.toDateString();
+          }
+
+          this.addSeason(season);
+        }
+      }
+    });
   }
 }
