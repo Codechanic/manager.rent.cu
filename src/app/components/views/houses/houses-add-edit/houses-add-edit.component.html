@@ -200,7 +200,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let housePriceForm of houseForm.controls['homestayPrices']['controls']">
+                    <tr *ngFor="let housePriceForm of houseForm.controls['homestayPrices']['controls'] | seasonScrub">
                       <td>
                         <table class="table table-sm table-borderless inner-table">
                           <tr
