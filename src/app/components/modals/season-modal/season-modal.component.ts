@@ -17,7 +17,9 @@ export class SeasonModalComponent implements OnInit {
 
   confirmed = false;
 
-  constructor(private fb: FormBuilder, private bsModalRef: BsModalRef) {
+  constructor(
+    private fb: FormBuilder,
+    private bsModalRef: BsModalRef) {
     this.seasonForm = this.fb.group({
       name: this.fb.control("", Validators.required),
       seasonRanges: this.fb.array([])
