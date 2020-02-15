@@ -10,7 +10,7 @@ export class AppCommonConstants {
   public static ALERT_MESSAGE_TYPES = {
     SUCCESS: 'success',
     WARNING: 'warning',
-    DANGER: 'DANGER',
+    DANGER: 'danger',
   };
 
   public static ALERT_MESSAGES = {

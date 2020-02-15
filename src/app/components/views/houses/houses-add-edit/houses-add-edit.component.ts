@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { NgSelectComponent } from "@ng-select/ng-select";
 import { BsModalRef, BsModalService } from "ngx-bootstrap";
 
@@ -22,13 +22,14 @@ import { HouseSeasonPrice } from "../../../../model/house-season-price.model";
 import { Season } from "../../../../model/season.model";
 import { SeasonRange } from "../../../../model/season-range.model";
 import { SeasonModalComponent } from "../../../modals/season-modal/season-modal.component";
+import * as dateHelper from "../../../../helpers/date.helper";
 
 @Component({
   selector: "app-houses-add-edit",
   templateUrl: "./houses-add-edit.component.html",
   styleUrls: ["./houses-add-edit.component.scss"]
 })
-export class HousesAddEditComponent implements OnInit {
+export class HousesAddEditComponent implements OnInit, OnDestroy {
 
   /**
    * Form group to collect and validate House data
@@ -110,9 +111,20 @@ export class HousesAddEditComponent implements OnInit {
    */
   @ViewChild("provincesSelect", { static: false }) provincesSelect: NgSelectComponent;
 
+  /**
+   * Reference to the ngx-bootstrap seasons modal
+   */
   seasonModalRef: BsModalRef;
 
-  seasonModalControl = 0;
+  /**
+   * Date helper that contains util functions
+   */
+  dateHelper = dateHelper;
+
+  /**
+   * Array of subscriptions to keep control over them
+   */
+  componentSubscriptions: Subscription[] = [];
 
   /**
    * Component constructor
@@ -163,6 +175,7 @@ export class HousesAddEditComponent implements OnInit {
    */
   ngOnInit() {
 
+    /* show message if this route was reached because of the creation of a new house */
     if (this.activatedRoute.snapshot.queryParams.created) {
       this.showAlertMessage(
         AppCommonConstants.ALERT_MESSAGE_TYPES.SUCCESS,
@@ -210,6 +223,7 @@ export class HousesAddEditComponent implements OnInit {
         this.houseForm.controls["homestayPrices"] = this.setHomestayPrices(homestayPrices);
 
         this.initializeProvince();
+        this.onReset();
       });
     }
 
@@ -223,6 +237,9 @@ export class HousesAddEditComponent implements OnInit {
      */
     this.setCardHeight();
 
+    /**
+     * initialize subscription to season modal result
+     */
     this.initializeModalSubscription();
 
   }
@@ -276,6 +293,29 @@ export class HousesAddEditComponent implements OnInit {
      * create the provinces observable
      */
     this.provinces$ = this.formDataService.provinces();
+  }
+
+  /**
+   * Initialize subscription to season modal result
+   */
+  initializeModalSubscription() {
+    const modalSubscription = this.modalService.onHide.subscribe(() => {
+      if (this.seasonModalRef.content.confirmed) {
+        const season = this.seasonModalRef.content.seasonForm.value;
+        if (season) {
+          for (const seasonRange of season.seasonRanges) {
+            const start = new Date(seasonRange.range[0]);
+            const end = new Date(seasonRange.range[1]);
+            seasonRange.start = dateHelper.getStorageDateFormat(start.toString());
+            seasonRange.end = dateHelper.getStorageDateFormat(end.toString());
+          }
+
+          this.addSeason(season);
+        }
+      }
+    });
+
+    this.componentSubscriptions.push(modalSubscription);
   }
 
   /**
@@ -417,22 +457,6 @@ export class HousesAddEditComponent implements OnInit {
     }
   }
 
-  getFormattedDate(stringDate: string) {
-    const date = new Date(stringDate);
-    let dd = date.getDate().toString();
-    let mm = (date.getMonth() - 1).toString();
-    const yyyy = date.getFullYear();
-
-    if (+dd < 10) {
-      dd = "0" + dd;
-    }
-    if (+mm < 10) {
-      mm = "0" + mm;
-    }
-
-    return dd + "." + mm + "." + yyyy;
-  }
-
   /**
    * Set the height of the list containing card dynamically
    */
@@ -451,7 +475,7 @@ export class HousesAddEditComponent implements OnInit {
     for (const homestayPrice of homestayPrices) {
       arr.push(this.fb.group({
         id: homestayPrice.id,
-        code: homestayPrice.code ? homestayPrice.code : "HS" + this.houseId + "#S" + homestayPrice.season.id,
+        code: "1",
         price: homestayPrice.price ? homestayPrice.price : 0,
         season: this.setSeason(homestayPrice.season)
       }));
@@ -522,7 +546,7 @@ export class HousesAddEditComponent implements OnInit {
     this.houseForm.controls["homestayPrices"] = this.setHomestayPrices(homestayPricesFormControls.value.concat([{
       id: null,
       price: null,
-      code: "HS" + undefined + "#S" + season.id,
+      code: "1",
       season
     }]));
 
@@ -541,22 +565,17 @@ export class HousesAddEditComponent implements OnInit {
     }
   }
 
-  initializeModalSubscription() {
+  ngOnDestroy(): void {
+    for (const subscription of this.componentSubscriptions) {
+      subscription.unsubscribe();
+    }
+  }
 
-    this.modalService.onHidden.subscribe(() => {
-      if (this.seasonModalRef.content.confirmed) {
-        const season = this.seasonModalRef.content.seasonForm.value;
-        if (season) {
-          for (const seasonRange of season.seasonRanges) {
-            const start = new Date(seasonRange.range[0]);
-            const end = new Date(seasonRange.range[1]);
-            seasonRange.start = start.toDateString();
-            seasonRange.end = end.toDateString();
-          }
-
-          this.addSeason(season);
-        }
-      }
-    });
+  onReset() {
+    this.houseForm.controls['homestayPrices'] = this.fb.array([]);
+    this.houseForm.reset();
+    this.houseForm.controls["owner"].setValue(this.owner.name);
+    this.houseForm.controls["email"].setValue(this.owner.email);
+    this.houseForm.controls["id"].setValue(this.houseId);
   }
 }

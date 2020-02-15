@@ -208,7 +208,8 @@
                             housePriceForm.controls['season']['controls']['seasonRanges']['controls']
                             | formControlDateSort">
                             <td class="dates">
-                              {{getFormattedDate(rangeForm.value.start)}} - {{getFormattedDate(rangeForm.value.end)}}
+                              {{dateHelper.getVisualDateFormat(rangeForm.value.start)}}
+                              - {{dateHelper.getVisualDateFormat(rangeForm.value.end)}}
                             </td>
                           </tr>
                         </table>
@@ -221,7 +222,8 @@
                     <tfoot>
                     <tr>
                       <td colspan="2">
-                        <button type="button" style="width: 100%" class="btn btn-ghost-primary" (click)="openNewSeasonModal()">
+                        <button type="button" style="width: 100%" class="btn btn-ghost-primary"
+                                (click)="openNewSeasonModal()">
                           New season
                         </button>
                       </td>
@@ -233,7 +235,7 @@
             </div>
             <div class="card-footer">
               <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
-              <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
+              <button type="button" class="btn btn-sm btn-danger" (click)="onReset()"><i class="fa fa-ban"></i> Reset</button>
             </div>
           </div>
         </form>

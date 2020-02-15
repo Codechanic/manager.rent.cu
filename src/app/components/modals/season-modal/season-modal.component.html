@@ -30,6 +30,7 @@
                 </div>
                 <div class="flex-box">
                   <input type="text" style="text-align: center" class="form-control" bsDaterangepicker
+                         [bsConfig]="{ rangeInputFormat : 'DD.MM.YYYY', dateInputFormat: 'DD.MM.YYYY', showWeekNumbers: false }"
                          [formControl]="seasonRange.controls['range']">
                   <button *ngIf="seasonForm.controls['seasonRanges']['controls'].length > 1"
                           class="btn btn-danger"
