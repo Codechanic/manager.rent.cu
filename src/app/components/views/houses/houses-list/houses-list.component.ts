@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 
 import {BsDropdownConfig} from 'ngx-bootstrap';
 import {ColumnMode, SelectionType} from '@swimlane/ngx-datatable';
+import {Observable, zip} from 'rxjs';
 
 import {HouseService} from '../../../../services/house.service';
 import {AuthService} from '../../../../services/auth.service';
@@ -19,9 +20,14 @@ import {Page} from '../../../../model/page';
 export class HousesListComponent implements OnInit {
 
   /**
-   * Currently authenticates user
+   * Currently authenticated user
    */
   currentUser: any;
+
+  /**
+   * Available user roles
+   */
+  roles = AppCommonConstants.ROLES;
 
   /**
    * NgxDatatable rows
@@ -87,12 +93,17 @@ export class HousesListComponent implements OnInit {
   /**
    * Sorting values for the houses list
    */
-  sort = { field: 'name', direction: 'ASC' };
+  sort = {field: 'name', direction: 'ASC'};
 
   /**
    * Whether or not the table should show a loading indicator
    */
   loading = false;
+
+  /**
+   * Object to handle alerts
+   */
+  alert = {type: '', msg: '', show: false};
 
   /**
    * Listener to DOM event window:resize
@@ -239,5 +250,26 @@ export class HousesListComponent implements OnInit {
     this.sort.direction = $event.sorts[0].dir.toUpperCase();
 
     this.setPage({offset: 0});
+  }
+
+  shouldEnable() {
+    return !this.selected.find(house => house.enabled);
+  }
+
+  onEnable() {
+    const observablesArray: Observable<any>[] = [];
+    for (const selectedHouse of this.selected) {
+      selectedHouse.enabled = true;
+      observablesArray.push(this.houseService.update(selectedHouse));
+    }
+    console.log(observablesArray);
+    zip(observablesArray).subscribe(() => {
+        this.setPage({offset: this.page.pageNumber});
+        this.alert.type = 'success';
+        this.alert.msg = 'Houses successfully updated';
+        this.alert.show = true;
+      },
+      (error => console.log(error)),
+      () => console.log('complete'));
   }
 }

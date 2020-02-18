@@ -1,3 +1,6 @@
+<alert *ngIf="alert.show" [type]="alert.type" [dismissible]="true"
+       (onClose)="alert.show = false">{{ alert.msg }}</alert>
+
 <div class="row">
   <div class="col-md-2">
     <div class="owner-card">
@@ -24,16 +27,21 @@
                      [ngClass]="!(selected.length === 1) ? 'disabled' : ''"
                      (click)="onEdit()">Edit</a>
                 </li>
-                <li role="menuitem">
+                <li role="menuitem" [style.display]="currentUser.role !== roles.ROLE_ADMIN ? 'none' : 'block'">
                   <a href="javascript:void(0);" class="dropdown-item"
-                     [ngClass]="!(selected.length === 1) ? 'disabled' : ''"
-                     (click)="onViewComments()">View comments</a></li>
-                <li class="divider dropdown-divider"></li>
+                     [ngClass]="!(selected.length > 0 && shouldEnable()) ? 'disabled' : ''"
+                     (click)="onEnable()">Enable</a>
+                </li>
                 <li role="menuitem">
                   <a href="javascript:void(0);" class="dropdown-item"
                      [ngClass]="!(selected.length > 0) ? 'disabled' : ''"
                      (click)="onDelete()">Delete</a>
                 </li>
+                <li class="divider dropdown-divider"></li>
+                <li role="menuitem">
+                  <a href="javascript:void(0);" class="dropdown-item"
+                     [ngClass]="!(selected.length === 1) ? 'disabled' : ''"
+                     (click)="onViewComments()">View comments</a></li>
               </ul>
             </div>
           </div>
