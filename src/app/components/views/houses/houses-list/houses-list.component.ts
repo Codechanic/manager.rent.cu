@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 
 import {BsDropdownConfig} from 'ngx-bootstrap';
 import {ColumnMode, SelectionType} from '@swimlane/ngx-datatable';
-import {Observable, zip} from 'rxjs';
+import {forkJoin, Observable, zip} from 'rxjs';
 
 import {HouseService} from '../../../../services/house.service';
 import {AuthService} from '../../../../services/auth.service';
@@ -252,24 +252,31 @@ export class HousesListComponent implements OnInit {
     this.setPage({offset: 0});
   }
 
+  /**
+   * Function that determines whether or not the Enabled button should be enabled
+   */
   shouldEnable() {
     return !this.selected.find(house => house.enabled);
   }
 
+  /**
+   * Callback on enabling houses
+   */
   onEnable() {
+    // create an array of observables and fill it with the calls to the server for the enabling of each of the selected houses
     const observablesArray: Observable<any>[] = [];
     for (const selectedHouse of this.selected) {
       selectedHouse.enabled = true;
-      observablesArray.push(this.houseService.update(selectedHouse));
+      observablesArray.push(this.houseService.enable(selectedHouse));
     }
-    console.log(observablesArray);
-    zip(observablesArray).subscribe(() => {
+
+    // subscribe to all observables and reply back to the UI only when all of them complete
+    forkJoin(observablesArray).subscribe(() => {
         this.setPage({offset: this.page.pageNumber});
         this.alert.type = 'success';
-        this.alert.msg = 'Houses successfully updated';
+        this.alert.msg = 'House(s) successfully enabled';
         this.alert.show = true;
       },
-      (error => console.log(error)),
-      () => console.log('complete'));
+      (error => console.log(error)));
   }
 }

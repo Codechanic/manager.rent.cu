@@ -87,6 +87,16 @@ export class HouseService {
   }
 
   /**
+   * Enable house
+   * @param house House partial entity
+   */
+  enable(house) {
+    return this.httpClient.put(environment.uris.api + '/house/enable', house).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  /**
    * Handle http requests errors
    * @param error Http request error
    */
