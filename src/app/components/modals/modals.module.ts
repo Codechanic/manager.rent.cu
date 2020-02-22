@@ -1,20 +1,26 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { ReactiveFormsModule } from "@angular/forms";
 
-import { BsDatepickerModule, ModalModule } from 'ngx-bootstrap';
+import { BsDatepickerModule, ModalModule } from "ngx-bootstrap";
 
-import { DeleteComponent } from './delete/delete.component';
-import { SeasonModalComponent } from './season-modal/season-modal.component';
+import { DeleteComponent } from "./delete/delete.component";
+import { SeasonModalComponent } from "./season-modal/season-modal.component";
+import { HousePreviewComponent } from "./house-preview/house-preview.component";
 
 @NgModule({
-  declarations: [DeleteComponent, SeasonModalComponent],
+  declarations: [DeleteComponent, SeasonModalComponent, HousePreviewComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     BsDatepickerModule.forRoot(),
-    ModalModule.forRoot(),
+    ModalModule.forRoot()
   ],
-  exports: [DeleteComponent, SeasonModalComponent],
+  entryComponents: [
+    SeasonModalComponent,
+    HousePreviewComponent
+  ],
+  exports: [DeleteComponent, SeasonModalComponent, HousePreviewComponent]
 })
-export class ModalsModule { }
+export class ModalsModule {
+}

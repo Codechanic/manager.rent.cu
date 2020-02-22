@@ -1,21 +1,21 @@
-import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
-import {Router} from '@angular/router';
+import { Component, HostListener, OnInit, ViewChild } from "@angular/core";
+import { Router } from "@angular/router";
 
-import {BsDropdownConfig} from 'ngx-bootstrap';
-import {ColumnMode, SelectionType} from '@swimlane/ngx-datatable';
-import {forkJoin, Observable} from 'rxjs';
+import { BsDropdownConfig } from "ngx-bootstrap";
+import { ColumnMode, SelectionType } from "@swimlane/ngx-datatable";
+import { forkJoin, Observable } from "rxjs";
 
-import {HouseService} from '../../../../services/house.service';
-import {AuthService} from '../../../../services/auth.service';
-import {AppCommonConstants} from '../../../../constants/common';
-import {House} from '../../../../model/house.model';
-import {Page} from '../../../../model/page';
+import { HouseService } from "../../../../services/house.service";
+import { AuthService } from "../../../../services/auth.service";
+import { AppCommonConstants } from "../../../../constants/common";
+import { House } from "../../../../model/house.model";
+import { Page } from "../../../../model/page";
 
 @Component({
-  selector: 'app-houses-list',
-  templateUrl: './houses-list.component.html',
-  styleUrls: ['./houses-list.component.scss'],
-  providers: [{provide: BsDropdownConfig, useValue: {isAnimated: true, autoClose: true}}]
+  selector: "app-houses-list",
+  templateUrl: "./houses-list.component.html",
+  styleUrls: ["./houses-list.component.scss"],
+  providers: [{ provide: BsDropdownConfig, useValue: { isAnimated: true, autoClose: true } }]
 })
 export class HousesListComponent implements OnInit {
 
@@ -44,23 +44,28 @@ export class HousesListComponent implements OnInit {
    */
   columns: any[] = [
     {
-      name: 'Name',
-      prop: 'name',
+      name: "Name",
+      prop: "name",
       resizeable: true
     },
     {
-      name: 'Address',
-      prop: 'address',
+      name: "Address",
+      prop: "address",
       resizeable: true
     },
     {
-      name: 'Phones',
-      prop: 'phones',
+      name: "Phones",
+      prop: "phones",
       resizeable: true
     },
     {
-      name: 'Rooms',
-      prop: 'rooms',
+      name: "Rooms",
+      prop: "rooms",
+      resizeable: true
+    },
+    {
+      name: "Enabled",
+      prop: "enabled",
       resizeable: true
     }
   ];
@@ -78,7 +83,7 @@ export class HousesListComponent implements OnInit {
   /**
    * Instance reference to the delete modal component
    */
-  @ViewChild('deleteComponent', {static: false}) deleteComponent;
+  @ViewChild("deleteComponent", { static: false }) deleteComponent;
 
   /**
    * Selected rows
@@ -93,7 +98,7 @@ export class HousesListComponent implements OnInit {
   /**
    * Sorting values for the houses list
    */
-  sort = {field: 'name', direction: 'ASC'};
+  sort = { field: "name", direction: "ASC" };
 
   /**
    * Whether or not the table should show a loading indicator
@@ -103,13 +108,13 @@ export class HousesListComponent implements OnInit {
   /**
    * Object to handle alerts
    */
-  alert = {type: '', msg: '', show: false};
+  alert = { type: "", msg: "", show: false };
 
   /**
    * Listener to DOM event window:resize
    * @param event DOM event
    */
-  @HostListener('window:resize', ['$event']) onWindowResize(event) {
+  @HostListener("window:resize", ["$event"]) onWindowResize(event) {
     this.adjustElementsHeights();
   }
 
@@ -135,7 +140,7 @@ export class HousesListComponent implements OnInit {
   ngOnInit() {
 
     // Set the current page
-    this.setPage({offset: 0});
+    this.setPage({ offset: 0 });
 
     // Adjust the elements height base on viewport's height
     this.adjustElementsHeights();
@@ -162,16 +167,16 @@ export class HousesListComponent implements OnInit {
   adjustElementsHeights() {
 
     const baseHeight = (
-      document.getElementsByClassName('nav')[2].clientHeight -
+      document.getElementsByClassName("nav")[2].clientHeight -
       50 -
       AppCommonConstants.LIST_CONTAINING_CARD_PADDING
     );
 
-    this.cardHeight = baseHeight + 'px';
+    this.cardHeight = baseHeight + "px";
 
     this.page.size = Math.abs(Math.trunc(baseHeight / 50) - 4);
 
-    this.setPage({offset: 0});
+    this.setPage({ offset: 0 });
 
   }
 
@@ -187,15 +192,22 @@ export class HousesListComponent implements OnInit {
       /* if the user confirmed the operation */
       if (result === true) {
 
-        this.selected.forEach((row) => {
 
-          /* call service action to delete the house */
-          this.houseService.delete(row.id).subscribe((response) => {
+        // create an array of observables and fill it with the calls to the server for the enabling of each of the selected houses
+        const observablesArray: Observable<any>[] = [];
+        for (const selectedHouse of this.selected) {
+          selectedHouse.enabled = true;
+          observablesArray.push(this.houseService.delete(selectedHouse.id));
+        }
 
-            /* if the deletion operation was successful, reinitialize component's data */
-            // this.initializeData();
-          }, error => console.log(error));
-        });
+        // subscribe to all observables and reply back to the UI only when all of them complete
+        forkJoin(observablesArray).subscribe(() => {
+            this.setPage({ offset: this.page.pageNumber });
+            this.alert.type = "success";
+            this.alert.msg = "House(s) successfully deleted";
+            this.alert.show = true;
+          },
+          (error => console.log(error)));
       }
     });
   }
@@ -204,21 +216,21 @@ export class HousesListComponent implements OnInit {
    * Callback to execute on edit button click
    */
   onEdit() {
-    this.router.navigate(['houses/edit/' + this.selected[0].id]);
+    this.router.navigate(["houses/edit/" + this.selected[0].id]);
   }
 
   /**
    * Callback to execute on new button click
    */
   onNew() {
-    this.router.navigate(['houses/new/']);
+    this.router.navigate(["houses/new/"]);
   }
 
   /**
    * Callback to execute on view comments button click
    */
   onViewComments() {
-    this.router.navigate(['houses/list/comments/' + this.selected[0].id]);
+    this.router.navigate(["houses/list/comments/" + this.selected[0].id]);
   }
 
   /**
@@ -249,7 +261,7 @@ export class HousesListComponent implements OnInit {
     this.sort.field = $event.sorts[0].prop;
     this.sort.direction = $event.sorts[0].dir.toUpperCase();
 
-    this.setPage({offset: 0});
+    this.setPage({ offset: 0 });
   }
 
   /**
@@ -272,11 +284,19 @@ export class HousesListComponent implements OnInit {
 
     // subscribe to all observables and reply back to the UI only when all of them complete
     forkJoin(observablesArray).subscribe(() => {
-        this.setPage({offset: this.page.pageNumber});
-        this.alert.type = 'success';
-        this.alert.msg = 'House(s) successfully enabled';
+        this.setPage({ offset: this.page.pageNumber });
+        this.alert.type = "success";
+        this.alert.msg = "House(s) successfully enabled";
         this.alert.show = true;
       },
       (error => console.log(error)));
+  }
+
+  /**
+   * Callback on list view checkbox to make it readonly
+   * @param $event Event data thrown by checkbox onClick event
+   */
+  checkboxClicked($event: { target: { checked: boolean } }) {
+    $event.target.checked = !$event.target.checked;
   }
 }
