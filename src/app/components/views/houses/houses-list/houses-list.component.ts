@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 
 import {BsDropdownConfig} from 'ngx-bootstrap';
 import {ColumnMode, SelectionType} from '@swimlane/ngx-datatable';
-import {forkJoin, Observable, zip} from 'rxjs';
+import {forkJoin, Observable} from 'rxjs';
 
 import {HouseService} from '../../../../services/house.service';
 import {AuthService} from '../../../../services/auth.service';

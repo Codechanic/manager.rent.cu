@@ -12,7 +12,7 @@
       <div class="card" [style.height]="cardHeight">
         <div class="card-header">
           Comments
-          <div class="card-header-actions">
+          <div class="card-header-actions" *ngIf="currentUser.role === roles.ROLE_ADMIN">
             <div class="btn-group" dropdown>
               <button class="btn btn-primary" type="button" (click)="onEdit()" [disabled]="selected.length !== 1">
                 Edit
@@ -59,9 +59,10 @@
             (page)="setPage($event)"
             (sort)="onSort($event)">
             <ngx-datatable-column name="Name" headerClass="header"></ngx-datatable-column>
-            <ngx-datatable-column name="Phones" headerClass="header"></ngx-datatable-column>
-            <ngx-datatable-column name="Address" headerClass="header"></ngx-datatable-column>
-            <ngx-datatable-column name="Rooms" headerClass="header right-align" cellClass="right-align"></ngx-datatable-column>
+            <ngx-datatable-column name="Nick" headerClass="header"></ngx-datatable-column>
+            <ngx-datatable-column name="Text" headerClass="header"></ngx-datatable-column>
+            <ngx-datatable-column name="Rating" headerClass="header right-align" cellClass="right-align"></ngx-datatable-column>
+            <ngx-datatable-column name="Enabled" headerClass="header right-align" cellClass="right-align"></ngx-datatable-column>
           </ngx-datatable>
         </div>
       </div>
