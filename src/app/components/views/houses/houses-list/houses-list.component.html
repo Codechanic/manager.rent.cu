@@ -12,25 +12,52 @@
       <div class="card" [style.height]="cardHeight">
         <div class="card-header">
           Houses
-          <div class="card-header-actions">
-            <div class="btn-group" dropdown>
+          <div class="card-header-actions" [ngSwitch]="currentUser.role">
+            <div class="btn-group" dropdown *ngSwitchCase="roles.ROLE_ADMIN">
               <button class="btn btn-primary" type="button" (click)="onNew()">New</button>
-              <button id="button-split" class="btn btn-primary dropdown-toggle dropdown-toggle-split" type="button"
-                      dropdownToggle aria-controls="dropdown-split">
+              <button id="button-split-admin" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                      type="button"
+                      dropdownToggle aria-controls="dropdown-split-admin">
                 <span class="caret"></span>
                 <span class="sr-only">Split button!</span>
               </button>
-              <ul id="dropdown-split" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+              <ul id="dropdown-split-admin" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
                   aria-labelledby="button-animated">
                 <li role="menuitem">
                   <a href="javascript:void(0);" class="dropdown-item"
                      [ngClass]="!(selected.length === 1) ? 'disabled' : ''"
                      (click)="onEdit()">Edit</a>
                 </li>
-                <li role="menuitem" [style.display]="currentUser.role !== roles.ROLE_ADMIN ? 'none' : 'block'">
+                <li role="menuitem">
                   <a href="javascript:void(0);" class="dropdown-item"
                      [ngClass]="!(selected.length > 0 && shouldEnable()) ? 'disabled' : ''"
                      (click)="onEnable()">Enable</a>
+                </li>
+                <li role="menuitem">
+                  <a href="javascript:void(0);" class="dropdown-item"
+                     [ngClass]="!(selected.length > 0) ? 'disabled' : ''"
+                     (click)="onDelete()">Delete</a>
+                </li>
+                <li class="divider dropdown-divider"></li>
+                <li role="menuitem">
+                  <a href="javascript:void(0);" class="dropdown-item"
+                     [ngClass]="!(selected.length === 1) ? 'disabled' : ''"
+                     (click)="onViewComments()">View comments</a></li>
+              </ul>
+            </div>
+            <div class="btn-group" dropdown *ngSwitchCase="roles.ROLE_USER">
+              <button class="btn btn-primary" type="button" (click)="onNew()">New</button>
+              <button id="button-split-user" class="btn btn-primary dropdown-toggle dropdown-toggle-split" type="button"
+                      dropdownToggle aria-controls="dropdown-split-user">
+                <span class="caret"></span>
+                <span class="sr-only">Split button!</span>
+              </button>
+              <ul id="dropdown-split-user" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                  aria-labelledby="button-animated">
+                <li role="menuitem">
+                  <a href="javascript:void(0);" class="dropdown-item"
+                     [ngClass]="!(selected.length === 1) ? 'disabled' : ''"
+                     (click)="onEdit()">Edit</a>
                 </li>
                 <li role="menuitem">
                   <a href="javascript:void(0);" class="dropdown-item"
@@ -67,7 +94,8 @@
             <ngx-datatable-column name="Name" headerClass="header"></ngx-datatable-column>
             <ngx-datatable-column name="Phones" headerClass="header"></ngx-datatable-column>
             <ngx-datatable-column name="Address" headerClass="header"></ngx-datatable-column>
-            <ngx-datatable-column name="Rooms" headerClass="header right-align" cellClass="right-align"></ngx-datatable-column>
+            <ngx-datatable-column name="Rooms" headerClass="header right-align"
+                                  cellClass="right-align"></ngx-datatable-column>
           </ngx-datatable>
         </div>
       </div>
