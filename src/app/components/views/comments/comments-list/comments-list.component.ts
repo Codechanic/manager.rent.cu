@@ -3,9 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 
 import {CommentService} from '../../../../services/comment.service';
 import {Comment} from '../../../../model/comment.model';
-import {Observable} from 'rxjs';
 import {AppCommonConstants} from '../../../../constants/common';
-import {House} from '../../../../model/house.model';
 import {Page} from '../../../../model/page';
 import {ColumnMode, SelectionType} from '@swimlane/ngx-datatable';
 import {AuthService} from '../../../../services/auth.service';
@@ -20,6 +18,11 @@ export class CommentsListComponent implements OnInit {
    * Currently authenticates user
    */
   currentUser: any;
+
+  /**
+   * Available user roles
+   */
+  roles = AppCommonConstants.ROLES;
 
   /**
    * NgxDatatable rows
@@ -38,11 +41,6 @@ export class CommentsListComponent implements OnInit {
     {
       name: 'Name',
       prop: 'name',
-      resizeable: true
-    },
-    {
-      name: 'Email',
-      prop: 'email',
       resizeable: true
     },
     {
