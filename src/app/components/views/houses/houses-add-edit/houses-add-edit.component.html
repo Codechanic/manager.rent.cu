@@ -14,6 +14,11 @@
           <div class="card" [style.min-height]="cardHeight">
             <div class="card-header">
               House
+              <div class="card-header-actions" *ngIf="houseId !== undefined">
+                <button class="btn btn-primary" type="button" (click)="onPreview()">
+                  Preview
+                </button>
+              </div>
             </div>
             <div class="card-body">
               <tabset>
@@ -32,12 +37,20 @@
                   <div class="form-group row">
                     <label class="col-md-3 col-form-label">Phones</label>
                     <div class="col-md-9">
+                      <div class="bg-danger"
+                           *ngIf="houseForm.get('phones').hasError('required') && houseForm.get('phones').touched">
+                        Phones required
+                      </div>
                       <input type="text" class="form-control" formControlName="phones">
                     </div>
                   </div>
                   <div class="form-group row">
                     <label class="col-md-3 col-form-label">Rooms</label>
                     <div class="col-md-9">
+                      <div class="bg-danger"
+                           *ngIf="houseForm.get('rooms').hasError('required') && houseForm.get('rooms').touched">
+                        Rooms quantity required
+                      </div>
                       <input type="number" class="form-control" formControlName="rooms">
                     </div>
                   </div>
@@ -56,6 +69,10 @@
                   <div class="form-group row">
                     <label class="col-md-3 col-form-label">Description</label>
                     <div class="col-md-9">
+                      <div class="bg-danger"
+                           *ngIf="houseForm.get('description').hasError('required') && houseForm.get('description').touched">
+                        Description required
+                      </div>
                       <textarea style="min-height: 400px" class="form-control" formControlName="description"></textarea>
                     </div>
                   </div>
@@ -70,6 +87,10 @@
                   <div class="form-group row">
                     <label class="col-md-3 col-form-label">Accommodation Type</label>
                     <div class="col-md-9">
+                      <div class="bg-danger"
+                           *ngIf="houseForm.get('accommodation').hasError('required') && houseForm.get('accommodation').touched">
+                        Accommodation required
+                      </div>
                       <ng-select [items]="accommodationTypes$ | async"
                                  placeholder="Select accomodation type"
                                  bindValue="id"
@@ -127,6 +148,25 @@
                 </tab>
                 <tab heading="Location">
                   <div class="form-group row">
+                  <label class="col-md-3 col-form-label">Location type</label>
+                  <div class="col-md-9">
+                    <div class="bg-danger"
+                         *ngIf="houseForm.get('location').hasError('required') && houseForm.get('location').touched">
+                      Location type required
+                    </div>
+                    <ng-select [items]="location$ | async"
+                               placeholder="Select location type"
+                               bindValue="id"
+                               bindLabel="name"
+                               [multiple]="false"
+                               [closeOnSelect]="true"
+                               [searchable]="true"
+                               formControlName="location">
+
+                    </ng-select>
+                  </div>
+                </div>
+                  <div class="form-group row">
                     <label class="col-md-3 col-form-label">Address</label>
                     <div class="col-md-9">
                       <div
@@ -152,6 +192,10 @@
                   <div class="form-group row">
                     <label class="col-md-3 col-form-label">Municipality</label>
                     <div class="col-md-9">
+                      <div class="bg-danger"
+                           *ngIf="houseForm.get('municipality').hasError('required') && houseForm.get('municipality').touched">
+                        Municipality required
+                      </div>
                       <ng-select [items]="municipalities"
                                  placeholder="Select municipality"
                                  bindValue="id"
@@ -178,6 +222,10 @@
                   <div class="form-group row">
                     <label class="col-md-3 col-form-label">Nearby places</label>
                     <div class="col-md-9">
+                      <div class="bg-danger"
+                           *ngIf="houseForm.get('places').hasError('required') && houseForm.get('places').touched">
+                        Nearby places required
+                      </div>
                       <ng-select [items]="places$ | async"
                                  placeholder="Select nearby places"
                                  bindValue="id"
@@ -243,3 +291,5 @@
     </div>
   </div>
 </div>
+
+<ngx-spinner></ngx-spinner>

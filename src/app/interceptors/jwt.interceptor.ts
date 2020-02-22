@@ -1,10 +1,13 @@
-import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from "@angular/common/http";
 
-import { Observable } from 'rxjs';
-import { CookieService } from 'ngx-cookie-service';
-import * as CryptoJS from 'crypto-js';
-import { environment } from 'environments/environment';
+import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
+import { CookieService } from "ngx-cookie-service";
+import * as CryptoJS from "crypto-js"
+  ;
+import { environment } from "environments/environment";
+import { AuthService } from "../services/auth.service";
 
 /**
  * Http requests interceptor
@@ -12,7 +15,7 @@ import { environment } from 'environments/environment';
  */
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-  constructor(private cookieService: CookieService) {
+  constructor(private cookieService: CookieService, private authService: AuthService) {
   }
 
   /**
@@ -22,8 +25,45 @@ export class JwtInterceptor implements HttpInterceptor {
    */
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
+    if (!request.url.includes(environment.uris.refresh_token)) {
+      request = this.setRequestJWTToken(request);
+    }
+
+    return next.handle(request).pipe(tap(
+      () => {
+      },
+      (error) => {
+        if (error instanceof HttpErrorResponse) {
+          if (error.status !== 401) {
+            return;
+          }
+          this.authService.refreshToken().subscribe((response) => {
+            this.cookieService.set("context", CryptoJS.AES.encrypt(response, environment.secret).toString());
+            request = this.setRequestJWTToken(request);
+            return next.handle(request);
+          });
+        }
+      }
+    ));
+  }
+
+
+  /**
+   * Gets the JWT string from the cookie.
+   * @description This function returns empty in case no JWT is found
+   */
+  public getJwt(): string {
+    return this.cookieService.get("context");
+  }
+
+  /**
+   * Sets the JWT Token in the request
+   * @param request
+   */
+  private setRequestJWTToken(request: HttpRequest<any>) {
+
     /* add authorization header with jwt token if available */
-    const jwt = this.getJwt();
+    let jwt = this.getJwt();
 
     /* the jwt is in a cookie and it is encrypted*/
     if (jwt) {
@@ -34,15 +74,6 @@ export class JwtInterceptor implements HttpInterceptor {
       });
     }
 
-    return next.handle(request);
-  }
-
-
-  /**
-   * Gets the JWT string from the cookie.
-   * @description This function returns empty in case no JWT is found
-   */
-  public getJwt(): string {
-    return this.cookieService.get('context');
+    return request;
   }
 }

@@ -32,12 +32,12 @@ export class AuthGuard implements CanLoad, CanActivate {
 
     /* if the user is authenticated but the token expired*/
     if (this.authService.isAuthenticated()) {
-      if (this.authService.isTokenExpired()) {
-
-        /*redirect to login page*/
-        this.router.navigate(['/login/true']);
-        return false;
-      }
+      // if (this.authService.isTokenExpired()) {
+      //
+      //   /*redirect to login page*/
+      //   this.router.navigate(['/login/true']);
+      //   return false;
+      // }
       return true;
     }
 
@@ -59,10 +59,10 @@ export class AuthGuard implements CanLoad, CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     if (this.authService.isAuthenticated()) {
-      if (this.authService.isTokenExpired()) {
-        this.router.navigate(['/login/true']);
-        return false;
-      }
+      // if (this.authService.isTokenExpired()) {
+      //   this.router.navigate(['/login/true']);
+      //   return false;
+      // }
       return true;
     } else {
       this.router.navigate(['/login']);

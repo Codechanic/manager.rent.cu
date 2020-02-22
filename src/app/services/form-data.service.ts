@@ -12,6 +12,7 @@ import { ExtraCostService } from "../model/extra-cost-service.model";
 import { NotOffered } from "../model/not-offered.model";
 import { Place } from "../model/place.model";
 import { Season } from "../model/season.model";
+import { LocationType } from "../model/location-type.model";
 
 /**
  * Form data handling service
@@ -39,6 +40,13 @@ export class FormDataService {
    */
   municipalities(): Observable<Municipality[]> {
     return this.httpClient.get<Municipality[]>(environment.uris.api + "/form/data/municipality");
+  }
+
+  /**
+   * Get list of location types
+   */
+  locationTypes(): Observable<LocationType[]> {
+    return this.httpClient.get<LocationType[]>(environment.uris.api + "/form/data/location");
   }
 
   /**

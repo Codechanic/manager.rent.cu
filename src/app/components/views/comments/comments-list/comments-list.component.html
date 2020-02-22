@@ -26,7 +26,7 @@
                   aria-labelledby="button-animated">
                 <li role="menuitem">
                   <a href="javascript:void(0);" class="dropdown-item"
-                     [ngClass]="!(selected.length === 1) ? 'disabled' : ''"
+                     [ngClass]="!(selected.length > 0 && shouldAllowApprove()) ? 'disabled' : ''"
                      (click)="onApprove()"
                   >Approve</a>
                 </li>
@@ -62,7 +62,11 @@
             <ngx-datatable-column name="Nick" headerClass="header"></ngx-datatable-column>
             <ngx-datatable-column name="Text" headerClass="header"></ngx-datatable-column>
             <ngx-datatable-column name="Rating" headerClass="header right-align" cellClass="right-align"></ngx-datatable-column>
-            <ngx-datatable-column name="Enabled" headerClass="header right-align" cellClass="right-align"></ngx-datatable-column>
+            <ngx-datatable-column name="Enabled" headerClass="header center-align" cellClass="checkbox-cell">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <ngx-checkbox [iconClass]="'fas fa-check-square'" [isChecked]="value" (isClicked)="checkboxClicked($event)"></ngx-checkbox>
+              </ng-template>
+            </ngx-datatable-column>
           </ngx-datatable>
         </div>
       </div>

@@ -127,11 +127,12 @@ export class AuthService {
   }
 
   /**
-   * Returns the password encrypted 10 times using SHA512 algorithm
-   * @param password Password to encrypt
+   * Refresh the JWT Token
    */
-  encryptPassword(password: string): string {
-    const encryptedPassword = CryptoJS.SHA512(password);
-    return encryptedPassword.toString(CryptoJS.enc.Base64);
+  refreshToken() {
+    const jwt = this.cookieService.get("context");
+    const formData = new FormData();
+    formData.append("_token", CryptoJS.AES.decrypt(jwt, environment.secret).toString(CryptoJS.enc.Utf8));
+    return this.httpClient.post(environment.uris.refresh_token, formData);
   }
 }

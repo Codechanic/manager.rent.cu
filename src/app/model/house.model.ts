@@ -6,6 +6,7 @@ import { NotOffered } from './not-offered.model';
 import { ExtraCostService } from './extra-cost-service.model';
 import { Place } from './place.model';
 import {HouseSeasonPrice} from './house-season-price.model';
+import { LocationType } from "./location-type.model";
 
 
 export class House {
@@ -22,6 +23,7 @@ export class House {
   longitude: number;
   metaKeywords: string;
   accommodation: AccommodationType;
+  location: LocationType;
   homestayFreeservices: FreeService[];
   homestayNotOffered: NotOffered[];
   homestayExtracosts: ExtraCostService[];

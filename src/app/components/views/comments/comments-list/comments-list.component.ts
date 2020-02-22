@@ -225,4 +225,19 @@ export class CommentsListComponent implements OnInit {
 
     this.setPage({offset: 0});
   }
+
+  /**
+   * Callback on list view checkbox to make it readonly
+   * @param $event Event data thrown by checkbox onClick event
+   */
+  checkboxClicked($event: { target: { checked: boolean } }) {
+    $event.target.checked = !$event.target.checked;
+  }
+
+  /**
+   * Function that determines whether or not the Enabled button should be enabled
+   */
+  shouldAllowApprove() {
+    return !this.selected.find(comment => comment.enabled);
+  }
 }

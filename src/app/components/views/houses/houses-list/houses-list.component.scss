@@ -39,6 +39,12 @@
     padding-right: 20px;
   }
 
+  .ngx-datatable.bootstrap .center-align,
+  .ngx-datatable.bootstrap .datatable-body .datatable-body-row .datatable-body-cell.center-align, {
+    text-align: center;
+    padding-right: 20px;
+  }
+
   .ngx-datatable.bootstrap .datatable-footer {
     background: #f8f9fa;
     color: black;
@@ -54,6 +60,25 @@
 
   .ngx-datatable.bootstrap .header {
     font-weight: bold;
+  }
+
+  .ngx-datatable.bootstrap .checkbox-cell {
+    font-size: 16px;
+    line-height: 0;
+    display: flex;
+    justify-content: space-around;
+
+    .ngx-checkbox {
+      width: 18px !important;
+      height: 18px !important;
+      line-height: 0 !important;
+      cursor: default !important;
+      border: 1px solid #7EAD3B !important;
+
+      .ngx-icon-checkbox {
+        color: #7EAD3B !important;
+      }
+    }
   }
 
   .ngx-datatable.bootstrap .datatable-footer .datatable-pager a {

@@ -14,7 +14,9 @@
           Houses
           <div class="card-header-actions" [ngSwitch]="currentUser.role">
             <div class="btn-group" dropdown *ngSwitchCase="roles.ROLE_ADMIN">
-              <button class="btn btn-primary" type="button" (click)="onNew()">New</button>
+              <button class="btn btn-primary" type="button" (click)="onEdit()" [disabled]="!(selected.length === 1)">
+                Edit
+              </button>
               <button id="button-split-admin" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
                       type="button"
                       dropdownToggle aria-controls="dropdown-split-admin">
@@ -23,11 +25,6 @@
               </button>
               <ul id="dropdown-split-admin" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
                   aria-labelledby="button-animated">
-                <li role="menuitem">
-                  <a href="javascript:void(0);" class="dropdown-item"
-                     [ngClass]="!(selected.length === 1) ? 'disabled' : ''"
-                     (click)="onEdit()">Edit</a>
-                </li>
                 <li role="menuitem">
                   <a href="javascript:void(0);" class="dropdown-item"
                      [ngClass]="!(selected.length > 0 && shouldEnable()) ? 'disabled' : ''"
@@ -96,6 +93,11 @@
             <ngx-datatable-column name="Address" headerClass="header"></ngx-datatable-column>
             <ngx-datatable-column name="Rooms" headerClass="header right-align"
                                   cellClass="right-align"></ngx-datatable-column>
+            <ngx-datatable-column name="Enabled" headerClass="header center-align" cellClass="checkbox-cell">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <ngx-checkbox [iconClass]="'fas fa-check-square'" [isChecked]="value" (isClicked)="checkboxClicked($event)"></ngx-checkbox>
+              </ng-template>
+            </ngx-datatable-column>
           </ngx-datatable>
         </div>
       </div>
