@@ -3,6 +3,7 @@ import { Routes, RouterModule } from "@angular/router";
 
 import { CommentsListComponent } from "./comments-list/comments-list.component";
 import { CommentsAddEditComponent } from "./comments-add-edit/comments-add-edit.component";
+import { CanExitGuard } from "../../../guards/can-exit.guard";
 
 
 const routes: Routes = [
@@ -19,7 +20,8 @@ const routes: Routes = [
   {
     path: "edit/:id",
     data: { breadcrumb: "Edit Comment" },
-    component: CommentsAddEditComponent
+    component: CommentsAddEditComponent,
+    canDeactivate: [CanExitGuard]
   }
 ];
 

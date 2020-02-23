@@ -3,7 +3,8 @@ import { Routes, RouterModule } from "@angular/router";
 
 import { HousesListComponent } from "./houses-list/houses-list.component";
 import { HousesAddEditComponent } from "./houses-add-edit/houses-add-edit.component";
-import { AuthGuard } from "../../../services/auth.guard";
+import { AuthGuard } from "../../../guards/auth.guard";
+import { CanExitGuard } from "../../../guards/can-exit.guard";
 
 const routes: Routes = [
   {
@@ -40,7 +41,8 @@ const routes: Routes = [
       breadcrumb: "New House"
     },
     canLoad: [AuthGuard],
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    canDeactivate: [CanExitGuard]
   },
   {
     path: "edit/:id",
@@ -49,7 +51,8 @@ const routes: Routes = [
       breadcrumb: "Edit House"
     },
     canLoad: [AuthGuard],
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    canDeactivate: [CanExitGuard]
   }
 ];
 

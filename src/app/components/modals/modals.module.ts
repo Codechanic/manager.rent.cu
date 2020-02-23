@@ -7,9 +7,15 @@ import { BsDatepickerModule, ModalModule } from "ngx-bootstrap";
 import { DeleteComponent } from "./delete/delete.component";
 import { SeasonModalComponent } from "./season-modal/season-modal.component";
 import { HousePreviewComponent } from "./house-preview/house-preview.component";
+import { ConfirmComponent } from "./confirm/confirm.component";
 
 @NgModule({
-  declarations: [DeleteComponent, SeasonModalComponent, HousePreviewComponent],
+  declarations: [
+    DeleteComponent,
+    SeasonModalComponent,
+    HousePreviewComponent,
+    ConfirmComponent
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -18,9 +24,15 @@ import { HousePreviewComponent } from "./house-preview/house-preview.component";
   ],
   entryComponents: [
     SeasonModalComponent,
-    HousePreviewComponent
+    HousePreviewComponent,
+    ConfirmComponent
   ],
-  exports: [DeleteComponent, SeasonModalComponent, HousePreviewComponent]
+  exports: [
+    DeleteComponent,
+    SeasonModalComponent,
+    HousePreviewComponent,
+    ConfirmComponent
+  ]
 })
 export class ModalsModule {
 }

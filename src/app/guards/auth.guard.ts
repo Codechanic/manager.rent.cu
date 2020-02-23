@@ -3,7 +3,7 @@ import { CanLoad, Route, UrlSegment, ActivatedRouteSnapshot, RouterStateSnapshot
 
 import { Observable } from 'rxjs';
 
-import { AuthService } from './auth.service';
+import { AuthService } from '../services/auth.service';
 
 /**
  * Authentication guard for the entire application

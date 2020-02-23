@@ -26,13 +26,15 @@ import { SeasonModalComponent } from "../../../modals/season-modal/season-modal.
 import * as dateHelper from "../../../../helpers/date.helper";
 import { LocationType } from "../../../../model/location-type.model";
 import { HousePreviewComponent } from "../../../modals/house-preview/house-preview.component";
+import { CanExit } from "../../../../guards/can-exit.guard";
+import { ConfirmComponent } from "../../../modals/confirm/confirm.component";
 
 @Component({
   selector: "app-houses-add-edit",
   templateUrl: "./houses-add-edit.component.html",
   styleUrls: ["./houses-add-edit.component.scss"]
 })
-export class HousesAddEditComponent implements OnInit, OnDestroy {
+export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
 
   /**
    * Form group to collect and validate House data
@@ -128,6 +130,11 @@ export class HousesAddEditComponent implements OnInit, OnDestroy {
    * Reference to the ngx-bootstrap house-preview modal
    */
   housePreviewModalRef: BsModalRef;
+
+  /**
+   * Reference to the ngx-bootstrap confirm modal
+   */
+  confirmModalRef: BsModalRef;
 
   /**
    * Date helper that contains util functions
@@ -325,7 +332,7 @@ export class HousesAddEditComponent implements OnInit, OnDestroy {
    * Initialize subscription to season modal result
    */
   initializeModalSubscription() {
-    const modalSubscription = this.modalService.onHide.subscribe(() => {
+    const modalSubscription = this.modalService.onHide.subscribe((sd) => {
       if (this.seasonModalRef && this.seasonModalRef.content.confirmed) {
         const season = this.seasonModalRef.content.seasonForm.value;
         if (season) {
@@ -357,9 +364,17 @@ export class HousesAddEditComponent implements OnInit, OnDestroy {
     this.houseForm.controls["latitude"].setValue(this.house.latitude);
     this.houseForm.controls["longitude"].setValue(this.house.longitude);
     this.houseForm.controls["metaKeywords"].setValue(this.house.metaKeywords);
-    this.houseForm.controls["municipality"].setValue(this.house.municipality ? this.house.municipality.id : "");
-    this.houseForm.controls["accommodation"].setValue(this.house.accommodation ? this.house.accommodation.id : "");
-    this.houseForm.controls["location"].setValue(this.house.location ? this.house.location.id : "");
+
+    // set one-to-one relationships
+    this.house.municipality
+      ? this.houseForm.controls["municipality"].setValue(this.house.municipality.id)
+      : this.houseForm.controls["municipality"].reset();
+    this.house.accommodation
+      ? this.houseForm.controls["accommodation"].setValue(this.house.accommodation.id)
+      : this.houseForm.controls["accommodation"].reset;
+    this.house.location
+      ? this.houseForm.controls["location"].setValue(this.house.location.id)
+      : this.houseForm.controls["location"].reset();
 
     /* set many-to-many relationship values */
     this.setManyToManyRelationships(this.house);
@@ -613,7 +628,23 @@ export class HousesAddEditComponent implements OnInit, OnDestroy {
   }
 
   onPreview() {
-    const initialState = {house: this.house};
-    this.housePreviewModalRef = this.modalService.show(HousePreviewComponent, { class: "house-preview-modal", initialState});
+    const initialState = { house: this.house };
+    this.housePreviewModalRef = this.modalService.show(HousePreviewComponent, {
+      class: "house-preview-modal",
+      initialState
+    });
+  }
+
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    if (this.houseForm.touched && this.houseForm.dirty) {
+      const initialState = {
+        confirmMessage: "There are unsaved changes. " +
+          "Are you sure you want to leave this page? " +
+          "All unsaved changes will be lost."
+      };
+      this.confirmModalRef = this.modalService.show(ConfirmComponent, { initialState });
+      return this.confirmModalRef.content.onConfirmed;
+    }
+    return true;
   }
 }

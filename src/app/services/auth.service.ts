@@ -130,9 +130,13 @@ export class AuthService {
    * Refresh the JWT Token
    */
   refreshToken() {
-    const jwt = this.cookieService.get("context");
+    const jwt = CryptoJS.AES.decrypt(
+      this.cookieService.get("context"), environment.secret
+    ).toString(CryptoJS.enc.Utf8);
+    const jwt_decoded = this.jwtDecoder(jwt);
+    console.log(jwt_decoded);
     const formData = new FormData();
-    formData.append("_token", CryptoJS.AES.decrypt(jwt, environment.secret).toString(CryptoJS.enc.Utf8));
+    formData.append("_token", jwt_decoded.refresh_token);
     return this.httpClient.post(environment.uris.refresh_token, formData);
   }
 }

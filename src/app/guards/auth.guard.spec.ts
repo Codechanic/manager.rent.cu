@@ -5,7 +5,7 @@ import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/ro
 import { CookieService } from 'ngx-cookie-service';
 
 import { AuthGuard } from './auth.guard';
-import { AuthService } from './auth.service';
+import { AuthService } from '../services/auth.service';
 
 describe('AuthGuard', () => {
   beforeEach(() => {
