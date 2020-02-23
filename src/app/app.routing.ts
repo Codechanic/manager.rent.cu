@@ -8,7 +8,7 @@ import { P404Component } from './components/shared/error/404.component';
 import { P500Component } from './components/shared/error/500.component';
 import { LoginComponent } from './components/views/login/login.component';
 import { RegisterComponent } from './components/views/register/register.component';
-import { AuthGuard } from './services/auth.guard';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
