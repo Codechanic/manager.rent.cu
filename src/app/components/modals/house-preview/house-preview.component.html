@@ -1,6 +1,6 @@
 <div class="modal-header">{{house.name}} - Preview</div>
 <div class="modal-body">
-  <iframe [src]="previewUrl" frameborder="0"></iframe>
+  <iframe [src]="previewUrl" frameborder="0" (load)="onIFrameLoad()" sandbox></iframe>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-primary" (click)="onClose()">Close</button>
