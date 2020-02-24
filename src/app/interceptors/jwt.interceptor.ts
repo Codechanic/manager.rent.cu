@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from "@angular/common/http";
 
 import { Observable } from "rxjs";
-import { tap } from "rxjs/operators";
+import { catchError, switchMap } from "rxjs/operators";
 import { CookieService } from "ngx-cookie-service";
 import * as CryptoJS from "crypto-js"
   ;
@@ -29,22 +29,16 @@ export class JwtInterceptor implements HttpInterceptor {
       request = this.setRequestJWTToken(request);
     }
 
-    return next.handle(request).pipe(tap(
-      () => {
-      },
-      (error) => {
-        if (error instanceof HttpErrorResponse) {
-          if (error.status !== 401) {
-            return;
-          }
-          this.authService.refreshToken().subscribe((response) => {
+    return next.handle(request).pipe(
+      catchError((error, caught) => {
+        if (error instanceof HttpErrorResponse && error.status === 401) {
+          return this.authService.refreshToken().pipe(switchMap((response) => {
             this.cookieService.set("context", CryptoJS.AES.encrypt(response, environment.secret).toString());
-            request = this.setRequestJWTToken(request);
-            return next.handle(request);
-          });
+            return next.handle(this.setRequestJWTToken(request));
+          }));
         }
-      }
-    ));
+      })
+    );
   }
 
 
