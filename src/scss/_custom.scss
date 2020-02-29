@@ -19,6 +19,20 @@ a {
   background-color: #a2b588 !important;
 }
 
+.sidebar .nav-link {
+  color: #6c757d;
+}
+
+.sidebar .nav-link.active {
+  color: #255180;
+  background: #a2b588;
+}
+
+.sidebar .nav-link:hover {
+  color: #fff;
+  background: #7EAD3B;
+}
+
 .season-modal {
   max-width: 600px;
 }

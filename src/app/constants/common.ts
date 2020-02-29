@@ -18,5 +18,10 @@ export class AppCommonConstants {
     HOUSE_UPDATED: 'House updated successfully',
   };
 
+  public static PROFILE_PILLS = {
+    CHANGE_PASSWORD: 'Change password',
+    PERSONAL_DATA: 'Personal data',
+  };
+
   public static DEFAUlT_SEASON_IDS = ['7', '9'];
 }

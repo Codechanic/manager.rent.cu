@@ -1,0 +1,54 @@
+<app-header
+  [navbarBrandRouterLink]="['/base/cards']"
+  [fixed]="true"
+  [navbarBrandFull]="{src: 'assets/img/brand/logo.png', width: 60, height: 25, alt: 'Rent.cu Logo'}"
+  [navbarBrandMinimized]="{src: 'assets/img/brand/logo.png', width: 30, height: 12.5, alt: 'Rent.cu Logo'}"
+  [sidebarToggler]="'lg'"
+  [asideMenuToggler]="false">
+  <ul class="nav navbar-nav d-md-down-none">
+  </ul>
+  <ul class="nav navbar-nav ml-auto">
+    <li class="nav-item dropdown" dropdown placement="bottom right">
+      <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
+        <img src="../../../assets/img/avatars/standard_user-512.png" class="img-avatar"/>
+      </a>
+      <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
+        <div class="dropdown-header text-center"><strong>Account</strong></div>
+        <a class="dropdown-item" routerLink="/profile"><i class="fa fa-user"></i> Profile</a>
+        <a href="javascript:void(0)" class="divider"></a>
+        <a class="dropdown-item" href="javascript:void(0)" (click)="onLogout()"><i class="fa fa-lock"></i> Logout</a>
+      </div>
+    </li>
+  </ul>
+</app-header>
+<div class="app-body">
+  <app-sidebar [fixed]="true" [display]="'lg'">
+    <app-sidebar-nav [navItems]="navItems" [perfectScrollbar] [disabled]="sidebarMinimized"></app-sidebar-nav>
+    <app-sidebar-minimizer></app-sidebar-minimizer>
+  </app-sidebar>
+  <!-- Main content -->
+  <main class="main">
+    <!-- Breadcrumb -->
+    <!-- breaking change 'cui-breadcrumb' -->
+<!--    <cui-breadcrumb #breadcrumbComponent>-->
+<!--      &lt;!&ndash; Breadcrumb Menu&ndash;&gt;-->
+<!--    </cui-breadcrumb>-->
+    <breadcrumb #parent>
+      <ol class="breadcrumb">
+        <ng-template ngFor let-route [ngForOf]="parent.breadcrumbs">
+          <li *ngIf="!route.terminal" class="breadcrumb-item">
+            <a href="" [routerLink]="[route.url]">{{ route.displayName }}</a>
+          </li>
+          <li *ngIf="route.terminal" class="breadcrumb-item active" aria-current="page">{{ route.displayName }}</li>
+        </ng-template>
+      </ol>
+    </breadcrumb>
+    <div class="container-fluid">
+      <router-outlet></router-outlet>
+    </div><!-- /.container-fluid -->
+  </main>
+</div>
+<app-footer>
+  <span><a href="https://rent.cu">RENT.CU</a> &copy; 2019.</span>
+  <span class="ml-auto">Powered by <a href="https://coreui.io/angular">CoreUI for Angular</a></span>
+</app-footer>

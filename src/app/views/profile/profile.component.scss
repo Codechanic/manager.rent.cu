@@ -1,0 +1,24 @@
+.avatar-container {
+  display: flex;
+  justify-content: center;
+  height: 110px;
+
+  .img-avatar {
+    height: 100%;
+  }
+}
+
+.card-body.tabs {
+  padding: 1rem;
+}
+
+::ng-deep {
+  .tab-content {
+    display: none;
+  }
+
+  .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #7EAD3B;
+  }
+}
