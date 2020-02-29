@@ -1,0 +1,106 @@
+<div class="row">
+  <div class="col-md-2">
+    <div class="card">
+      <div class="card-header">
+        <div class="avatar-container">
+          <img src="../../../assets/img/avatars/standard_user-512.png" class="img-avatar" alt="User standard avatar"/>
+        </div>
+      </div>
+      <div class="card-body tabs">
+        <tabset [vertical]="true" type="pills">
+          <tab heading="Personal data" (selectTab)="onTabSelect($event)"></tab>
+          <tab heading="Change password" (selectTab)="onTabSelect($event)"></tab>
+        </tabset>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-10">
+    <div class="card personal-data" *ngIf="selectedPill === profilePills.PERSONAL_DATA">
+      <div class="card-header">
+        Personal data
+      </div>
+      <div class="card-body">
+        <form [formGroup]="personalDataForm" (ngSubmit)="onPersonalDataFormSubmit()">
+          <input type="hidden" formControlName="id">
+          <div
+            class="bg-danger"
+            *ngIf="personalDataForm.get('email').hasError('required') && personalDataForm.get('email').touched">
+            Email required
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="icon-envelope"></i></span>
+            </div>
+            <input type="text" class="form-control" placeholder="Email" autocomplete="email" required
+                   formControlName="email">
+          </div>
+          <div
+            class="bg-danger"
+            *ngIf="personalDataForm.get('name').hasError('required') && personalDataForm.get('name').touched">
+            Name required
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="icon-user"></i></span>
+            </div>
+            <input type="text" class="form-control" placeholder="Name" autocomplete="name" required
+                   formControlName="name">
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="card personal-data" *ngIf="selectedPill === profilePills.CHANGE_PASSWORD">
+      <div class="card-header">
+        Change password
+      </div>
+      <div class="card-body">
+        <form [formGroup]="changePasswordForm" (ngSubmit)="onChangePasswordFormSubmit()">
+          <input type="hidden" formControlName="id">
+          <div
+            class="bg-danger"
+            *ngIf="changePasswordForm.get('old').hasError('required') && changePasswordForm.get('old').touched">
+            Old password required
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="icon-lock"></i></span>
+            </div>
+            <input type="password" class="form-control" placeholder="Old password" autocomplete="old" required
+                   formControlName="old">
+          </div>
+          <div class="form-group" formGroupName="passwords">
+            <div
+              class="bg-danger"
+              *ngIf="changePasswordForm.get(['passwords','new']).hasError('required') && changePasswordForm.get(['passwords','new']).touched">
+              New password required
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="icon-lock"></i></span>
+              </div>
+              <input type="password" class="form-control" placeholder="New password" autocomplete="new" required
+                     formControlName="new">
+            </div>
+            <div
+              class="bg-danger"
+              *ngIf="changePasswordForm.get(['passwords','repeat']).hasError('required') && changePasswordForm.get(['passwords','repeat']).touched">
+              Repeat password
+            </div>
+            <div
+              class="bg-danger"
+              *ngIf="changePasswordForm.get(['passwords','new']).value != changePasswordForm.get(['passwords','repeat']).value && changePasswordForm.get(['passwords','repeat']).value != null">
+              Passwords don't match
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="icon-lock"></i></span>
+              </div>
+              <input type="password" class="form-control" placeholder="Repeat password" autocomplete="repeat" required
+                     formControlName="repeat">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

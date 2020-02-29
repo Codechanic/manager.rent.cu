@@ -10,12 +10,12 @@ import { JwtInterceptor } from "./interceptors/jwt.interceptor";
 import { AppComponent } from "./app.component";
 
 // Import containers
-import { FramedLayoutComponent } from "./components/core/framed-layout/framed-layout.component";
+import { FramedLayoutComponent } from "./core/framed-layout/framed-layout.component";
 
 // Import local and core components
-import { LoginComponent } from "./components/views/login/login.component";
-import { P404Component } from "./components/shared/error/404.component";
-import { P500Component } from "./components/shared/error/500.component";
+import { LoginComponent } from "./views/login/login.component";
+import { P404Component } from "./shared/error/404.component";
+import { P500Component } from "./shared/error/500.component";
 
 import {
   AppAsideModule,
