@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 
-import * as CryptoJS from 'crypto-js';
-import { CookieService } from 'ngx-cookie-service';
-import * as jwt_decode from 'jwt-decode';
+import * as CryptoJS from "crypto-js";
+import { CookieService } from "ngx-cookie-service";
+import * as jwt_decode from "jwt-decode";
 
-import { AuthService } from '../../services/auth.service';
-import { environment } from '../../../environments/environment';
+import { AuthService } from "../../services/auth.service";
+import { environment } from "../../../environments/environment";
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: 'login.component.html',
+  selector: "app-dashboard",
+  templateUrl: "login.component.html"
 })
 export class LoginComponent implements OnInit {
 
@@ -25,11 +25,11 @@ export class LoginComponent implements OnInit {
    */
   loginForm = new FormGroup(
     {
-      username: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.required),
-    },
+      username: new FormControl("", Validators.required),
+      password: new FormControl("", Validators.required)
+    }
   );
-  loginError = { show: false, message: '' };
+  loginError = { show: false, message: "" };
 
   /**
    * Component's constructor
@@ -51,8 +51,8 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
 
     /* get whether the session expired or not from route param */
-    this.sessionExpired = this.activatedRoute.snapshot.params['expired'] !== undefined
-      ? this.activatedRoute.snapshot.params['expired']
+    this.sessionExpired = this.activatedRoute.snapshot.params["expired"] !== undefined
+      ? this.activatedRoute.snapshot.params["expired"]
       : false;
   }
 
@@ -73,14 +73,14 @@ export class LoginComponent implements OnInit {
         .subscribe((response: any) => {
 
           /* if the authentication succeeded, store the resulting jwt in cookie encrypted  */
-          this.cookieService.set('context', CryptoJS.AES.encrypt(response, environment.secret).toString());
+          this.cookieService.set("context", CryptoJS.AES.encrypt(response, environment.secret).toString());
 
           /* navigate to the houses route */
-          this.router.navigate(['/houses']);
+          this.router.navigate(["/houses"]);
         }, error => {
           console.log(error);
           this.loginError.show = true;
-          this.loginError.message = 'Login failed';
+          this.loginError.message = "Login failed";
         });
     }
   }

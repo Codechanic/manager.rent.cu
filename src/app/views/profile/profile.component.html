@@ -1,3 +1,6 @@
+<alert *ngIf="alert.show" [type]="alert.type" [dismissible]="true"
+       (onClose)="alert.show = false">{{ alert.msg }}</alert>
+
 <div class="row">
   <div class="col-md-2">
     <div class="card">
@@ -7,7 +10,7 @@
         </div>
       </div>
       <div class="card-body tabs">
-        <tabset [vertical]="true" type="pills">
+        <tabset [vertical]="true" type="pills" [style.text-align]="'center'">
           <tab heading="Personal data" (selectTab)="onTabSelect($event)"></tab>
           <tab heading="Change password" (selectTab)="onTabSelect($event)"></tab>
         </tabset>
@@ -15,12 +18,13 @@
     </div>
   </div>
   <div class="col-md-10">
-    <div class="card personal-data" *ngIf="selectedPill === profilePills.PERSONAL_DATA">
-      <div class="card-header">
-        Personal data
-      </div>
-      <div class="card-body">
-        <form [formGroup]="personalDataForm" (ngSubmit)="onPersonalDataFormSubmit()">
+    <form [formGroup]="personalDataForm" (ngSubmit)="onPersonalDataFormSubmit()"
+          *ngIf="selectedPill === profilePills.PERSONAL_DATA">
+      <div class="card personal-data">
+        <div class="card-header">
+          Personal data
+        </div>
+        <div class="card-body">
           <input type="hidden" formControlName="id">
           <div
             class="bg-danger"
@@ -46,15 +50,20 @@
             <input type="text" class="form-control" placeholder="Name" autocomplete="name" required
                    formControlName="name">
           </div>
-        </form>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
+          <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
+        </div>
       </div>
-    </div>
-    <div class="card personal-data" *ngIf="selectedPill === profilePills.CHANGE_PASSWORD">
-      <div class="card-header">
-        Change password
-      </div>
-      <div class="card-body">
-        <form [formGroup]="changePasswordForm" (ngSubmit)="onChangePasswordFormSubmit()">
+    </form>
+    <form [formGroup]="changePasswordForm" (ngSubmit)="onChangePasswordFormSubmit()"
+          *ngIf="selectedPill === profilePills.CHANGE_PASSWORD">
+      <div class="card personal-data">
+        <div class="card-header">
+          Change password
+        </div>
+        <div class="card-body">
           <input type="hidden" formControlName="id">
           <div
             class="bg-danger"
@@ -99,8 +108,14 @@
                      formControlName="repeat">
             </div>
           </div>
-        </form>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
+          <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 </div>
+
+<ngx-spinner></ngx-spinner>

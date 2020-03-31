@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from "@angular/forms";
 import { CommonModule } from '@angular/common';
 
-import { TabsModule } from "ngx-bootstrap";
+import { AlertModule, TabsModule } from "ngx-bootstrap";
+import { NgxSpinnerModule } from "ngx-spinner";
 
 import { ProfileRoutingModule } from './profile-routing.module';
 import { ProfileComponent } from './profile.component';
-import { ReactiveFormsModule } from "@angular/forms";
 
 
 @NgModule({
@@ -14,7 +15,9 @@ import { ReactiveFormsModule } from "@angular/forms";
     CommonModule,
     ReactiveFormsModule,
     TabsModule,
-    ProfileRoutingModule
+    ProfileRoutingModule,
+    NgxSpinnerModule,
+    AlertModule
   ]
 })
 export class ProfileModule { }

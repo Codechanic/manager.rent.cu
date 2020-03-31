@@ -202,7 +202,7 @@ export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
     if (this.activatedRoute.snapshot.queryParams.created) {
       this.showAlertMessage(
         AppCommonConstants.ALERT_MESSAGE_TYPES.SUCCESS,
-        AppCommonConstants.ALERT_MESSAGES.HOUSE_CREATED
+        AppCommonConstants.ALERT_MESSAGES.SUCCESS.HOUSE_CREATED
       );
     }
 
@@ -462,7 +462,7 @@ export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
           /* if the operation was successful, alert the user about it */
           this.showAlertMessage(
             AppCommonConstants.ALERT_MESSAGE_TYPES.SUCCESS,
-            AppCommonConstants.ALERT_MESSAGES.HOUSE_UPDATED
+            AppCommonConstants.ALERT_MESSAGES.SUCCESS.HOUSE_UPDATED
           );
 
           /* reset the many-to-many relationships */

@@ -1,12 +1,13 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 
 import { CookieService } from "ngx-cookie-service";
-import { Observable, Subscriber } from "rxjs";
+import { Observable, Subscriber, throwError } from "rxjs";
 import * as CryptoJS from "crypto-js";
 import * as jwt_decode from "jwt-decode";
 
 import { environment } from "../../environments/environment";
+import { catchError } from "rxjs/operators";
 
 /**
  * Authentication service
@@ -138,5 +139,59 @@ export class AuthService {
     const formData = new FormData();
     formData.append("_token", jwt_decoded.refresh_token);
     return this.httpClient.post(environment.uris.refresh_token, formData);
+  }
+
+  /**
+   * Change the authenticated user's password
+   * @param oldPassword
+   * @param newPassword
+   */
+  password(oldPassword: string, newPassword: string): Observable<any> {
+    const headerDict = {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Access-Control-Allow-Origin',
+    };
+
+    const requestOptions = {
+      headers: new HttpHeaders(headerDict),
+    };
+    const formData = new FormData();
+    formData.append("_old_password", oldPassword);
+    formData.append("_password", newPassword);
+    return this.httpClient.post<any>(environment.uris.password + "/" + this.currentUser().id, formData, requestOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  /**
+   * Change the authenticated user's profile data
+   */
+  profile(): Observable<any> {
+    const formData = new FormData();
+    return this.httpClient.post<any>(environment.uris.api + "/owner/" + this.currentUser().id, formData)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  /**
+   * Handle http requests errors
+   * @param error Http request error
+   */
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error("An error occurred:", error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
+    }
+    // return an observable with a user-facing error message
+    return throwError(
+      "Something bad happened; please try again later.");
   }
 }

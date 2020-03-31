@@ -1,7 +1,10 @@
 import { Owner } from './owner.model';
 
 export class User {
-  id: string;
+
+  id: number;
   username: string;
-  manager: Owner;
+  name: string;
+  email: string;
+  enabled: boolean;
 }

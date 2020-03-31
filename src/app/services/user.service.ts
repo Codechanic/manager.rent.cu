@@ -23,18 +23,32 @@ export class UserService {
   }
 
   /**
-   * Find all users
+   * Finds all users
    */
   find(): Observable<User[]> {
-    return this.httpClient.get<any[]>(environment.uris.api + '/user');
+    return this.httpClient.get<any[]>(environment.uris.api + '/user')
+      .pipe(
+        catchError(this.handleError),
+      );
   }
 
   /**
-   * Create a user
-   * @param user House to be created
+   * Creates a user
+   * @param user User to be created
    */
-  create(user: User) {
-    return this.httpClient.post<User>(environment.uris.api + '/user/create', user, {})
+  create(user: User): Observable<any> {
+    return this.httpClient.post<User>(environment.uris.api + '/user', user, {})
+      .pipe(
+        catchError(this.handleError),
+      );
+  }
+
+  /**
+   * Updates a user
+   * @param user User to be created
+   */
+  update(user: User): Observable<any> {
+    return this.httpClient.put<User>(environment.uris.api + `/user/${user.id}`, user, {})
       .pipe(
         catchError(this.handleError),
       );
