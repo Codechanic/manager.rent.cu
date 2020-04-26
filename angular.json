@@ -35,6 +35,12 @@
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -53,11 +59,16 @@
             },
             "es": {
               "aot": true,
-              "outputPath": "dist/manager.rent.cu/es/",
-              "i18nFile": "src/locale/messages.es.xlf",
-              "i18nFormat": "xlf",
-              "i18nLocale": "es"
-            }
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+            "localize": [
+              "es"
+            ],
+              "outputPath": "dist/manager.rent.cu"}
           }
         },
         "serve": {
@@ -124,7 +135,7 @@
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
-      "styleext": "scss"
+      "style": "scss"
     },
     "@schematics/angular:directive": {
       "prefix": "app"

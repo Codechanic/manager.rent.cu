@@ -114,12 +114,12 @@ export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
   /**
    * Municipalities NgSelectComponent
    */
-  @ViewChild("municipalitiesSelect", { static: false }) municipalitiesSelect: NgSelectComponent;
+  @ViewChild("municipalitiesSelect") municipalitiesSelect: NgSelectComponent;
 
   /**
    * Municipalities NgSelectComponent
    */
-  @ViewChild("provincesSelect", { static: false }) provincesSelect: NgSelectComponent;
+  @ViewChild("provincesSelect") provincesSelect: NgSelectComponent;
 
   /**
    * Reference to the ngx-bootstrap seasons modal
