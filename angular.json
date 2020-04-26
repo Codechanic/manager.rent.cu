@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ng": {
+    "manager.rent.cu": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -50,24 +50,34 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
+            },
+            "es": {
+              "aot": true,
+              "outputPath": "dist/manager.rent.cu/es/",
+              "i18nFile": "src/locale/messages.es.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "es"
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ng:build"
+            "browserTarget": "manager.rent.cu:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ng:build:production"
+              "browserTarget": "manager.rent.cu:build:production"
+            },
+            "es": {
+              "browserTarget": "manager.rent.cu:build:es"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ng:build"
+            "browserTarget": "manager.rent.cu:build"
           }
         },
         "lint": {
@@ -110,7 +120,7 @@
       }
     }
   },
-  "defaultProject": "ng",
+  "defaultProject": "manager.rent.cu",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",

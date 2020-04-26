@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { DEFAULT_SEASONS_IDS } from '../../../../rent.cu-admin-api/src/common/constants';
+import { DEFAULT_SEASONS_IDS } from '../../../../api.rent.cu/src/common/constants';
 
 @Pipe({
   name: 'seasonScrub'
