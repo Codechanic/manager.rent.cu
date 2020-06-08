@@ -4,8 +4,10 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@ang
 
 import { Observable, Subscription } from "rxjs";
 import { NgSelectComponent } from "@ng-select/ng-select";
+import { GalleryItem, ImageItem } from "@ngx-gallery/core";
 import { BsModalRef, BsModalService } from "ngx-bootstrap";
 import { NgxSpinnerService } from "ngx-spinner";
+import { map } from "rxjs/operators";
 
 import { HouseService } from "../../../services/house.service";
 import { House } from "../../../model/house.model";
@@ -28,6 +30,7 @@ import { LocationType } from "../../../model/location-type.model";
 import { HousePreviewComponent } from "../../../modals/house-preview/house-preview.component";
 import { CanExit } from "../../../guards/can-exit.guard";
 import { ConfirmComponent } from "../../../modals/confirm/confirm.component";
+import { ImageService } from "../../../services/image.service";
 
 @Component({
   selector: "app-houses-add-edit",
@@ -146,6 +149,8 @@ export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
    */
   componentSubscriptions: Subscription[] = [];
 
+  images$: Observable<GalleryItem[]>;
+
   /**
    * Component constructor
    * @param houseService House handling service
@@ -153,6 +158,7 @@ export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
    * @param activatedRoute Activated route
    * @param authService Authentication service
    * @param formDataService Form data service
+   * @param imageService Image service
    * @param fb Form builder Angular service
    * @param router Angular router service
    * @param modalService NgxBootstrap modal service
@@ -164,6 +170,7 @@ export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private formDataService: FormDataService,
+    private imageService: ImageService,
     private fb: FormBuilder,
     private router: Router,
     private modalService: BsModalService,
@@ -238,6 +245,24 @@ export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
         this.populateForm();
         this.spinnerService.hide();
       });
+
+
+      /**
+       * get house images
+       */
+      this.images$ = this.imageService.findByOwner(this.houseId).pipe(
+        map(res => {
+          const galleryImages = [];
+          for (const image of res) {
+            galleryImages.push(new ImageItem({
+              src: `http://site.rent.cu/uploads/gallery/${image.owner}/${image.path}`,
+              thumb: `http://site.rent.cu/uploads/gallery/${image.owner}/${image.path}`
+            }));
+          }
+          return galleryImages;
+        })
+      );
+
     } else {
       this.formDataService.defaultSeasons().subscribe((defaultSeasons: Season[]) => {
         this.initializeProvince();

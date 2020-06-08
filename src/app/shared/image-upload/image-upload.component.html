@@ -1,41 +1,29 @@
-<form [formGroup]="imageUploadForm" (ngSubmit)="submit()">
+<div class="form-group">
 
-  <div class="form-group">
+  <label class="image-upload-container btn btn-bwm">
+    <span>Select Image</span>
+    <input #imageInput
+           type="file"
+           accept="image/*"
+           (change)="processFile(imageInput)">
+  </label>
 
-    <label for="name">Name</label>
 
-    <input
-      formControlName="name"
-      id="name"
-      type="text"
-      class="form-control">
+  <div *ngIf="selectedFile" class="img-preview-container">
 
-    <div *ngIf="f.name.touched && f.name.invalid" class="alert alert-danger">
-      <div *ngIf="f.name.errors.required">Name is required.</div>
-      <div *ngIf="f.name.errors.minlength">Name should be at least 3 characters of length.</div>
+    <div class="img-preview{{selectedFile.status === 'fail' ? '-error' : ''}}"
+         [ngStyle]="{'background-image': 'url('+ selectedFile.src + ')'}">
     </div>
 
-  </div>
-
-  <div class="form-group">
-
-    <label for="file">File</label>
-
-    <input
-      formControlName="file"
-      id="file"
-      type="file"
-      class="form-control"
-      (change)="onFileChange($event)">
-
-    <div *ngIf="f.file.touched && f.file.invalid" class="alert alert-danger">
-      <div *ngIf="f.file.errors.required">File is required.</div>
+    <div *ngIf="selectedFile.pending" class="img-loading-overlay">
+      <div class="img-spinning-circle"></div>
     </div>
 
+    <div *ngIf="selectedFile.status === 'ok'" class="alert alert-success"> Image Uploaded Succesfuly!</div>
+    <div *ngIf="selectedFile.status === 'fail'" class="alert alert-danger"> Image Upload Failed!</div>
+    <img [src]="selectedFile.src" alt="Image to upload" class="image-to-upload">
   </div>
 
-  <img [src]="imageSrc" *ngIf="imageSrc" alt="Image to upload" class="image-to-upload">
+</div>
 
-  <button class="btn btn-primary" type="submit">Submit</button>
-
-</form>
+<button class="btn btn-primary" type="button" (click)="submit()">Submit</button>

@@ -1,5 +1,14 @@
-import { Component } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { Component, Input } from "@angular/core";
+
+import { ImageService } from "../../services/image.service";
+
+class ImageSnippet {
+  pending: boolean = false;
+  status: string = "init";
+
+  constructor(public src: string, public file: File) {
+  }
+}
 
 @Component({
   selector: "app-image-upload",
@@ -7,37 +16,46 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
   styleUrls: ["./image-upload.component.scss"]
 })
 export class ImageUploadComponent {
-  imageSrc: string;
 
-  imageUploadForm = new FormGroup({
-    name: new FormControl("", [Validators.required, Validators.minLength(3)]),
-    file: new FormControl("", [Validators.required]),
-    fileSource: new FormControl("", [Validators.required])
+  selectedFile: ImageSnippet;
 
-  });
+  @Input() houseId: string;
 
-  constructor() {
+  constructor(private imageService: ImageService) {
   }
 
-  get f(){
-    return this.imageUploadForm.controls;
-  }
-
-  onFileChange(event) {
+  processFile(imageInput: any) {
+    const file: File = imageInput.files[0];
     const reader = new FileReader();
-    if (event.target.files && event.target.files.length) {
-      const [file] = event.target.files;
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.imageSrc = reader.result as string;
-        this.imageUploadForm.patchValue({
-          fileSource: reader.result
-        });
-      };
-    }
+
+    reader.addEventListener("load", (event: any) => {
+
+      this.selectedFile = new ImageSnippet(event.target.result, file);
+
+      this.selectedFile.pending = true;
+    });
+
+    reader.readAsDataURL(file);
   }
 
   submit() {
+    this.imageService.uploadImage(this.houseId, this.selectedFile.file).subscribe(
+      (res) => {
+        this.onSuccess();
+      },
+      (err) => {
+        this.onError();
+      });
+  }
 
+  private onSuccess() {
+    this.selectedFile.pending = false;
+    this.selectedFile.status = 'ok';
+  }
+
+  private onError() {
+    this.selectedFile.pending = false;
+    this.selectedFile.status = 'fail';
+    this.selectedFile.src = '';
   }
 }
