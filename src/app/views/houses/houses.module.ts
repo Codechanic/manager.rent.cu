@@ -7,6 +7,7 @@ import { NgSelectModule } from "@ng-select/ng-select";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 import { NgxCheckboxModule } from "ngx-checkbox";
 import { NgxSpinnerModule } from "ngx-spinner";
+import { GalleryModule } from "@ngx-gallery/core";
 
 import { HousesRoutingModule } from "./houses-routing.module";
 import { HousesListComponent } from "./houses-list/houses-list.component";
@@ -34,6 +35,11 @@ import { SeasonScrubPipe } from "../../pipes/season-scrub.pipe";
     NgxDatatableModule,
     NgxCheckboxModule,
     NgxSpinnerModule,
+    GalleryModule.withConfig({
+      loop: true,
+      autoPlay: true,
+      counter: false
+    }),
     BsDropdownModule.forRoot(),
     AlertModule.forRoot()
   ]

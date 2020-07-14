@@ -27,7 +27,9 @@
               "src/scss/style.scss"
             ],
             "stylePreprocessorOptions": {
-              "includePaths": ["./node_modules"]
+              "includePaths": [
+                "./node_modules"
+              ]
             },
             "scripts": [
               "node_modules/chart.js/dist/Chart.min.js"
@@ -35,6 +37,12 @@
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -53,10 +61,16 @@
             },
             "es": {
               "aot": true,
-              "outputPath": "dist/manager.rent.cu/es/",
-              "i18nFile": "src/locale/messages.es.xlf",
-              "i18nFormat": "xlf",
-              "i18nLocale": "es"
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "localize": [
+                "es"
+              ],
+              "outputPath": "dist/manager.rent.cu"
             }
           }
         },
@@ -124,10 +138,13 @@
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
-      "styleext": "scss"
+      "style": "scss"
     },
     "@schematics/angular:directive": {
       "prefix": "app"
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

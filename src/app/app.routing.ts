@@ -1,14 +1,14 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
 
 // Import Containers
-import { FramedLayoutComponent } from './core/framed-layout/framed-layout.component';
+import {FramedLayoutComponent} from './core/framed-layout/framed-layout.component';
 
-import { P404Component } from './shared/error/404.component';
-import { P500Component } from './shared/error/500.component';
-import { LoginComponent } from './views/login/login.component';
-import { RegisterComponent } from './views/register/register.component';
-import { AuthGuard } from './guards/auth.guard';
+import {P404Component} from './shared/error/404.component';
+import {P500Component} from './shared/error/500.component';
+import {LoginComponent} from './views/login/login.component';
+import {RegisterComponent} from './views/register/register.component';
+import {AuthGuard} from './guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -32,7 +32,7 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    children:[
+    children: [
       {
         path: '',
         redirectTo: 'false',
@@ -70,7 +70,7 @@ export const routes: Routes = [
       },
     ],
   },
-  { path: '**', component: P404Component },
+  {path: '**', component: P404Component},
 ];
 
 @NgModule({

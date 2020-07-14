@@ -11,7 +11,7 @@ export class DeleteComponent {
   /**
    * Instance reference to ngx-bootstrap modal
    */
-  @ViewChild('dangerModal', { static: false }) public dangerModal: ModalDirective;
+  @ViewChild('dangerModal') public dangerModal: ModalDirective;
 
   /**
    * Event to emit when the operation was confirmed

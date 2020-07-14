@@ -83,7 +83,7 @@ export class HousesListComponent implements OnInit {
   /**
    * Instance reference to the delete modal component
    */
-  @ViewChild("deleteComponent", { static: false }) deleteComponent;
+  @ViewChild("deleteComponent") deleteComponent;
 
   /**
    * Selected rows

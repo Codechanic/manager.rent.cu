@@ -148,24 +148,24 @@
                 </tab>
                 <tab heading="Location">
                   <div class="form-group row">
-                  <label class="col-md-3 col-form-label">Location type</label>
-                  <div class="col-md-9">
-                    <div class="bg-danger"
-                         *ngIf="houseForm.get('location').hasError('required') && houseForm.get('location').touched">
-                      Location type required
-                    </div>
-                    <ng-select [items]="location$ | async"
-                               placeholder="Select location type"
-                               bindValue="id"
-                               bindLabel="name"
-                               [multiple]="false"
-                               [closeOnSelect]="true"
-                               [searchable]="true"
-                               formControlName="location">
+                    <label class="col-md-3 col-form-label">Location type</label>
+                    <div class="col-md-9">
+                      <div class="bg-danger"
+                           *ngIf="houseForm.get('location').hasError('required') && houseForm.get('location').touched">
+                        Location type required
+                      </div>
+                      <ng-select [items]="location$ | async"
+                                 placeholder="Select location type"
+                                 bindValue="id"
+                                 bindLabel="name"
+                                 [multiple]="false"
+                                 [closeOnSelect]="true"
+                                 [searchable]="true"
+                                 formControlName="location">
 
-                    </ng-select>
+                      </ng-select>
+                    </div>
                   </div>
-                </div>
                   <div class="form-group row">
                     <label class="col-md-3 col-form-label">Address</label>
                     <div class="col-md-9">
@@ -279,11 +279,22 @@
                     </tfoot>
                   </table>
                 </tab>
+                <tab heading="Images" *ngIf="houseId">
+                  <div class="row">
+                  <div class="col-md-5">
+                    <app-image-upload [houseId]="houseId"></app-image-upload>
+                  </div>
+                  <div class="col-md-7">
+                    <gallery id="houseImagesGallery" [items]="images$ | async"></gallery>
+                  </div>
+                  </div>
+                </tab>
               </tabset>
             </div>
             <div class="card-footer">
               <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
-              <button type="button" class="btn btn-sm btn-danger" (click)="onReset()"><i class="fa fa-ban"></i> Reset</button>
+              <button type="button" class="btn btn-sm btn-danger" (click)="onReset()"><i class="fa fa-ban"></i> Reset
+              </button>
             </div>
           </div>
         </form>
