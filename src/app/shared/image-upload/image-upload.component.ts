@@ -1,19 +1,19 @@
-import { Component, Input } from "@angular/core";
+import {Component, Input} from '@angular/core';
 
-import { ImageService } from "../../services/image.service";
+import {ImageService} from '../../services/image.service';
 
 class ImageSnippet {
   pending: boolean = false;
-  status: string = "init";
+  status: string = 'init';
 
   constructor(public src: string, public file: File) {
   }
 }
 
 @Component({
-  selector: "app-image-upload",
-  templateUrl: "./image-upload.component.html",
-  styleUrls: ["./image-upload.component.scss"]
+  selector: 'app-image-upload',
+  templateUrl: './image-upload.component.html',
+  styleUrls: ['./image-upload.component.scss']
 })
 export class ImageUploadComponent {
 
@@ -28,7 +28,7 @@ export class ImageUploadComponent {
     const file: File = imageInput.files[0];
     const reader = new FileReader();
 
-    reader.addEventListener("load", (event: any) => {
+    reader.addEventListener('load', (event: any) => {
 
       this.selectedFile = new ImageSnippet(event.target.result, file);
 

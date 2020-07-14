@@ -27,7 +27,9 @@
               "src/scss/style.scss"
             ],
             "stylePreprocessorOptions": {
-              "includePaths": ["./node_modules"]
+              "includePaths": [
+                "./node_modules"
+              ]
             },
             "scripts": [
               "node_modules/chart.js/dist/Chart.min.js"
@@ -65,10 +67,11 @@
                   "maximumWarning": "6kb"
                 }
               ],
-            "localize": [
-              "es"
-            ],
-              "outputPath": "dist/manager.rent.cu"}
+              "localize": [
+                "es"
+              ],
+              "outputPath": "dist/manager.rent.cu"
+            }
           }
         },
         "serve": {
@@ -140,5 +143,8 @@
     "@schematics/angular:directive": {
       "prefix": "app"
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
