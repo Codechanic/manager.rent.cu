@@ -5,23 +5,27 @@
     <input #imageInput
            type="file"
            accept="image/*"
+           multiple="multiple"
            (change)="processFile(imageInput)">
   </label>
 
 
-  <div *ngIf="selectedFile" class="img-preview-container">
+  <div *ngIf="selectedFiles.length > 0" class="img-preview-container">
+    <ng-container *ngFor="let selectedFile of selectedFiles">
 
-    <div class="img-preview{{selectedFile.status === 'fail' ? '-error' : ''}}"
-         [ngStyle]="{'background-image': 'url('+ selectedFile.src + ')'}">
-    </div>
+      <div class="img-preview{{selectedFile.status === 'fail' ? '-error' : ''}}"
+           [ngStyle]="{'background-image': 'url('+ selectedFile.src + ')'}">
+      </div>
 
-    <div *ngIf="selectedFile.pending" class="img-loading-overlay">
-      <div class="img-spinning-circle"></div>
-    </div>
+      <div *ngIf="selectedFile.pending" class="img-loading-overlay">
+        <div class="img-spinning-circle"></div>
+      </div>
 
-    <div *ngIf="selectedFile.status === 'ok'" class="alert alert-success"> Image Uploaded Succesfuly!</div>
-    <div *ngIf="selectedFile.status === 'fail'" class="alert alert-danger"> Image Upload Failed!</div>
-    <img [src]="selectedFile.src" alt="Image to upload" class="image-to-upload">
+      <div *ngIf="selectedFile.status === 'ok'" class="alert alert-success"> Image Uploaded Succesfuly!</div>
+      <div *ngIf="selectedFile.status === 'fail'" class="alert alert-danger"> Image Upload Failed!</div>
+      <img [src]="selectedFile.src" alt="Image to upload" class="image-to-upload">
+
+    </ng-container>
   </div>
 
 </div>
