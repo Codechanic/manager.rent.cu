@@ -18,14 +18,17 @@ export class ImageService {
     return this.httpClient.get<Image[]>(environment.uris.api + '/images/owner/' + ownerId);
   }
 
-  uploadImage(houseId: string, image: File, straightBinary = false): Observable<any> {
+  uploadImage(houseId: string, images: File[], straightBinary = false): Observable<any> {
     const formData = new FormData();
-    formData.append('vibalco_gallerybundle_imagetype[image]', image);
-    console.log(formData.get('vibalco_gallerybundle_imagetype[image]'), image);
+    for (let i = 0; i < images.length; i++) {
+      formData.append('vibalco_gallerybundle_multiple_imagetype[images][' + i + ']', images[i]);
+      console.log(formData.get('vibalco_gallerybundle_multiple_imagetype[images]'), images[i]);
+    }
+
     if (!straightBinary) {
       return this.httpClient.post(`${environment.uris.upload}/${houseId}/upload`, formData);
     } else {
-      return this.httpClient.post(`${environment.uris.upload}/${houseId}/upload`, image);
+      return this.httpClient.post(`${environment.uris.upload}/${houseId}/upload`, images);
     }
   }
 

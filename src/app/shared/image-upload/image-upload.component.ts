@@ -18,28 +18,29 @@ class ImageSnippet {
 export class ImageUploadComponent {
 
   selectedFile: ImageSnippet;
+  selectedFiles: ImageSnippet [];
 
   @Input() houseId: string;
 
   constructor(private imageService: ImageService) {
+    this.selectedFiles = [];
   }
 
   processFile(imageInput: any) {
-    const file: File = imageInput.files[0];
-    const reader = new FileReader();
+    const files: File[] = imageInput.files;
+    const promises = [];
+    for (let i = 0; i < files.length; i++) {
+      promises.push(this.fileLoader(files[i]));
+    }
 
-    reader.addEventListener('load', (event: any) => {
-
-      this.selectedFile = new ImageSnippet(event.target.result, file);
-
-      this.selectedFile.pending = true;
+    Promise.all(promises).then(value => {
+      this.selectedFiles = value;
     });
-
-    reader.readAsDataURL(file);
   }
 
   submit() {
-    this.imageService.uploadImage(this.houseId, this.selectedFile.file).subscribe(
+    const files = this.selectedFiles.map((f) => f.file);
+    this.imageService.uploadImage(this.houseId, files).subscribe(
       (res) => {
         this.onSuccess();
       },
@@ -57,5 +58,27 @@ export class ImageUploadComponent {
     this.selectedFile.pending = false;
     this.selectedFile.status = 'fail';
     this.selectedFile.src = '';
+  }
+
+  private fileLoader(file: File): Promise<any> {
+    return new Promise(((resolve, reject) => {
+      const reader = new FileReader();
+      reader.addEventListener('load', (event: any) => {
+        const imageSnippet = new ImageSnippet(event.target.result, file);
+        imageSnippet.pending = true;
+        resolve(imageSnippet);
+      });
+
+      reader.addEventListener('error', (event: any) => {
+        reject(event);
+      });
+
+      if (file !== undefined) {
+        reader.readAsDataURL(file);
+      } else {
+        reject(undefined);
+      }
+
+    }));
   }
 }
