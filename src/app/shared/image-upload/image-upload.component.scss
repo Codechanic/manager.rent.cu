@@ -1,3 +1,21 @@
 .image-to-upload {
   max-width: 300px;
 }
+
+.image-upload-container {
+  cursor: pointer;
+}
+
+.img-preview-container {
+  position: relative;
+
+  .img-preview {
+    background: center center no-repeat;
+    background-size: contain;
+
+    &-error {
+      display: none;
+    }
+  }
+}
+

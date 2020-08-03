@@ -1,43 +1,45 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import {Observable, Subscription} from 'rxjs';
-import {NgSelectComponent} from '@ng-select/ng-select';
-import {GalleryItem, ImageItem} from '@ngx-gallery/core';
-import {BsModalRef, BsModalService} from 'ngx-bootstrap';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {map} from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
+import { NgSelectComponent } from '@ng-select/ng-select';
+import { GalleryItem, ImageItem } from '@ngx-gallery/core';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { map } from 'rxjs/operators';
 
-import {HouseService} from '../../../services/house.service';
-import {House} from '../../../model/house.model';
-import {AuthService} from '../../../services/auth.service';
-import {OwnerService} from '../../../services/owner.service';
-import {Owner} from '../../../model/owner.model';
-import {Municipality} from '../../../model/municipality.model';
-import {FormDataService} from '../../../services/form-data.service';
-import {AccommodationType} from '../../../model/accommodation-type.model';
-import {FreeService} from '../../../model/free-service.model';
-import {AppCommonConstants} from '../../../constants/common';
-import {ExtraCostService} from '../../../model/extra-cost-service.model';
-import {Province} from '../../../model/province.model';
-import {HouseSeasonPrice} from '../../../model/house-season-price.model';
-import {Season} from '../../../model/season.model';
-import {SeasonRange} from '../../../model/season-range.model';
-import {SeasonModalComponent} from '../../../modals/season-modal/season-modal.component';
+import { HouseService } from '../../../services/house.service';
+import { House } from '../../../model/house.model';
+import { AuthService } from '../../../services/auth.service';
+import { OwnerService } from '../../../services/owner.service';
+import { Owner } from '../../../model/owner.model';
+import { Municipality } from '../../../model/municipality.model';
+import { FormDataService } from '../../../services/form-data.service';
+import { AccommodationType } from '../../../model/accommodation-type.model';
+import { FreeService } from '../../../model/free-service.model';
+import { AppCommonConstants } from '../../../constants/common';
+import { ExtraCostService } from '../../../model/extra-cost-service.model';
+import { Province } from '../../../model/province.model';
+import { HouseSeasonPrice } from '../../../model/house-season-price.model';
+import { Season } from '../../../model/season.model';
+import { SeasonRange } from '../../../model/season-range.model';
+import { SeasonModalComponent } from '../../../modals/season-modal/season-modal.component';
 import * as dateHelper from '../../../helpers/date.helper';
-import {LocationType} from '../../../model/location-type.model';
-import {HousePreviewComponent} from '../../../modals/house-preview/house-preview.component';
-import {CanExit} from '../../../guards/can-exit.guard';
-import {ConfirmComponent} from '../../../modals/confirm/confirm.component';
-import {ImageService} from '../../../services/image.service';
+import { LocationType } from '../../../model/location-type.model';
+import { HousePreviewComponent } from '../../../modals/house-preview/house-preview.component';
+import { CanExit } from '../../../guards/can-exit.guard';
+import { ConfirmComponent } from '../../../modals/confirm/confirm.component';
+import { ImageService } from '../../../services/image.service';
+import { ImageUploadComponent } from '../../../shared/image-upload/image-upload.component';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-houses-add-edit',
   templateUrl: './houses-add-edit.component.html',
-  styleUrls: ['./houses-add-edit.component.scss']
+  styleUrls: [ './houses-add-edit.component.scss' ]
 })
-export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
+export class HousesAddEditComponent implements AfterViewInit, OnInit, OnDestroy, CanExit {
 
   /**
    * Form group to collect and validate House data
@@ -149,6 +151,8 @@ export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
    */
   componentSubscriptions: Subscription[] = [];
 
+  @ViewChild('imageUploadComponent') imageUploadComponent: ImageUploadComponent;
+
   images$: Observable<GalleryItem[]>;
 
   /**
@@ -234,7 +238,6 @@ export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
       /* get the house object from the server and populate the form with its data */
       this.houseService.findById(this.houseId).subscribe((house) => {
         this.house = house;
-        console.log(house);
         if (!(this.provincesSelect.itemsList.items.length > 0)) {
           this.provinces$.subscribe(() => {
             this.initializeProvince();
@@ -246,22 +249,7 @@ export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
         this.spinnerService.hide();
       });
 
-
-      /**
-       * get house images
-       */
-      this.images$ = this.imageService.findByOwner(this.houseId).pipe(
-        map(res => {
-          const galleryImages = [];
-          for (const image of res) {
-            galleryImages.push(new ImageItem({
-              src: `http://site.rent.cu/uploads/gallery/${image.owner}/${image.path}`,
-              thumb: `http://site.rent.cu/uploads/gallery/${image.owner}/${image.path}`
-            }));
-          }
-          return galleryImages;
-        })
-      );
+      this.getHouseGalleryImages();
 
     } else {
       this.formDataService.defaultSeasons().subscribe((defaultSeasons: Season[]) => {
@@ -396,7 +384,7 @@ export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
       : this.houseForm.controls['municipality'].reset();
     this.house.accommodation
       ? this.houseForm.controls['accommodation'].setValue(this.house.accommodation.id)
-      : this.houseForm.controls['accommodation'].reset;
+      : this.houseForm.controls['accommodation'].reset();
     this.house.location
       ? this.houseForm.controls['location'].setValue(this.house.location.id)
       : this.houseForm.controls['location'].reset();
@@ -465,7 +453,7 @@ export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
 
           this.houseForm.markAsPristine();
 
-          this.router.navigate(['houses/edit/' + result.id], {queryParams: {created: true}});
+          this.router.navigate([ 'houses/edit/' + result.id ], {queryParams: {created: true}});
         }, error => {
 
           /* if the operation was unsuccessful, alert the user about it */
@@ -545,6 +533,10 @@ export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
 
   }
 
+  /**
+   * Set form homestay prices
+   * @param homestayPrices Homestay prices to show on form
+   */
   setHomestayPrices(homestayPrices: HouseSeasonPrice[]) {
     const arr = new FormArray([]);
     for (const homestayPrice of homestayPrices) {
@@ -558,6 +550,10 @@ export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
     return arr;
   }
 
+  /**
+   * Set form season
+   * @param season Season to set on form
+   */
   setSeason(season: any) {
     return this.fb.group({
       id: season.id,
@@ -566,6 +562,10 @@ export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
     });
   }
 
+  /**
+   * Set form season ranges
+   * @param seasonRanges Season ranges to set on form
+   */
   setSeasonRanges(seasonRanges: SeasonRange[]) {
     const arr = new FormArray([]);
     for (const seasonRange of seasonRanges) {
@@ -579,6 +579,10 @@ export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
     return arr;
   }
 
+  /**
+   * Set form many-to-many relationships
+   * @param house House containing the relationships to display
+   */
   setManyToManyRelationships(house: House) {
 
     this.houseForm.controls['homestayFreeservices'].setValue((house).homestayFreeservices
@@ -602,6 +606,11 @@ export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
       }));
   }
 
+  /**
+   * Show alert message
+   * @param type Type of the message
+   * @param message Text of the message
+   */
   showAlertMessage(type: string, message: string) {
     this.alert.type = type;
     this.alert.msg = message;
@@ -609,43 +618,57 @@ export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
 
   }
 
+  /**
+   * Open a season modal
+   */
   openNewSeasonModal() {
     this.seasonModalRef = this.modalService.show(SeasonModalComponent, {class: 'season-modal modal-lg'});
   }
 
+  /**
+   * Add a season to the house
+   * @param season Season to add
+   */
   addSeason(season: Season) {
     this.removeDefaultSeasons();
 
     const homestayPricesFormControls = <FormArray>this.houseForm.controls['homestayPrices'];
 
-    this.houseForm.controls['homestayPrices'] = this.setHomestayPrices(homestayPricesFormControls.value.concat([{
+    this.houseForm.controls['homestayPrices'] = this.setHomestayPrices(homestayPricesFormControls.value.concat([ {
       id: null,
       price: null,
       code: '1',
       season
-    }]));
-
-    console.log(this.houseForm.controls['homestayPrices'].value);
+    } ]));
   }
 
+  /**
+   * Remove the default seasons from the house in display
+   */
   removeDefaultSeasons() {
 
     const homestayPricesFormControls = <FormArray>this.houseForm.controls['homestayPrices'];
 
     for (let i = 0; i < homestayPricesFormControls.controls.length; i++) {
-      if ([7, 9].includes(homestayPricesFormControls.controls[i].value.season.id)) {
+      if ([ 7, 9 ].includes(homestayPricesFormControls.controls[i].value.season.id)) {
         homestayPricesFormControls.removeAt(i);
         i--;
       }
     }
   }
 
+  /**
+   * Angular's on destroy component hook
+   */
   ngOnDestroy(): void {
     for (const subscription of this.componentSubscriptions) {
       subscription.unsubscribe();
     }
   }
 
+  /**
+   * On resetting the form
+   */
   onReset() {
     this.houseForm.controls['homestayPrices'] = this.fb.array([]);
     this.houseForm.reset();
@@ -654,6 +677,9 @@ export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
     this.houseForm.controls['id'].setValue(this.houseId);
   }
 
+  /**
+   * On previewing the house information
+   */
   onPreview() {
     const initialState = {house: this.house};
     this.housePreviewModalRef = this.modalService.show(HousePreviewComponent, {
@@ -662,6 +688,9 @@ export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
     });
   }
 
+  /**
+   * Can deactivate method use by guard
+   */
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
     if (this.houseForm.touched && this.houseForm.dirty) {
       const initialState = {
@@ -673,5 +702,53 @@ export class HousesAddEditComponent implements OnInit, OnDestroy, CanExit {
       return this.confirmModalRef.content.onConfirmed;
     }
     return true;
+  }
+
+  /**
+   * After view init Angular hook
+   */
+  ngAfterViewInit(): void {
+    /**
+     * Subscribe to image uploading state
+     */
+    this.imageUploadComponent.imageUploadingState.subscribe((imageUploadState) => {
+      switch (imageUploadState) {
+        case AppCommonConstants.IMAGE_UPLOADING_STATE.UPLOADING:
+          this.spinnerService.show();
+          break;
+        case AppCommonConstants.IMAGE_UPLOADING_STATE.UPLOADED:
+          this.spinnerService.hide();
+          this.alert.type = 'success';
+          this.alert.msg = 'Image(s) uploaded successfully';
+          this.alert.show = true;
+          this.getHouseGalleryImages();
+          break;
+        case AppCommonConstants.IMAGE_UPLOADING_STATE.ERROR_UPLOADING:
+          this.spinnerService.hide();
+          this.alert.type = 'error';
+          this.alert.msg = 'There was an error uploading the images';
+          this.alert.show = true;
+          break;
+      }
+    });
+  }
+
+  /**
+   * Get house galleru images
+   */
+  getHouseGalleryImages() {
+
+    this.images$ = this.imageService.findByOwner(this.houseId).pipe(
+      map(res => {
+        const galleryImages = [];
+        for (const image of res) {
+          galleryImages.push(new ImageItem({
+            src: `${environment.uris.image}/gallery/${image.owner}/${image.path}`,
+            thumb: `${environment.uris.image}/gallery/${image.owner}/${image.path}`
+          }));
+        }
+        return galleryImages;
+      })
+    );
   }
 }

@@ -281,12 +281,12 @@
                 </tab>
                 <tab heading="Images" *ngIf="houseId">
                   <div class="row">
-                  <div class="col-md-5">
-                    <app-image-upload [houseId]="houseId"></app-image-upload>
-                  </div>
-                  <div class="col-md-7">
-                    <gallery id="houseImagesGallery" [items]="images$ | async"></gallery>
-                  </div>
+                    <div class="col-md-5">
+                      <app-image-upload #imageUploadComponent [houseId]="houseId"></app-image-upload>
+                    </div>
+                    <div class="col-md-7">
+                      <gallery id="houseImagesGallery" [items]="images$ | async"></gallery>
+                    </div>
                   </div>
                 </tab>
               </tabset>

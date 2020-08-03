@@ -13,7 +13,7 @@ export const environment = {
     register: 'http://site.rent.cu/es/owner',
     password: 'http://site.rent.cu/es/password',
     api: 'http://localhost:3000',
-    image: 'http://site.rent.cu/uploads/main/homestay',
+    image: 'http://site.rent.cu/uploads',
     upload: 'http://site.rent.cu/es/multiple_image'
   },
 
